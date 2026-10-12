@@ -21,7 +21,7 @@ const heroEndingStart = heroLeadWords.join("").length;
 
 function heroLetters(text: string, startIndex: number) {
   return [...text].map((letter, index) => letter === " " ? " " : (
-    <span className="hero-letter" data-letter={letter} key={index} style={{ "--letter-delay": `${140 + (startIndex + index) * 48}ms` } as CSSProperties}>{letter}</span>
+    <span className="hero-letter" data-letter={letter} key={index} style={{ "--letter-delay": `${40 + (startIndex + index) * 16}ms` } as CSSProperties}>{letter}</span>
   ));
 }
 
