@@ -153,10 +153,10 @@ select {
 
 .splash-moment > span {
   min-width: 0;
-  font-size: clamp(2.35rem, 7.3vw, 7.15rem);
+  font-size: clamp(2rem, 5.4vw, 5.35rem);
   font-weight: 500;
-  letter-spacing: -0.075em;
-  line-height: 0.9;
+  letter-spacing: -0.065em;
+  line-height: 0.95;
   white-space: nowrap;
 }
 
@@ -171,16 +171,12 @@ select {
 
 .splash-icon {
   justify-self: end;
-  width: clamp(74px, 9vw, 130px);
-  height: clamp(74px, 9vw, 130px);
+  width: clamp(60px, 7vw, 96px);
+  height: clamp(60px, 7vw, 96px);
   overflow: visible;
   color: var(--lime);
-}
-
-.splash-icon [pathLength] {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  will-change: stroke-dashoffset;
+  transform-origin: center;
+  will-change: transform;
 }
 
 .splash-footer {
@@ -190,21 +186,24 @@ select {
   bottom: clamp(25px, 4vw, 52px);
   left: clamp(24px, 5vw, 76px);
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 15px 24px;
+  grid-template-columns: 1fr;
+  gap: 12px;
   align-items: end;
   color: #9ea099;
   font-size: 0.66rem;
   font-weight: 600;
   letter-spacing: 0.13em;
+  text-align: center;
   text-transform: uppercase;
 }
 
 .splash-progress {
-  grid-column: 1 / -1;
-  height: 1px;
+  width: min(680px, 100%);
+  height: 3px;
+  justify-self: center;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.28);
 }
 
 .splash-progress-fill {
@@ -1431,13 +1430,13 @@ footer > p {
 
   .splash-icon {
     justify-self: center;
-    width: 84px;
-    height: 84px;
+    width: 68px;
+    height: 68px;
   }
 
   .splash-moment > span {
-    font-size: clamp(2.25rem, 10vw, 3.35rem);
-    letter-spacing: -0.065em;
+    font-size: clamp(1.85rem, 8.6vw, 2.8rem);
+    letter-spacing: -0.055em;
   }
 
   .splash-moment small {
