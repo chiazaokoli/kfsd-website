@@ -140,7 +140,7 @@ export default function Home() {
         </header>
 
         <section className="new-hero" aria-labelledby="hero-title">
-          <Image src={`${assetPrefix}/images/hero-workshop.webp`} alt="Students collaborating while one student presents an idea" fill priority unoptimized sizes="100vw" className="hero-photo" />
+          <Image src={`${assetPrefix}/images/hero-editorial.webp`} alt="Students collaborating while one student presents an idea" fill priority unoptimized sizes="100vw" className="hero-photo" />
           <div className="hero-scrim" aria-hidden="true" />
           <div className="hero-content">
             <p className="hero-kicker hero-enter">{siteConfig.edition} · Live online</p>
