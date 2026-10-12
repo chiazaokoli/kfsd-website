@@ -67,7 +67,7 @@ img { display: block; }
 .new-hero h1 { max-width: 1240px; margin: 0 auto; font-size: clamp(3.4rem, 7vw, 7.3rem); font-weight: 550; letter-spacing: -.075em; line-height: 1; text-wrap: balance; }
 .hero-word, .hero-ending { display: inline-block; white-space: nowrap; }
 .hero-letter { position: relative; display: inline-block; color: var(--white); animation: hero-type-in 300ms cubic-bezier(.2,.7,.2,1) var(--letter-delay) both; }
-.hero-letter::after { position: absolute; inset: 0; color: transparent; background: linear-gradient(115deg, #ffd6a6, #fa95bd 40%, #ad92ff 72%, #8bc8ff); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; content: attr(data-letter); opacity: 0; animation: hero-tip-glow 300ms ease-out var(--letter-delay) both; }
+.hero-letter::after { position: absolute; inset: 0; color: transparent; background: linear-gradient(115deg, #f2ffd9, #d9ff63 32%, #8df0ad 68%, #4dd9a3); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; content: attr(data-letter); opacity: 0; animation: hero-tip-glow 300ms ease-out var(--letter-delay) both; }
 @keyframes hero-type-in { from { opacity: 0; filter: blur(.16em); transform: translateY(.1em); } to { opacity: 1; filter: blur(0); transform: translateY(0); } }
 @keyframes hero-tip-glow { 0%, 40% { opacity: 1; } 100% { opacity: 0; } }
 .hero-subhead { max-width: 610px; margin: 27px auto 0; color: rgba(255,255,255,.82); font-size: clamp(1.03rem, 1.5vw, 1.3rem); line-height: 1.55; }
