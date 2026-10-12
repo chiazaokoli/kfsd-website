@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import SplashScreen from "./components/SplashScreen";
 import {
   ArrowDown,
   ArrowUpRight,
@@ -79,9 +80,12 @@ export default function Home() {
   const pageRef = useRef<HTMLElement>(null);
   const [activeAudience, setActiveAudience] = useState(0);
   const [formStatus, setFormStatus] = useState("");
+  const [pageReady, setPageReady] = useState(false);
 
   useGSAP(
     () => {
+      if (!pageReady) return;
+
       const reduceMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
       ).matches;
@@ -138,7 +142,7 @@ export default function Home() {
         );
       });
     },
-    { scope: pageRef },
+    { scope: pageRef, dependencies: [pageReady], revertOnUpdate: true },
   );
 
   function handleWaitlist(event: FormEvent<HTMLFormElement>) {
@@ -149,7 +153,9 @@ export default function Home() {
   }
 
   return (
-    <main ref={pageRef} className="overflow-x-hidden w-full max-w-full">
+    <>
+      <SplashScreen onComplete={() => setPageReady(true)} />
+      <main ref={pageRef} className="overflow-x-hidden w-full max-w-full">
       <header className="site-header">
         <a className="wordmark" href="#top" aria-label="Future in Practice home">
           <span className="wordmark-dot" aria-hidden="true" />
@@ -555,6 +561,7 @@ export default function Home() {
           <a href="#waitlist">Join the waitlist</a>
         </div>
       </footer>
-    </main>
+      </main>
+    </>
   );
 }
