@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { type CSSProperties, FormEvent, Fragment, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -15,8 +15,15 @@ import { siteConfig } from "../src/config/site";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 const assetPrefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-const heroScrambleTarget = "2 days.";
-const scrambleCharacters = "abcdefghijklmnopqrstuvwxyz0123456789";
+const heroLeadWords = ["Learn", "the", "soft", "skills", "that", "set", "you", "apart", "in"];
+const heroEnding = "2 days.";
+const heroEndingStart = heroLeadWords.join("").length;
+
+function heroLetters(text: string, startIndex: number) {
+  return [...text].map((letter, index) => letter === " " ? " " : (
+    <span className="hero-letter" data-letter={letter} key={index} style={{ "--letter-delay": `${140 + (startIndex + index) * 48}ms` } as CSSProperties}>{letter}</span>
+  ));
+}
 
 const questions = [
   "Do you struggle with rallying your friends around a task?",
@@ -71,37 +78,6 @@ export default function Home() {
   const [localTime, setLocalTime] = useState("");
   const [formStatus, setFormStatus] = useState("");
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
-  const [heroScrambleText, setHeroScrambleText] = useState(heroScrambleTarget);
-
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    let interval: number | undefined;
-    const start = window.setTimeout(() => {
-      let step = 0;
-      const update = () => {
-        step += 1;
-        if (step >= 16) {
-          setHeroScrambleText(heroScrambleTarget);
-          window.clearInterval(interval);
-          return;
-        }
-        const settled = Math.floor((step / 16) * heroScrambleTarget.length);
-        setHeroScrambleText([...heroScrambleTarget].map((character, index) => {
-          if (character === " " || character === "." || index < settled) return character;
-          return scrambleCharacters[Math.floor(Math.random() * scrambleCharacters.length)];
-        }).join(""));
-      };
-      update();
-      interval = window.setInterval(update, 65);
-    }, 300);
-
-    return () => {
-      window.clearTimeout(start);
-      window.clearInterval(interval);
-    };
-  }, []);
-
   useEffect(() => {
     const updateCountdown = () => setCountdown(getCountdown());
     updateCountdown();
@@ -127,9 +103,7 @@ export default function Home() {
       return;
     }
 
-    const heroIntro = gsap.timeline();
-    heroIntro.from(".hero-enter", { opacity: 0, y: 34, duration: 1, stagger: 0.1, ease: "power3.out" });
-    heroIntro.call(() => pageRef.current?.querySelector(".new-hero h1")?.classList.add("hero-gradient-wipe"), [], 0.35);
+    gsap.from(".hero-enter", { opacity: 0, y: 34, duration: 1, stagger: 0.1, ease: "power3.out" });
     gsap.fromTo(revealWords, { opacity: 0.12 }, { opacity: 1, stagger: 0.045, ease: "none", scrollTrigger: { trigger: ".reveal-statement", start: "top 78%", end: "bottom 40%", scrub: 0.55 } });
     revealItems.forEach((item) => gsap.from(item, { opacity: 0, y: 48, duration: 0.9, ease: "power3.out", scrollTrigger: { trigger: item, start: "top 88%" } }));
     motionImages.forEach((image) => gsap.fromTo(image, { scale: 0.88, opacity: 0.55 }, { scale: 1, opacity: 1, ease: "none", scrollTrigger: { trigger: image, start: "top 92%", end: "center 50%", scrub: 0.6 } }));
@@ -174,7 +148,7 @@ export default function Home() {
           <div className="hero-scrim" aria-hidden="true" />
           <div className="hero-content">
             <p className="edition-badge hero-enter"><span className="edition-badge-icon"><Medal size={15} weight="duotone" aria-hidden="true" /></span><span>{siteConfig.edition}</span></p>
-            <h1 className="hero-enter" id="hero-title" aria-label="Learn the soft skills that set you apart in 2 days.">Learn the soft skills that set you apart in <span className="hero-scramble" aria-hidden="true"><span className="hero-scramble-placeholder">2 days.</span><span className="hero-scramble-active">{heroScrambleText}</span></span></h1>
+            <h1 id="hero-title" aria-label="Learn the soft skills that set you apart in 2 days."><span aria-hidden="true">{heroLeadWords.map((word, index) => <Fragment key={word}>{index > 0 && " "}<span className="hero-word">{heroLetters(word, heroLeadWords.slice(0, index).join("").length)}</span></Fragment>)}{" "}<span className="hero-ending">{heroLetters(heroEnding, heroEndingStart)}</span></span></h1>
             <p className="hero-subhead hero-enter">Learn from experienced professionals and become more career-ready.</p>
             <a className="primary-cta hero-enter" href="#register">Reserve My Free Spot <ArrowRight size={20} weight="bold" /></a>
           </div>
