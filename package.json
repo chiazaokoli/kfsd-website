@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fontsource-variable/outfit": "^5.2.8",
+    "@fontsource/be-vietnam-pro": "^5.2.8",
     "@gsap/react": "^2.1.2",
     "@phosphor-icons/react": "^2.1.10",
     "gsap": "^3.13.0",

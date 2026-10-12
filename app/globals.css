@@ -23,7 +23,7 @@ body {
   margin: 0;
   background: var(--ink);
   color: var(--white);
-  font-family: "Outfit Variable", "Outfit", sans-serif;
+  font-family: "Be Vietnam Pro", sans-serif;
   text-rendering: optimizeLegibility;
 }
 
@@ -207,12 +207,13 @@ select {
   line-height: 0.91;
 }
 
-.hero-title em {
+.hero-title span {
   display: block;
   color: var(--lime);
-  font-family: Georgia, "Times New Roman", serif;
-  font-weight: 400;
-  letter-spacing: -0.055em;
+  font-family: inherit;
+  font-style: normal;
+  font-weight: 560;
+  letter-spacing: -0.07em;
 }
 
 .hero-intro {

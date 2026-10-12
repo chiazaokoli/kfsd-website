@@ -171,7 +171,7 @@ export default function Home() {
         <div className="hero-copy">
           <p className="eyebrow hero-reveal">Live online · Built for students everywhere</p>
           <h1 className="hero-title max-w-6xl hero-reveal">
-            The skills that make everything else <em>work.</em>
+            The skills that make everything else <span>work.</span>
           </h1>
           <p className="hero-intro hero-reveal">
             Two focused mornings to communicate with clarity, work better with
