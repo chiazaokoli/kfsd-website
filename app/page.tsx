@@ -25,11 +25,11 @@ const questions = [
 ];
 
 const skills = [
-  { tag: "Leadership", title: "Lead from Where You Stand", copy: "Learn how to lead yourself and others, take responsibility, show initiative and positively influence the people around you.", icon: CrownSimple, className: "skill-wide skill-blue", image: "/images/student-speaker.webp" },
-  { tag: "Critical Thinking", title: "Think Before You Follow", copy: "Learn to analyse information, question assumptions, see different perspectives and make smart decisions.", icon: Brain, className: "skill-wide skill-photo", image: "/images/collaboration.webp" },
-  { tag: "Communication", title: "Say It So They Hear It", copy: "Express your ideas clearly, listen well and speak with confidence to any audience.", icon: ChatCircleDots, className: "skill-third skill-lime" },
-  { tag: "Resilience", title: "Bounce Back Stronger", copy: "Handle setbacks, challenges and pressure while keeping a positive, solution-focused mindset.", icon: Mountains, className: "skill-third skill-cream" },
-  { tag: "Integrity", title: "Be the Name People Trust", copy: "Understand why honesty, accountability and doing the right thing matter in your personal and professional life.", icon: ShieldCheck, className: "skill-third skill-dark" },
+  { tag: "Leadership", title: "Lead with Confidence", copy: "Learn how to lead yourself and others, take responsibility, show initiative and positively influence the people around you.", icon: CrownSimple, className: "skill-wide skill-blue", image: "/images/student-speaker.webp" },
+  { tag: "Critical Thinking", title: "Think Critically", copy: "Learn to analyse information, question assumptions, see different perspectives and make smart decisions.", icon: Brain, className: "skill-wide skill-photo", image: "/images/collaboration.webp" },
+  { tag: "Communication", title: "Communicate Clearly", copy: "Express your ideas clearly, listen well and speak with confidence to any audience.", icon: ChatCircleDots, className: "skill-third skill-lime" },
+  { tag: "Resilience", title: "Build Resilience", copy: "Handle setbacks, challenges and pressure while keeping a positive, solution-focused mindset.", icon: Mountains, className: "skill-third skill-cream" },
+  { tag: "Integrity", title: "Act with Integrity", copy: "Understand why honesty, accountability and doing the right thing matter in your personal and professional life.", icon: ShieldCheck, className: "skill-third skill-dark" },
 ];
 
 const learningSteps = [
@@ -139,7 +139,7 @@ export default function Home() {
           <Image src={`${assetPrefix}/images/hero-editorial.webp`} alt="Students collaborating while one student presents an idea" fill priority unoptimized sizes="100vw" className="hero-photo" />
           <div className="hero-scrim" aria-hidden="true" />
           <div className="hero-content">
-            <p className="edition-badge hero-enter"><Medal size={17} weight="duotone" aria-hidden="true" /><span>{siteConfig.edition}</span></p>
+            <p className="edition-badge hero-enter"><span className="edition-badge-icon"><Medal size={15} weight="duotone" aria-hidden="true" /></span><span>{siteConfig.edition}</span></p>
             <h1 className="hero-enter" id="hero-title">Learn the soft skills that set you apart in <span className="hero-title-highlight">2 days.</span></h1>
             <p className="hero-subhead hero-enter">Learn from experienced professionals and become more career-ready.</p>
             <div className="hero-price hero-enter"><span>{siteConfig.registration.priceNow}</span></div>
