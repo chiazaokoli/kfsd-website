@@ -127,7 +127,9 @@ export default function Home() {
       return;
     }
 
-    gsap.from(".hero-enter", { opacity: 0, y: 34, duration: 1, stagger: 0.1, ease: "power3.out" });
+    const heroIntro = gsap.timeline();
+    heroIntro.from(".hero-enter", { opacity: 0, y: 34, duration: 1, stagger: 0.1, ease: "power3.out" });
+    heroIntro.call(() => pageRef.current?.querySelector(".new-hero h1")?.classList.add("hero-gradient-wipe"), [], 0.35);
     gsap.fromTo(revealWords, { opacity: 0.12 }, { opacity: 1, stagger: 0.045, ease: "none", scrollTrigger: { trigger: ".reveal-statement", start: "top 78%", end: "bottom 40%", scrub: 0.55 } });
     revealItems.forEach((item) => gsap.from(item, { opacity: 0, y: 48, duration: 0.9, ease: "power3.out", scrollTrigger: { trigger: item, start: "top 88%" } }));
     motionImages.forEach((image) => gsap.fromTo(image, { scale: 0.88, opacity: 0.55 }, { scale: 1, opacity: 1, ease: "none", scrollTrigger: { trigger: image, start: "top 92%", end: "center 50%", scrub: 0.6 } }));
