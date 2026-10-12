@@ -144,11 +144,10 @@ export default function Home() {
           <div className="hero-scrim" aria-hidden="true" />
           <div className="hero-content">
             <p className="hero-kicker hero-enter">{siteConfig.edition} · Live online</p>
-            <h1 className="hero-enter" id="hero-title">Learn the soft skills that set you apart in 2 days.</h1>
+            <h1 className="hero-enter" id="hero-title">Learn the soft skills that set you apart in <span className="hero-title-highlight">2 days.</span></h1>
             <p className="hero-subhead hero-enter">Learn from experienced professionals and become more career-ready.</p>
             <div className="hero-price hero-enter"><s>{siteConfig.registration.priceWas}</s><span>{siteConfig.registration.priceNow}</span></div>
             <a className="primary-cta hero-enter" href="#register">Reserve My Free Spot <ArrowRight size={20} weight="bold" /></a>
-            <p className="hero-audience hero-enter">Open to high school, university and technical/vocational college students, and other educational institutions.</p>
           </div>
           <div className="event-dock hero-enter">
             <div><CalendarBlank size={22} weight="duotone" /><span>{siteConfig.event.dateLabel}</span></div>
