@@ -6,6 +6,15 @@ whatever action you can do yourself, please do yourself. this includes starting 
 
 Build a polished Next.js landing page for the virtual soft skills training waitlist. The event takes place November 25–26, 2026, from 10:00 AM to 12:00 PM West Africa Time (UTC+1) each day.
 
+## Mobile-first priority
+
+- Mobile is the highest-priority experience for every design and implementation decision.
+- Design for small screens first, then enhance the experience for tablets and desktops.
+- Make mobile layouts, typography, imagery, navigation, forms, interactions, animation, accessibility, and performance feel complete and intentional rather than compressed versions of desktop.
+- Prevent horizontal overflow, clipped content, crowded controls, unreadable text, awkward image crops, and overlapping elements at common mobile widths.
+- Keep touch targets comfortable, primary actions easy to reach, forms simple to complete, and important content clear without relying on hover.
+- After every meaningful visual or interaction change, verify the mobile production experience at multiple viewport widths and treat mobile defects as release blockers.
+
 ## Audience and tone
 
 - Speak directly to high school, pre-college, and university students in Nigeria and internationally.
