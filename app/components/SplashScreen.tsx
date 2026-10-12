@@ -97,11 +97,22 @@ export default function SplashScreen({ onComplete }: { onComplete: () => void })
       if (main instanceof HTMLElement) main.inert = true;
       document.body.classList.add("splash-active");
 
+      let pageReleased = false;
+
+      const releasePage = () => {
+        if (pageReleased) return;
+        pageReleased = true;
+        onComplete();
+      };
+
       const finish = () => {
+        releasePage();
+        if (main instanceof HTMLElement) {
+          gsap.set(main, { clearProps: "opacity,filter,transform,textShadow" });
+        }
         if (main instanceof HTMLElement) main.inert = false;
         document.body.classList.remove("splash-active");
         setVisible(false);
-        onComplete();
       };
 
       if (reduceMotion) {
@@ -135,8 +146,40 @@ export default function SplashScreen({ onComplete }: { onComplete: () => void })
 
       timeline
         .to(".splash-brand, .splash-footer", { opacity: 0, y: -10, duration: 0.25, ease: "power2.in" }, 2.12)
-        .to(".splash-curtain", { yPercent: -100, borderBottomLeftRadius: "46vw", borderBottomRightRadius: "46vw", duration: 0.82, ease: "power4.inOut" }, 2.23)
-        .to(".splash-underlay", { yPercent: -100, duration: 0.72, ease: "power4.inOut" }, 2.31)
+        .set(main, {
+          opacity: 0.08,
+          scale: 1.012,
+          filter: "blur(20px) saturate(2.4) contrast(1.35) brightness(0.52)",
+          textShadow: "7px 0 rgba(61, 93, 255, .72), -7px 0 rgba(255, 79, 96, .62)",
+        }, 2.12)
+        .call(releasePage, [], 2.13)
+        .to(".splash-glitch", { opacity: 0.9, duration: 0.08, ease: "steps(2)" }, 2.13)
+        .to(".splash-stage", {
+          x: -5,
+          opacity: 0.32,
+          filter: "blur(2px)",
+          color: "#a9c7ff",
+          textShadow: "8px 0 #ff775f, -8px 0 #496bff",
+          duration: 0.15,
+          ease: "steps(3)",
+        }, 2.13)
+        .to(".splash-curtain", {
+          opacity: 0.04,
+          scale: 1.018,
+          filter: "blur(22px) brightness(0.22) saturate(1.8)",
+          duration: 0.55,
+          ease: "power2.inOut",
+        }, 2.23)
+        .to(".splash-underlay", { opacity: 0, duration: 0.7, ease: "power2.inOut" }, 2.29)
+        .to(main, {
+          opacity: 1,
+          scale: 1,
+          filter: "blur(0px) saturate(1) contrast(1) brightness(1)",
+          textShadow: "0 0 rgba(61, 93, 255, 0), 0 0 rgba(255, 79, 96, 0)",
+          duration: 1.02,
+          ease: "power3.out",
+        }, 2.24)
+        .to(".splash-glitch", { opacity: 0, duration: 0.68, ease: "power2.out" }, 2.3)
         .set(".splash-shell", { pointerEvents: "none" });
 
       return () => {
@@ -175,6 +218,7 @@ export default function SplashScreen({ onComplete }: { onComplete: () => void })
           <div className="splash-progress"><span className="splash-progress-fill" /></div>
         </div>
       </div>
+      <div className="splash-glitch" />
     </div>
   );
 }

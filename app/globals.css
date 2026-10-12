@@ -95,7 +95,10 @@ select {
 
 .splash-underlay {
   z-index: 0;
-  background: var(--lime);
+  background:
+    radial-gradient(circle at 32% 48%, rgba(36, 64, 255, 0.32), transparent 35%),
+    radial-gradient(circle at 71% 53%, rgba(255, 62, 86, 0.24), transparent 38%),
+    #050506;
 }
 
 .splash-curtain {
@@ -106,6 +109,41 @@ select {
     var(--ink);
   color: var(--white);
   transform-origin: top center;
+}
+
+.splash-glitch {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  opacity: 0;
+  background:
+    linear-gradient(90deg, rgba(49, 81, 255, 0.24), transparent 34%, rgba(255, 52, 76, 0.2)),
+    radial-gradient(ellipse at 50% 45%, rgba(96, 70, 255, 0.23), transparent 54%),
+    repeating-linear-gradient(0deg, transparent 0 5px, rgba(255, 255, 255, 0.025) 6px, transparent 7px);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+.splash-glitch::before,
+.splash-glitch::after {
+  position: absolute;
+  right: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #4f6fff 30%, #ff5067 68%, transparent);
+  box-shadow: 0 0 32px rgba(107, 86, 255, 0.65);
+  content: "";
+  opacity: 0.7;
+}
+
+.splash-glitch::before {
+  top: 37%;
+}
+
+.splash-glitch::after {
+  top: 63%;
+  transform: translateX(-8%);
 }
 
 .splash-curtain::before {
