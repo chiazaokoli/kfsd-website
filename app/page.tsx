@@ -1,566 +1,266 @@
 "use client";
 
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import SplashScreen from "./components/SplashScreen";
 import {
-  ArrowDown,
-  ArrowUpRight,
-  CalendarBlank,
-  CheckCircle,
-  Clock,
-  Compass,
-  GlobeHemisphereWest,
-  MicrophoneStage,
-  Play,
-  ShieldCheck,
-  Student,
-  UsersThree,
+  ArrowDown, ArrowRight, ArrowUpRight, Brain, CalendarBlank, ChatCircleDots,
+  Check, Clock, CrownSimple, GlobeHemisphereWest, HandHeart, Lightning,
+  ListChecks, MicrophoneStage, Mountains, Play, Question, ShieldCheck,
+  Sparkle, Student, UsersThree,
 } from "@phosphor-icons/react";
+import SplashScreen from "./components/SplashScreen";
+import { siteConfig } from "../src/config/site";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
-
 const assetPrefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
-const audience = [
-  {
-    title: "High school",
-    number: "01",
-    copy: "Build the confidence to speak up, work in groups, and make your ideas easier to understand.",
-    image: `${assetPrefix}/visuals/high-school.svg`,
-  },
-  {
-    title: "Pre-college",
-    number: "02",
-    copy: "Step into applications, interviews, and new environments with more clarity and self-belief.",
-    image: `${assetPrefix}/visuals/pre-college.svg`,
-  },
-  {
-    title: "University",
-    number: "03",
-    copy: "Strengthen the human skills that make projects, internships, leadership, and early careers work.",
-    image: `${assetPrefix}/visuals/university.svg`,
-  },
+const questions = [
+  "Do you struggle with rallying your friends around a task?",
+  "Do you want to be liked more by people?",
+  "Do you want to keep to deadlines and manage your time better?",
+  "Do you want people to listen when you speak?",
+  "Do you want to speak publicly without feeling nervous?",
 ];
 
-const journeyCards = [
-  {
-    icon: MicrophoneStage,
-    title: "Make your ideas land",
-    copy: "Learn to organise what you mean, speak with intention, and adjust your message for the people in front of you.",
-    accent: "lime",
-  },
-  {
-    icon: UsersThree,
-    title: "Work well with different people",
-    copy: "Practise listening, contributing, handling disagreement, and becoming the kind of teammate others can rely on.",
-    accent: "coral",
-  },
-  {
-    icon: Compass,
-    title: "Move towards opportunity",
-    copy: "Build the confidence to ask better questions, introduce yourself, respond to feedback, and take your next step.",
-    accent: "blue",
-  },
+const skills = [
+  { tag: "Leadership", title: "Lead from Where You Stand", copy: "Learn how to lead yourself and others, take responsibility, show initiative and positively influence the people around you.", icon: CrownSimple, className: "skill-wide skill-blue", image: "/images/student-speaker.webp" },
+  { tag: "Critical Thinking", title: "Think Before You Follow", copy: "Learn to analyse information, question assumptions, see different perspectives and make smart decisions.", icon: Brain, className: "skill-wide skill-photo", image: "/images/collaboration.webp" },
+  { tag: "Communication", title: "Say It So They Hear It", copy: "Express your ideas clearly, listen well and speak with confidence to any audience.", icon: ChatCircleDots, className: "skill-third skill-lime" },
+  { tag: "Resilience", title: "Bounce Back Stronger", copy: "Handle setbacks, challenges and pressure while keeping a positive, solution-focused mindset.", icon: Mountains, className: "skill-third skill-cream" },
+  { tag: "Integrity", title: "Be the Name People Trust", copy: "Understand why honesty, accountability and doing the right thing matter in your personal and professional life.", icon: ShieldCheck, className: "skill-third skill-dark" },
 ];
 
-const marqueeWords = [
-  "COMMUNICATE",
-  "LISTEN",
-  "COLLABORATE",
-  "ADAPT",
-  "PRESENT",
-  "LEAD",
+const learningSteps = [
+  { title: "Learn", copy: "Hear from experienced professionals.", icon: Student, image: "/images/student-speaker.webp" },
+  { title: "Ask questions", copy: "Get answers live.", icon: Question, image: "/images/listening.webp" },
+  { title: "Interact", copy: "Join group activities and polls.", icon: UsersThree, image: "/images/collaboration.webp" },
+  { title: "Reflect", copy: "Think about what it means for you.", icon: Brain, image: "/images/reflection.webp" },
+  { title: "Practice", copy: "Try the skills in real scenarios.", icon: Lightning, image: "/images/student-speaker.webp" },
+  { title: "Apply", copy: "Take them into school, work and life.", icon: ListChecks, image: "/images/collaboration.webp" },
 ];
+
+const faqs = [
+  ["Is it really free?", "Yes, completely free."],
+  ["Who can join?", "Students in high school, university, technical or vocational colleges and other educational institutions."],
+  ["Where is it held?", "Live on Zoom. You’ll get the link by email after registering."],
+  ["Do I need to attend both days?", "We strongly recommend it, as the sessions build on each other."],
+  ["Will I get a certificate?", "Details will be shared after registration."],
+];
+
+type Countdown = { days: number; hours: number; minutes: number; seconds: number };
+
+function getCountdown(): Countdown {
+  const distance = Math.max(0, new Date(siteConfig.event.startUtc).getTime() - Date.now());
+  return {
+    days: Math.floor(distance / 86_400_000),
+    hours: Math.floor((distance / 3_600_000) % 24),
+    minutes: Math.floor((distance / 60_000) % 60),
+    seconds: Math.floor((distance / 1_000) % 60),
+  };
+}
 
 export default function Home() {
   const pageRef = useRef<HTMLElement>(null);
-  const [activeAudience, setActiveAudience] = useState(0);
-  const [formStatus, setFormStatus] = useState("");
   const [pageReady, setPageReady] = useState(false);
+  const [countdown, setCountdown] = useState<Countdown>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [activeStep, setActiveStep] = useState(0);
+  const [activeDay, setActiveDay] = useState(0);
+  const [localTime, setLocalTime] = useState("");
+  const [formStatus, setFormStatus] = useState("");
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
-  useGSAP(
-    () => {
-      if (!pageReady) return;
+  useEffect(() => {
+    const updateCountdown = () => setCountdown(getCountdown());
+    updateCountdown();
+    const timer = window.setInterval(updateCountdown, 1_000);
+    const formatter = new Intl.DateTimeFormat(undefined, { weekday: "short", day: "numeric", month: "short", hour: "numeric", minute: "2-digit", timeZoneName: "short" });
+    const localTimeTimer = window.setTimeout(() => {
+      setLocalTime(formatter.formatRange(new Date(siteConfig.event.startUtc), new Date(siteConfig.event.endUtc)));
+    }, 0);
+    return () => {
+      window.clearInterval(timer);
+      window.clearTimeout(localTimeTimer);
+    };
+  }, []);
 
-      const reduceMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
+  useGSAP(() => {
+    if (!pageReady) return;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const revealWords = gsap.utils.toArray<HTMLElement>(".reveal-word");
+    const revealItems = gsap.utils.toArray<HTMLElement>(".chapter-reveal");
+    const motionImages = gsap.utils.toArray<HTMLElement>(".motion-image");
 
-      const revealWords = gsap.utils.toArray<HTMLElement>(".reveal-word");
-      const stackCards = gsap.utils.toArray<HTMLElement>(".stack-card");
+    if (reducedMotion) {
+      gsap.set([...revealWords, ...revealItems, ...motionImages], { opacity: 1, scale: 1, y: 0 });
+      return;
+    }
 
-      if (reduceMotion) {
-        gsap.set(revealWords, { opacity: 1 });
-        gsap.set(stackCards, { opacity: 1, scale: 1, y: 0 });
-        return;
-      }
+    gsap.from(".hero-enter", { opacity: 0, y: 34, duration: 1, stagger: 0.1, ease: "power3.out" });
+    gsap.fromTo(revealWords, { opacity: 0.12 }, { opacity: 1, stagger: 0.045, ease: "none", scrollTrigger: { trigger: ".reveal-statement", start: "top 78%", end: "bottom 40%", scrub: 0.55 } });
+    revealItems.forEach((item) => gsap.from(item, { opacity: 0, y: 48, duration: 0.9, ease: "power3.out", scrollTrigger: { trigger: item, start: "top 88%" } }));
+    motionImages.forEach((image) => gsap.fromTo(image, { scale: 0.88, opacity: 0.55 }, { scale: 1, opacity: 1, ease: "none", scrollTrigger: { trigger: image, start: "top 92%", end: "center 50%", scrub: 0.6 } }));
 
-      gsap.from(".hero-reveal", {
-        y: 38,
-        opacity: 0,
-        duration: 1.05,
-        stagger: 0.12,
-        ease: "power3.out",
-      });
+    const matchMedia = gsap.matchMedia();
+    matchMedia.add("(min-width: 901px)", () => {
+      ScrollTrigger.create({ trigger: ".schedule-layout", start: "top 110px", end: "bottom bottom-=80", pin: ".schedule-intro", pinSpacing: false });
+    });
+    return () => matchMedia.revert();
+  }, { scope: pageRef, dependencies: [pageReady], revertOnUpdate: true });
 
-      gsap.fromTo(
-        revealWords,
-        { opacity: 0.12 },
-        {
-          opacity: 1,
-          stagger: 0.08,
-          ease: "none",
-          scrollTrigger: {
-            trigger: ".reveal-copy",
-            start: "top 76%",
-            end: "bottom 45%",
-            scrub: 0.6,
-          },
-        },
-      );
-
-      stackCards.forEach((card, index) => {
-        gsap.fromTo(
-          card,
-          { y: 72, opacity: 0.5, scale: 0.96 },
-          {
-            y: 0,
-            opacity: 1,
-            scale: 1 - index * 0.012,
-            ease: "none",
-            scrollTrigger: {
-              trigger: card,
-              start: "top 88%",
-              end: "top 28%",
-              scrub: 0.7,
-            },
-          },
-        );
-      });
-    },
-    { scope: pageRef, dependencies: [pageReady], revertOnUpdate: true },
-  );
-
-  function handleWaitlist(event: FormEvent<HTMLFormElement>) {
+  function handleRegistration(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setFormStatus(
-      "Your details are ready. The live waitlist connection will be added before launch.",
-    );
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    const required = ["fullName", "email", "whatsapp", "level", "school"];
+    const errors: Record<string, string> = {};
+    required.forEach((field) => { if (!String(data.get(field) ?? "").trim()) errors[field] = "Please complete this field."; });
+    const email = String(data.get("email") ?? "");
+    if (email && !/^\S+@\S+\.\S+$/.test(email)) errors.email = "Enter a valid email address.";
+    const whatsapp = String(data.get("whatsapp") ?? "").replace(/\D/g, "");
+    if (whatsapp && whatsapp.length < 7) errors.whatsapp = "Enter a valid WhatsApp number.";
+    setFormErrors(errors);
+    if (Object.keys(errors).length) { setFormStatus(""); return; }
+    setFormStatus("Your details look good. Live registration confirmation will be enabled before launch.");
+    form.reset();
   }
+
+  const activeSchedule = siteConfig.schedules[activeDay];
 
   return (
     <>
       <SplashScreen onComplete={() => setPageReady(true)} />
-      <main ref={pageRef} className="overflow-x-hidden w-full max-w-full">
-      <header className="site-header">
-        <a className="wordmark" href="#top" aria-label="Future in Practice home">
-          <span className="wordmark-dot" aria-hidden="true" />
-          Future in Practice
-        </a>
-        <nav className="desktop-nav" aria-label="Main navigation">
-          <a href="#outcomes">What you’ll gain</a>
-          <a href="#format">How it works</a>
-          <a href="#trust">Why trust us</a>
-        </nav>
-        <a className="nav-cta" href="#waitlist">
-          Join the waitlist
-          <ArrowUpRight size={17} weight="bold" aria-hidden="true" />
-        </a>
-      </header>
+      <main ref={pageRef} className="site-shell" id="top">
+        <header className="topbar">
+          <a className="brand" href="#top" aria-label="KFSD Soft Skills Training home"><span className="brand-mark" aria-hidden="true"><Sparkle size={16} weight="fill" /></span><span>KFSD <b>Soft Skills Training</b></span></a>
+          <nav aria-label="Main navigation"><a href="#skills">Skills</a><a href="#schedule">Schedule</a><a href="#organiser">About CKL</a></nav>
+          <a className="topbar-cta" href="#register">Register Free <ArrowUpRight size={17} weight="bold" /></a>
+        </header>
 
-      <section className="hero" id="top">
-        <div className="hero-ambient" aria-hidden="true" />
-        <div className="hero-copy">
-          <p className="eyebrow hero-reveal">Live online · Built for students everywhere</p>
-          <h1 className="hero-title max-w-6xl hero-reveal">
-            The skills that make everything else <span>work.</span>
-          </h1>
-          <p className="hero-intro hero-reveal">
-            Two focused mornings to communicate with clarity, work better with
-            people, and step into your future with more confidence.
-          </p>
-          <div className="hero-actions hero-reveal">
-            <a className="button button-primary" href="#waitlist">
-              Join the waitlist
-              <ArrowUpRight size={19} weight="bold" aria-hidden="true" />
-            </a>
-            <a className="button button-secondary" href="#format">
-              See how it works
-              <ArrowDown size={18} weight="bold" aria-hidden="true" />
-            </a>
+        <section className="new-hero" aria-labelledby="hero-title">
+          <Image src={`${assetPrefix}/images/hero-workshop.webp`} alt="Students collaborating while one student presents an idea" fill priority unoptimized sizes="100vw" className="hero-photo" />
+          <div className="hero-scrim" aria-hidden="true" />
+          <div className="hero-content">
+            <p className="hero-kicker hero-enter">{siteConfig.edition} · Live online</p>
+            <h1 className="hero-enter" id="hero-title">Learn the soft skills that set you apart in 2 days.</h1>
+            <p className="hero-subhead hero-enter">Learn from experienced professionals and become more career-ready.</p>
+            <div className="hero-price hero-enter"><s>{siteConfig.registration.priceWas}</s><span>{siteConfig.registration.priceNow}</span></div>
+            <a className="primary-cta hero-enter" href="#register">Reserve My Free Spot <ArrowRight size={20} weight="bold" /></a>
+            <p className="hero-audience hero-enter">Open to high school, university and technical/vocational college students, and other educational institutions.</p>
           </div>
-        </div>
-
-        <div className="hero-visual hero-reveal">
-          <div className="hero-image-wrap group">
-            <Image
-              src={`${assetPrefix}/visuals/hero-collaboration.svg`}
-              alt=""
-              fill
-              priority
-              unoptimized
-              sizes="(max-width: 900px) 88vw, 38vw"
-              className="hero-image group-hover:scale-105"
-            />
-            <div className="image-wash" aria-hidden="true" />
-            <span className="play-button" aria-label="Program film coming soon">
-              <Play size={20} weight="fill" aria-hidden="true" />
-              Film coming soon
-            </span>
+          <div className="event-dock hero-enter">
+            <div><CalendarBlank size={22} weight="duotone" /><span>{siteConfig.event.dateLabel}</span></div>
+            <div><Clock size={22} weight="duotone" /><span>{siteConfig.event.timeLabel}</span></div>
+            <div><GlobeHemisphereWest size={22} weight="duotone" /><span>{siteConfig.event.venue}</span></div>
+            <a href="#story" aria-label="Continue to the program story"><ArrowDown size={21} /></a>
           </div>
-          <div className="date-card">
-            <CalendarBlank size={25} weight="duotone" aria-hidden="true" />
-            <div>
-              <strong>25–26 November 2026</strong>
-              <span>10:00–12:00 WAT · each day</span>
-            </div>
+        </section>
+
+        <section className="countdown-band" aria-label="Countdown to the training">
+          <p>We start in</p>
+          <div className="countdown-grid">{Object.entries(countdown).map(([label, value]) => <div key={label}><strong>{String(value).padStart(2, "0")}</strong><span>{label}</span></div>)}</div>
+          <p>25 Nov · 10:00 WAT</p>
+        </section>
+
+        <section className="hook-section" id="story">
+          <div className="hook-copy chapter-reveal">
+            <p className="section-kicker">Beyond the classroom</p><h2>Does any of this sound like you?</h2>
+            <ol className="question-list">{questions.map((question, index) => <li key={question}><span>{String(index + 1).padStart(2, "0")}</span><p>{question}</p></li>)}</ol>
+            <p className="hook-answer">Then this is for you.</p>
           </div>
-        </div>
+          <figure className="hook-visual motion-image">
+            <Image src={`${assetPrefix}/images/student-speaker.webp`} alt="A student speaking confidently to a group" fill unoptimized sizes="(max-width: 800px) 100vw, 46vw" />
+            <figcaption><MicrophoneStage size={20} weight="fill" /> Find your voice. Make it count.</figcaption>
+          </figure>
+        </section>
 
-        <a className="scroll-cue" href="#outcomes" aria-label="Explore the program">
-          <span>Explore</span>
-          <ArrowDown size={17} aria-hidden="true" />
-        </a>
-      </section>
+        <section className="matter-section">
+          <p className="section-kicker">Why soft skills matter</p><h2>Your future needs more than good grades.</h2>
+          <p className="reveal-statement">{"Soft skills are what everyone ignores, but they are just as important as technical skills. They help you communicate, lead, work with others, think clearly and handle tough moments. These are the skills that decide who gets noticed and who gets ahead in school, at work and in life.".split(" ").map((word, index) => <span className="reveal-word" key={`${word}-${index}`}>{word}{" "}</span>)}</p>
+          <div className="inline-photo-row" aria-hidden="true"><span style={{ backgroundImage: `url(${assetPrefix}/images/listening.webp)` }} /><span style={{ backgroundImage: `url(${assetPrefix}/images/collaboration.webp)` }} /><span style={{ backgroundImage: `url(${assetPrefix}/images/reflection.webp)` }} /></div>
+        </section>
 
-      <section className="marquee" aria-label="Skills covered">
-        <div className="marquee-track">
-          {[...marqueeWords, ...marqueeWords].map((word, index) => (
-            <span key={`${word}-${index}`}>
-              {word}
-              <span className="marquee-mark" aria-hidden="true" />
-            </span>
-          ))}
-        </div>
-      </section>
-
-      <section className="outcomes-section" id="outcomes">
-        <div className="section-heading split-heading">
-          <p className="eyebrow dark">Real life rarely gives you a script</p>
-          <h2>
-            Learn how to show up when the answer isn’t in a textbook.
-          </h2>
-        </div>
-
-        <div className="bento-grid grid-flow-dense">
-          <article className="bento-card bento-lead group">
-            <div className="bento-orbit" aria-hidden="true">
-              <span />
-              <span />
-              <span />
-            </div>
-            <div className="bento-copy">
-              <MicrophoneStage size={32} weight="duotone" aria-hidden="true" />
-              <h3>Turn thoughts into words people can follow.</h3>
-              <p>
-                Whether it’s a class presentation, an interview, or a difficult
-                conversation, clarity changes what happens next.
-              </p>
-            </div>
-          </article>
-
-          <article className="bento-card bento-coral group">
-            <div className="bento-copy">
-              <UsersThree size={29} weight="duotone" aria-hidden="true" />
-              <h3>Become better to build with.</h3>
-              <p>Listen well, contribute clearly, and navigate difference.</p>
-            </div>
-          </article>
-
-          <article className="bento-card bento-image group">
-            <Image
-              src={`${assetPrefix}/visuals/opportunity.svg`}
-              alt=""
-              fill
-              unoptimized
-              sizes="(max-width: 800px) 100vw, 42vw"
-              className="card-image group-hover:scale-105"
-            />
-            <div className="bento-image-overlay" />
-            <div className="bento-copy">
-              <Compass size={29} weight="duotone" aria-hidden="true" />
-              <h3>See opportunity—and meet it prepared.</h3>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section className="reveal-section">
-        <p className="reveal-copy">
-          {"Your grades can open a door. Your human skills help you walk through it, connect with the room, and make the opportunity count."
-            .split(" ")
-            .map((word, index) => (
-              <span className="reveal-word" key={`${word}-${index}`}>
-                {word}{" "}
-              </span>
+        <section className="skills-section" id="skills">
+          <div className="section-heading chapter-reveal"><p className="section-kicker">What you’ll learn</p><h2>5 skills that change how people see you</h2></div>
+          <div className="skills-grid grid-flow-dense">
+            {skills.map(({ tag, title, copy, icon: Icon, className, image }) => (
+              <article className={`skill-card ${className}`} key={tag}>
+                {image && <Image src={`${assetPrefix}${image}`} alt="" fill unoptimized sizes="(max-width: 760px) 100vw, 58vw" className="skill-image" />}
+                <div className="skill-overlay" aria-hidden="true" />
+                <div className="skill-card-content"><div className="skill-meta"><span>{tag}</span><Icon size={30} weight="duotone" /></div><h3>{title}</h3><p>{copy}</p></div>
+              </article>
             ))}
-        </p>
-      </section>
-
-      <section className="audience-section" id="audience">
-        <div className="section-heading audience-heading">
-          <p className="eyebrow">Made for where you are now</p>
-          <h2>
-            Your next chapter is different. The need to connect is universal.
-          </h2>
-        </div>
-
-        <div className="audience-accordion">
-          {audience.map((item, index) => {
-            const isActive = activeAudience === index;
-            return (
-              <button
-                className={`audience-panel group ${isActive ? "active" : ""}`}
-                key={item.title}
-                type="button"
-                aria-expanded={isActive}
-                onClick={() => setActiveAudience(index)}
-              >
-                <Image
-                  src={item.image}
-                  alt=""
-                  fill
-                  unoptimized
-                  sizes="(max-width: 800px) 100vw, 60vw"
-                  className="audience-image group-hover:scale-105"
-                />
-                <span className="audience-shade" aria-hidden="true" />
-                <span className="audience-number">{item.number}</span>
-                <span className="audience-content">
-                  <strong>{item.title}</strong>
-                  <span>{item.copy}</span>
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="format-section" id="format">
-        <div className="format-intro">
-          <p className="eyebrow dark">Four hours. Designed to travel with you.</p>
-          <h2>
-            Two mornings of useful ideas, active practice, and room to think.
-          </h2>
-          <p>
-            This is a live virtual experience for students in Nigeria and around
-            the world. Join from a quiet space with a stable connection and come
-            ready to participate.
-          </p>
-        </div>
-
-        <div className="schedule-card">
-          <div className="schedule-topline">
-            <span>Live online</span>
-            <GlobeHemisphereWest size={28} weight="duotone" aria-hidden="true" />
           </div>
-          <div className="schedule-row">
-            <div>
-              <strong>Wednesday</strong>
-              <span>25 November 2026</span>
-            </div>
-            <b>10:00–12:00</b>
+        </section>
+
+        <section className="learning-section">
+          <div className="section-heading learning-heading chapter-reveal"><p className="section-kicker">How you’ll learn</p><h2>No boring lectures. You’ll actually do things.</h2></div>
+          <div className="learning-accordion">
+            {learningSteps.map(({ title, copy, icon: Icon, image }, index) => {
+              const active = activeStep === index;
+              return <button className={`learning-panel ${active ? "active" : ""}`} type="button" key={title} aria-expanded={active} onClick={() => setActiveStep(index)} onMouseEnter={() => setActiveStep(index)}>
+                <Image src={`${assetPrefix}${image}`} alt="" fill unoptimized sizes="(max-width: 800px) 100vw, 50vw" /><span className="learning-shade" /><span className="learning-index">0{index + 1}</span><span className="learning-label"><Icon size={24} weight="duotone" /><strong>{title}</strong><small>{copy}</small></span>
+              </button>;
+            })}
           </div>
-          <div className="schedule-row">
-            <div>
-              <strong>Thursday</strong>
-              <span>26 November 2026</span>
-            </div>
-            <b>10:00–12:00</b>
+          <div className="experience-strip chapter-reveal">
+            <figure><Image src={`${assetPrefix}/images/collaboration.webp`} alt="Students collaborating on a group activity" fill unoptimized sizes="33vw" /></figure>
+            <figure><Image src={`${assetPrefix}/images/listening.webp`} alt="Students listening during a discussion" fill unoptimized sizes="33vw" /></figure>
+            <figure><Image src={`${assetPrefix}/images/reflection.webp`} alt="Students reflecting together after a workshop" fill unoptimized sizes="33vw" /></figure>
           </div>
-          <div className="timezone-note">
-            <Clock size={20} weight="duotone" aria-hidden="true" />
-            <p>
-              Times are in West Africa Time (WAT, UTC+1). That’s 09:00–11:00 UTC
-              each day.
-            </p>
+          <p className="image-disclosure">Concept imagery showing the kind of interactive learning experience planned for the program.</p>
+        </section>
+
+        <section className="schedule-section" id="schedule">
+          <div className="schedule-layout">
+            <div className="schedule-intro"><p className="section-kicker">Order of the day</p><h2>Two focused mornings. One stronger way to show up.</h2><p>Both days run from 10:00AM to 12:00PM West Africa Time.</p><div className="local-time-card"><GlobeHemisphereWest size={25} weight="duotone" /><div><strong>Not in Nigeria?</strong><span>{localTime || "Converting 10:00AM WAT to your local time…"}</span></div></div></div>
+            <div className="schedule-panel chapter-reveal">
+              <div className="day-tabs" role="tablist" aria-label="Training days">{siteConfig.schedules.map((day, index) => <button key={day.label} role="tab" aria-selected={activeDay === index} onClick={() => setActiveDay(index)}>{day.label}</button>)}</div>
+              <div className="schedule-title"><div><span>{activeSchedule.date}</span><h3>{activeSchedule.title}</h3></div><Clock size={31} weight="duotone" /></div>
+              <ol className="agenda-list">{activeSchedule.items.map(([time, item]) => <li key={`${time}-${item}`}><time>{time}</time><span>{item}</span></li>)}</ol><p className="schedule-note">Schedule may be adjusted slightly.</p>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="journey-section">
-        <div className="journey-heading">
-          <p className="eyebrow">What you’ll practise</p>
-          <h2>
-            Less watching from the sidelines. More skills you can actually use.
-          </h2>
-        </div>
-
-        <div className="journey-stack">
-          {journeyCards.map(({ icon: Icon, title, copy, accent }, index) => (
-            <article
-              className={`stack-card stack-${accent}`}
-              style={{ top: `${110 + index * 22}px` }}
-              key={title}
-            >
-              <span className="stack-index">0{index + 1}</span>
-              <div className="stack-icon">
-                <Icon size={34} weight="duotone" aria-hidden="true" />
-              </div>
-              <div>
-                <h3>{title}</h3>
-                <p>{copy}</p>
-              </div>
-              <CheckCircle size={30} weight="fill" aria-hidden="true" />
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="trust-section" id="trust">
-        <div className="trust-heading">
-          <p className="eyebrow dark">Trust should be earned in public</p>
-          <h2>
-            Know who is behind the room before you step into it.
-          </h2>
-          <p>
-            Facilitator biographies, relevant affiliations, program footage, and
-            participant stories will be added here only after they are verified.
-            No borrowed credibility. No made-up proof.
-          </p>
-        </div>
-
-        <div className="trust-grid">
-          <article className="trust-card">
-            <span className="trust-icon">
-              <Student size={29} weight="duotone" aria-hidden="true" />
-            </span>
-            <div>
-              <h3>Meet the facilitators</h3>
-              <p>Names, photographs, experience, and relevant links will appear here.</p>
-            </div>
-            <span className="verification-state">Awaiting verified details</span>
-          </article>
-          <article className="trust-card">
-            <span className="trust-icon">
-              <Play size={27} weight="duotone" aria-hidden="true" />
-            </span>
-            <div>
-              <h3>See the work</h3>
-              <p>Real clips and evidence from previous programs will be published when supplied.</p>
-            </div>
-            <span className="verification-state">Evidence slot reserved</span>
-          </article>
-          <article className="trust-card">
-            <span className="trust-icon">
-              <ShieldCheck size={29} weight="duotone" aria-hidden="true" />
-            </span>
-            <div>
-              <h3>Share with confidence</h3>
-              <p>Clear logistics and verified organizer details make it easier to involve a parent or educator.</p>
-            </div>
-            <span className="verification-state">Transparency first</span>
-          </article>
-        </div>
-      </section>
-
-      <section className="faq-section">
-        <div className="faq-heading">
-          <p className="eyebrow">Before you join</p>
-          <h2>Useful answers, upfront.</h2>
-        </div>
-        <div className="faq-list">
-          <details>
-            <summary>Who is this training for?</summary>
-            <p>
-              High school, pre-college, and university students who want to
-              communicate, collaborate, and navigate opportunities with more confidence.
-            </p>
-          </details>
-          <details>
-            <summary>Can I join from outside Nigeria?</summary>
-            <p>
-              Yes. The sessions are virtual and open internationally. Use 09:00–11:00
-              UTC to convert the schedule to your local time.
-            </p>
-          </details>
-          <details>
-            <summary>How much time should I set aside?</summary>
-            <p>
-              Two hours on Wednesday, 25 November and two hours on Thursday, 26
-              November 2026. Plan for four hours in total.
-            </p>
-          </details>
-          <details>
-            <summary>Is joining the waitlist the same as registering?</summary>
-            <p>
-              No. The waitlist lets you hear when registration opens and receive
-              confirmed program details before places are released.
-            </p>
-          </details>
-        </div>
-      </section>
-
-      <section className="waitlist-section" id="waitlist">
-        <div className="waitlist-ambient" aria-hidden="true" />
-        <div className="waitlist-copy">
-          <p className="eyebrow">Start before the room opens</p>
-          <h2>
-            Put your future skills into{" "}
-            <span
-              className="inline-image"
-              role="img"
-              aria-label="Students learning together"
-              style={{
-                backgroundImage: `linear-gradient(rgba(17,18,15,.08), rgba(17,18,15,.08)), url("${assetPrefix}/visuals/inline-learning.svg")`,
-              }}
-            />{" "}
-            practice.
-          </h2>
-          <p>
-            Join the waitlist for registration updates, confirmed facilitator
-            details, and everything you need to arrive ready.
-          </p>
-        </div>
-
-        <form className="waitlist-form" onSubmit={handleWaitlist}>
-          <div className="field-row">
-            <label>
-              First name
-              <input name="name" type="text" autoComplete="given-name" required placeholder="Your first name" />
-            </label>
-            <label>
-              Email address
-              <input name="email" type="email" autoComplete="email" required placeholder="you@example.com" />
-            </label>
+        <section className="proof-section">
+          <div className="proof-header chapter-reveal"><p className="section-kicker">People and proof</p><h2>Know who is behind the room before you join it.</h2><p>Speaker profiles, verified student stories and real footage will appear here as soon as the organiser approves them.</p></div>
+          <div className="speaker-placeholder-grid">{["Leadership", "Communication", "Career readiness", "Youth development"].map((area, index) => <article key={area}><span className="portrait-placeholder"><Student size={42} weight="thin" /></span><div><small>Profile {String(index + 1).padStart(2, "0")}</small><h3>{area} facilitator</h3><p>Verified profile coming soon</p></div></article>)}</div>
+          <div className="story-carousel" aria-label="Participant story placeholders">
+            <article className="video-story"><Image src={`${assetPrefix}/images/reflection.webp`} alt="Students reflecting together" fill unoptimized sizes="(max-width: 800px) 90vw, 45vw" /><span className="video-shade" /><div><span className="play-icon"><Play size={23} weight="fill" /></span><p>Video stories coming soon</p></div></article>
+            {["Confidence", "Time management", "Speaking up"].map((topic) => <article className="story-placeholder" key={topic}><HandHeart size={27} weight="duotone" /><p>{topic}</p><span>Approved participant story coming soon</span></article>)}
           </div>
-          <label>
-            Where are you in your journey?
-            <select name="studentStage" defaultValue="" required>
-              <option value="" disabled>Select one</option>
-              <option value="high-school">High school</option>
-              <option value="pre-college">Pre-college</option>
-              <option value="university">University</option>
-              <option value="other">Something else</option>
-            </select>
-          </label>
-          <button className="button form-submit" type="submit">
-            Join the waitlist
-            <ArrowUpRight size={20} weight="bold" aria-hidden="true" />
-          </button>
-          <p className="form-note">
-            By joining, you agree to receive updates about this program. You can unsubscribe at any time.
-          </p>
-          {formStatus && <p className="form-status" role="status">{formStatus}</p>}
-        </form>
-      </section>
+        </section>
 
-      <footer>
-        <a className="wordmark footer-mark" href="#top">
-          <span className="wordmark-dot" aria-hidden="true" />
-          Future in Practice
-        </a>
-        <p>Virtual soft skills training for the next generation.</p>
-        <div className="footer-meta">
-          <span>25–26 November 2026</span>
-          <span>10:00–12:00 WAT</span>
-          <a href="#waitlist">Join the waitlist</a>
-        </div>
-      </footer>
+        <section className="organiser-section" id="organiser">
+          <div className="organiser-image motion-image"><Image src={`${assetPrefix}/images/listening.webp`} alt="Young people taking part in a thoughtful group conversation" fill unoptimized sizes="(max-width: 800px) 100vw, 48vw" /></div>
+          <div className="organiser-copy chapter-reveal"><p className="section-kicker">Organised by CKL</p><h2>Four years of helping young people stand out</h2><p>For four years, CKL has been running sessions that teach young people the skills that set them apart in work, business and life. This is another amazing edition, after 300 days of waiting. We’re excited to bring you this opportunity.</p><p className="organiser-note"><ShieldCheck size={22} weight="duotone" /> Additional organiser links and affiliations will be added after verification.</p></div>
+        </section>
+
+        <section className="two-days-section"><div className="two-days-number" aria-hidden="true">2</div><div><p className="section-kicker">Why just two days?</p><h2>2 hours. 2 days. A lifetime of difference.</h2></div><p>We’ve packed the most valuable lessons into 4 focused hours so you get maximum value without wasting your time. These are 4 hours with information that could change how you show up for the rest of your life.</p></section>
+
+        <section className="registration-section" id="register">
+          <div className="registration-copy chapter-reveal">
+            <p className="section-kicker">Registration</p><h2>Register for the soft skills training and take on a new mindset that will shape your future.</h2><div className="registration-price"><s>{siteConfig.registration.priceWas}</s><strong>Free</strong></div>
+            <div className="availability"><div><span>Registration window</span><b>Spaces are limited</b></div><div className="availability-track"><span /></div><p>Confirmed availability will be shown here when registration goes live.</p></div>
+            <div className="registration-reminder"><Check size={18} weight="bold" /> 2 hours a day <Check size={18} weight="bold" /> 2 days <Check size={18} weight="bold" /> 100% free</div>
+          </div>
+          <form className="registration-form" onSubmit={handleRegistration} noValidate>
+            <label>Full name<input name="fullName" type="text" autoComplete="name" placeholder="Your full name" aria-describedby={formErrors.fullName ? "fullName-error" : undefined} />{formErrors.fullName && <small id="fullName-error">{formErrors.fullName}</small>}</label>
+            <div className="form-row">
+              <label>Email<input name="email" type="email" autoComplete="email" placeholder="you@example.com" aria-describedby={formErrors.email ? "email-error" : undefined} />{formErrors.email && <small id="email-error">{formErrors.email}</small>}</label>
+              <label>WhatsApp number<input name="whatsapp" type="tel" autoComplete="tel" placeholder="+234 800 000 0000" aria-describedby={formErrors.whatsapp ? "whatsapp-error" : undefined} />{formErrors.whatsapp && <small id="whatsapp-error">{formErrors.whatsapp}</small>}</label>
+            </div>
+            <label>Current level<select name="level" defaultValue="" aria-describedby={formErrors.level ? "level-error" : undefined}><option value="" disabled>Select your level</option>{siteConfig.levels.map((level) => <option key={level}>{level}</option>)}</select>{formErrors.level && <small id="level-error">{formErrors.level}</small>}</label>
+            <label>School or institution name<input name="school" type="text" autoComplete="organization" placeholder="Your school or institution" aria-describedby={formErrors.school ? "school-error" : undefined} />{formErrors.school && <small id="school-error">{formErrors.school}</small>}</label>
+            <button type="submit">Reserve My Free Spot <ArrowUpRight size={20} weight="bold" /></button><p className="form-reassurance">Your details will only be used for this training.</p>{formStatus && <p className="form-status" role="status">{formStatus}</p>}
+          </form>
+        </section>
+
+        <section className="faq-section-new"><div><p className="section-kicker">Good to know</p><h2>Questions, answered.</h2></div><div className="faq-list-new">{faqs.map(([question, answer]) => <details key={question}><summary>{question}<span>+</span></summary><p>{answer}</p></details>)}</div></section>
+
+        <footer className="new-footer"><div className="footer-lead"><a className="brand footer-brand" href="#top"><span className="brand-mark"><Sparkle size={16} weight="fill" /></span><span>KFSD <b>Soft Skills Training</b></span></a><h2>Ready to set yourself apart?</h2><a href="#register">Register Free <ArrowRight size={20} weight="bold" /></a></div><div className="footer-bottom"><p>Organised by {siteConfig.organiser}</p><p>{siteConfig.event.dateLabel} · {siteConfig.event.timeLabel}</p><p>Concept imagery shown; verified media coming soon</p><p>© 2026 KFSD</p></div></footer>
       </main>
     </>
   );

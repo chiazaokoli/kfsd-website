@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
   output: "export",
   trailingSlash: true,
   basePath: isGitHubPages ? "/kfsd-website" : "",
+  experimental: {
+    useTypeScriptCli: false,
+  },
   images: {
     unoptimized: true,
   },

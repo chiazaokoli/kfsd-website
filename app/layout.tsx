@@ -6,9 +6,9 @@ import "@fontsource/be-vietnam-pro/700.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Future in Practice | Virtual Soft Skills Training",
+  title: "KFSD Soft Skills Training | Live Online, 25–26 November 2026",
   description:
-    "A two-day virtual soft skills experience for high school, pre-college, and university students. November 25–26, 2026.",
+    "A free two-day virtual soft skills training for students. Build leadership, communication, critical thinking, resilience and integrity.",
 };
 
 export default function RootLayout({

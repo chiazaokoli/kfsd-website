@@ -93,7 +93,7 @@ export default function SplashScreen({ onComplete }: { onComplete: () => void })
       <div className="splash-curtain">
         <div className="splash-brand">
           <span className="wordmark-dot" />
-          Future in Practice
+          KFSD Soft Skills Training
         </div>
 
         <div className="splash-stage">
