@@ -190,7 +190,7 @@ export default function Home() {
         </section>
 
         <section className="learning-section">
-          <div className="section-heading learning-heading chapter-reveal"><p className="section-kicker">How you’ll learn</p><h2>No boring lectures. You’ll actually do things.</h2></div>
+          <div className="section-heading learning-heading chapter-reveal"><h2>No boring lectures. You’ll actually do things.</h2></div>
           <div className="learning-accordion">
             {learningSteps.map(({ title, copy, icon: Icon, image }, index) => {
               const active = activeStep === index;
@@ -199,17 +199,11 @@ export default function Home() {
               </button>;
             })}
           </div>
-          <div className="experience-strip chapter-reveal">
-            <figure><Image src={`${assetPrefix}/images/collaboration.webp`} alt="Students collaborating on a group activity" fill unoptimized sizes="33vw" /></figure>
-            <figure><Image src={`${assetPrefix}/images/listening.webp`} alt="Students listening during a discussion" fill unoptimized sizes="33vw" /></figure>
-            <figure><Image src={`${assetPrefix}/images/reflection.webp`} alt="Students reflecting together after a workshop" fill unoptimized sizes="33vw" /></figure>
-          </div>
-          <p className="image-disclosure">Concept imagery showing the kind of interactive learning experience planned for the program.</p>
         </section>
 
         <section className="schedule-section" id="schedule">
           <div className="schedule-layout">
-            <div className="schedule-intro"><p className="section-kicker">Order of the day</p><h2>Two focused mornings. One stronger way to show up.</h2><p>Both days run from 10:00AM to 12:00PM West Africa Time.</p><div className="local-time-card"><GlobeHemisphereWest size={25} weight="duotone" /><div><strong>Not in Nigeria?</strong><span>{localTime || "Converting 10:00AM WAT to your local time…"}</span></div></div></div>
+            <div className="schedule-intro"><h2>Order of the day</h2><p>Both days run from 10:00AM to 12:00PM West Africa Time.</p><div className="local-time-card"><GlobeHemisphereWest size={25} weight="duotone" /><div><strong>Not in Nigeria?</strong><span>{localTime || "Converting 10:00AM WAT to your local time…"}</span></div></div></div>
             <div className="schedule-panel chapter-reveal">
               <div className="day-tabs" role="tablist" aria-label="Training days">{siteConfig.schedules.map((day, index) => <button key={day.label} role="tab" aria-selected={activeDay === index} onClick={() => setActiveDay(index)}>{day.label}</button>)}</div>
               <div className="schedule-title"><div><span>{activeSchedule.date}</span><h3>{activeSchedule.title}</h3></div><Clock size={31} weight="duotone" /></div>

@@ -152,12 +152,6 @@ img { display: block; }
 .learning-label svg { grid-row: span 2; color: var(--lime); }
 .learning-label strong { font-size: clamp(1.5rem, 2.3vw, 2.8rem); letter-spacing: -.045em; }
 .learning-label small { color: rgba(255,255,255,.72); font-size: .78rem; }
-.experience-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 120px; }
-.experience-strip figure { position: relative; height: clamp(230px, 29vw, 460px); margin: 0; overflow: hidden; border-radius: 16px; }
-.experience-strip figure:nth-child(2) { transform: translateY(46px); }
-.experience-strip img { object-fit: cover; transition: transform 700ms ease; }
-.experience-strip figure:hover img { transform: scale(1.05); }
-.image-disclosure { margin: 72px 0 0 auto; max-width: 500px; color: rgba(255,255,255,.52); font-size: .7rem; line-height: 1.6; text-align: right; }
 
 /* Schedule */
 .schedule-section { padding: clamp(120px, 14vw, 210px) max(5vw, 28px); background: var(--paper); }
@@ -316,10 +310,6 @@ img { display: block; }
   .learning-panel.active { min-height: 420px; }
   .learning-index { top: 50%; left: 22px; transform: translateY(-50%); }
   .learning-panel.active .learning-index { top: 20px; left: 50%; transform: translateX(-50%); }
-  .experience-strip { grid-template-columns: 1fr; margin-top: 85px; }
-  .experience-strip figure { height: 75vw; max-height: 470px; }
-  .experience-strip figure:nth-child(2) { transform: none; }
-  .image-disclosure { margin-top: 28px; text-align: left; }
   .schedule-layout { min-height: 0; grid-template-columns: 1fr; gap: 60px; }
   .schedule-intro { max-width: none; }
   .speaker-placeholder-grid { grid-template-columns: 1fr 1fr; }
