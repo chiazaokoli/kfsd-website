@@ -15,6 +15,8 @@ import { siteConfig } from "../src/config/site";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 const assetPrefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+const heroScrambleTarget = "2 days.";
+const scrambleCharacters = "abcdefghijklmnopqrstuvwxyz0123456789";
 
 const questions = [
   "Do you struggle with rallying your friends around a task?",
@@ -69,6 +71,36 @@ export default function Home() {
   const [localTime, setLocalTime] = useState("");
   const [formStatus, setFormStatus] = useState("");
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [heroScrambleText, setHeroScrambleText] = useState(heroScrambleTarget);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let interval: number | undefined;
+    const start = window.setTimeout(() => {
+      let step = 0;
+      const update = () => {
+        step += 1;
+        if (step >= 16) {
+          setHeroScrambleText(heroScrambleTarget);
+          window.clearInterval(interval);
+          return;
+        }
+        const settled = Math.floor((step / 16) * heroScrambleTarget.length);
+        setHeroScrambleText([...heroScrambleTarget].map((character, index) => {
+          if (character === " " || character === "." || index < settled) return character;
+          return scrambleCharacters[Math.floor(Math.random() * scrambleCharacters.length)];
+        }).join(""));
+      };
+      update();
+      interval = window.setInterval(update, 65);
+    }, 300);
+
+    return () => {
+      window.clearTimeout(start);
+      window.clearInterval(interval);
+    };
+  }, []);
 
   useEffect(() => {
     const updateCountdown = () => setCountdown(getCountdown());
@@ -140,9 +172,8 @@ export default function Home() {
           <div className="hero-scrim" aria-hidden="true" />
           <div className="hero-content">
             <p className="edition-badge hero-enter"><span className="edition-badge-icon"><Medal size={15} weight="duotone" aria-hidden="true" /></span><span>{siteConfig.edition}</span></p>
-            <h1 className="hero-enter" id="hero-title">Learn the soft skills that set you apart in <span className="hero-title-highlight">2 days.</span></h1>
+            <h1 className="hero-enter" id="hero-title" aria-label="Learn the soft skills that set you apart in 2 days.">Learn the soft skills that set you apart in <span className="hero-scramble" aria-hidden="true"><span className="hero-scramble-placeholder">2 days.</span><span className="hero-scramble-active">{heroScrambleText}</span></span></h1>
             <p className="hero-subhead hero-enter">Learn from experienced professionals and become more career-ready.</p>
-            <div className="hero-price hero-enter"><span>{siteConfig.registration.priceNow}</span></div>
             <a className="primary-cta hero-enter" href="#register">Reserve My Free Spot <ArrowRight size={20} weight="bold" /></a>
           </div>
           <div className="event-dock hero-enter">
