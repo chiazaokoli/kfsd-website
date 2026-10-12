@@ -161,20 +161,19 @@ export default function Home() {
 
         <section className="hook-section" id="story">
           <div className="hook-copy chapter-reveal">
-            <p className="section-kicker">Beyond the classroom</p><h2>Does any of this sound like you?</h2>
+            <h2>Does any of this sound like you?</h2>
             <ol className="question-list">{questions.map((question, index) => <li key={question}><span>{String(index + 1).padStart(2, "0")}</span><p>{question}</p></li>)}</ol>
             <p className="hook-answer">Then this is for you.</p>
           </div>
           <figure className="hook-visual motion-image">
             <Image src={`${assetPrefix}/images/student-speaker.webp`} alt="A student speaking confidently to a group" fill unoptimized sizes="(max-width: 800px) 100vw, 46vw" />
-            <figcaption><MicrophoneStage size={20} weight="fill" /> Find your voice. Make it count.</figcaption>
+            <figcaption><MicrophoneStage size={28} weight="fill" /> Find your voice. Make it count.</figcaption>
           </figure>
         </section>
 
         <section className="matter-section">
-          <p className="section-kicker">Why soft skills matter</p><h2>Your future needs more than good grades.</h2>
+          <h2>Your future needs more than good grades.</h2>
           <p className="reveal-statement">{"Soft skills are what everyone ignores, but they are just as important as technical skills. They help you communicate, lead, work with others, think clearly and handle tough moments. These are the skills that decide who gets noticed and who gets ahead in school, at work and in life.".split(" ").map((word, index) => <span className="reveal-word" key={`${word}-${index}`}>{word}{" "}</span>)}</p>
-          <div className="inline-photo-row" aria-hidden="true"><span style={{ backgroundImage: `url(${assetPrefix}/images/listening.webp)` }} /><span style={{ backgroundImage: `url(${assetPrefix}/images/collaboration.webp)` }} /><span style={{ backgroundImage: `url(${assetPrefix}/images/reflection.webp)` }} /></div>
         </section>
 
         <section className="skills-section" id="skills">

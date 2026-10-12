@@ -99,16 +99,13 @@ img { display: block; }
 .hook-visual img { object-fit: cover; transition: transform 800ms ease; }
 .hook-visual:hover img { transform: scale(1.045); }
 .hook-visual::after { position: absolute; inset: 0; background: linear-gradient(to top, rgba(6,10,18,.72), transparent 40%); content: ""; }
-.hook-visual figcaption { position: absolute; z-index: 2; right: 24px; bottom: 24px; left: 24px; display: flex; align-items: center; gap: 10px; color: white; font-size: .78rem; font-weight: 650; }
-.hook-visual figcaption svg { color: var(--lime); }
+.hook-visual figcaption { position: absolute; z-index: 2; right: 24px; bottom: 24px; left: 24px; display: flex; align-items: center; gap: 12px; color: white; font-size: clamp(1rem, 1.3vw, 1.2rem); font-weight: 650; }
+.hook-visual figcaption svg { flex-shrink: 0; color: var(--lime); }
 
 .matter-section { position: relative; padding: clamp(130px, 15vw, 230px) max(5vw, 28px); overflow: hidden; color: var(--white); background: radial-gradient(circle at 80% 30%, rgba(49,92,255,.22), transparent 30%), var(--ink); }
 .matter-section h2 { max-width: 1050px; margin: 0 0 50px; font-size: clamp(3rem, 6.5vw, 7rem); font-weight: 520; letter-spacing: -.075em; line-height: .95; }
 .reveal-statement { position: relative; z-index: 2; max-width: 1190px; margin: 0; color: var(--cream); font-size: clamp(1.65rem, 3.1vw, 3.7rem); font-weight: 430; letter-spacing: -.045em; line-height: 1.25; }
 .reveal-word { opacity: .12; }
-.inline-photo-row { display: flex; gap: 12px; justify-content: flex-end; margin-top: 75px; }
-.inline-photo-row span { width: clamp(100px, 15vw, 230px); height: clamp(55px, 8vw, 115px); border-radius: 999px; background-position: center; background-size: cover; filter: saturate(.85) contrast(1.05); }
-.inline-photo-row span:nth-child(2) { transform: translateY(28px); }
 
 /* Skills */
 .skills-section { padding: clamp(120px, 14vw, 210px) max(5vw, 28px); background: var(--cream); }
@@ -348,15 +345,13 @@ img { display: block; }
   .splash-moment small { position: absolute; right: 0; bottom: 22px; padding: 0; }
   .splash-footer { right: 20px; bottom: 24px; left: 20px; }
   .hero-kicker { font-size: .63rem; }
-  .new-hero h1 { font-size: 2.55rem; line-height: .96; }
+  .new-hero h1 { font-size: 3rem; line-height: .96; }
   .hero-subhead { font-size: .94rem; }
   .countdown-grid strong { font-size: 2.2rem; }
   .hook-copy h2, .section-heading h2, .schedule-intro h2, .proof-header h2, .organiser-copy h2, .faq-section-new h2 { font-size: 2.65rem; }
   .question-list li { grid-template-columns: 34px 1fr; gap: 12px; }
   .matter-section h2 { font-size: 3.1rem; }
   .reveal-statement { font-size: 1.48rem; }
-  .inline-photo-row { justify-content: flex-start; }
-  .inline-photo-row span { width: 90px; height: 55px; }
   .skill-card { min-height: 400px; }
   .skill-third { min-height: 330px; }
   .speaker-placeholder-grid { grid-template-columns: 1fr; }
