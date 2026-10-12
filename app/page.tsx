@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { type CSSProperties, FormEvent, Fragment, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -15,8 +15,16 @@ import { siteConfig } from "../src/config/site";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 const assetPrefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-const heroScrambleTarget = "2 days.";
-const scrambleCharacters = "abcdefghijklmnopqrstuvwxyz0123456789";
+const heroIntroWords = ["LEARN", "THE", "SOFT", "SKILLS", "THAT", "SET", "YOU", "APART", "IN"];
+const heroScrambleTarget = "2 DAYS.";
+const scrambleCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+const heroScrambleStart = heroIntroWords.join("").length;
+
+function heroLetters(text: string, startIndex: number) {
+  return [...text].map((letter, index) => letter === " " ? " " : (
+    <span className="hero-letter" data-letter={letter} key={index} style={{ "--letter-delay": `${(startIndex + index) * 48}ms` } as CSSProperties}>{letter}</span>
+  ));
+}
 
 const questions = [
   "Do you struggle with rallying your friends around a task?",
@@ -174,7 +182,7 @@ export default function Home() {
           <div className="hero-scrim" aria-hidden="true" />
           <div className="hero-content">
             <p className="edition-badge hero-enter"><span className="edition-badge-icon"><Medal size={15} weight="duotone" aria-hidden="true" /></span><span>{siteConfig.edition}</span></p>
-            <h1 className="hero-enter" id="hero-title" aria-label="Learn the soft skills that set you apart in 2 days.">Learn the soft skills that set you apart in <span className="hero-scramble" aria-hidden="true"><span className="hero-scramble-placeholder">2 days.</span><span className="hero-scramble-active">{heroScrambleText}</span></span></h1>
+            <h1 className="hero-enter" id="hero-title" aria-label="Learn the soft skills that set you apart in 2 days."><span aria-hidden="true">{heroIntroWords.map((word, index) => <Fragment key={word}>{index > 0 && " "}<span className="hero-word">{heroLetters(word, heroIntroWords.slice(0, index).join("").length)}</span></Fragment>)}{" "}<span className="hero-scramble"><span className="hero-scramble-placeholder">{heroScrambleTarget}</span><span className="hero-scramble-active">{heroLetters(heroScrambleText, heroScrambleStart)}</span></span></span></h1>
             <p className="hero-subhead hero-enter">Learn from experienced professionals and become more career-ready.</p>
             <a className="primary-cta hero-enter" href="#register">Reserve My Free Spot <ArrowRight size={20} weight="bold" /></a>
           </div>
