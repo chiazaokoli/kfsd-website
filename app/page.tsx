@@ -9,9 +9,8 @@ import {
   ArrowDown, ArrowRight, ArrowUpRight, Brain, CalendarBlank, ChatCircleDots,
   Check, Clock, CrownSimple, GlobeHemisphereWest, HandHeart, Lightning,
   ListChecks, MicrophoneStage, Mountains, Play, Question, ShieldCheck,
-  Sparkle, Student, UsersThree,
+  Sparkle, Student, UsersThree, Medal,
 } from "@phosphor-icons/react";
-import SplashScreen from "./components/SplashScreen";
 import { siteConfig } from "../src/config/site";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
@@ -64,7 +63,6 @@ function getCountdown(): Countdown {
 
 export default function Home() {
   const pageRef = useRef<HTMLElement>(null);
-  const [pageReady, setPageReady] = useState(false);
   const [countdown, setCountdown] = useState<Countdown>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [activeStep, setActiveStep] = useState(0);
   const [activeDay, setActiveDay] = useState(0);
@@ -87,7 +85,6 @@ export default function Home() {
   }, []);
 
   useGSAP(() => {
-    if (!pageReady) return;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const revealWords = gsap.utils.toArray<HTMLElement>(".reveal-word");
     const revealItems = gsap.utils.toArray<HTMLElement>(".chapter-reveal");
@@ -108,7 +105,7 @@ export default function Home() {
       ScrollTrigger.create({ trigger: ".schedule-layout", start: "top 110px", end: "bottom bottom-=80", pin: ".schedule-intro", pinSpacing: false });
     });
     return () => matchMedia.revert();
-  }, { scope: pageRef, dependencies: [pageReady], revertOnUpdate: true });
+  }, { scope: pageRef });
 
   function handleRegistration(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -131,7 +128,6 @@ export default function Home() {
 
   return (
     <>
-      <SplashScreen onComplete={() => setPageReady(true)} />
       <main ref={pageRef} className="site-shell" id="top">
         <header className="topbar">
           <a className="brand" href="#top" aria-label="KFSD Soft Skills Training home"><span className="brand-mark" aria-hidden="true"><Sparkle size={16} weight="fill" /></span><span>KFSD <b>Soft Skills Training</b></span></a>
@@ -143,10 +139,10 @@ export default function Home() {
           <Image src={`${assetPrefix}/images/hero-editorial.webp`} alt="Students collaborating while one student presents an idea" fill priority unoptimized sizes="100vw" className="hero-photo" />
           <div className="hero-scrim" aria-hidden="true" />
           <div className="hero-content">
-            <p className="hero-kicker hero-enter">{siteConfig.edition} · Live online</p>
+            <p className="edition-badge hero-enter"><Medal size={17} weight="duotone" aria-hidden="true" /><span>{siteConfig.edition}</span></p>
             <h1 className="hero-enter" id="hero-title">Learn the soft skills that set you apart in <span className="hero-title-highlight">2 days.</span></h1>
             <p className="hero-subhead hero-enter">Learn from experienced professionals and become more career-ready.</p>
-            <div className="hero-price hero-enter"><s>{siteConfig.registration.priceWas}</s><span>{siteConfig.registration.priceNow}</span></div>
+            <div className="hero-price hero-enter"><span>{siteConfig.registration.priceNow}</span></div>
             <a className="primary-cta hero-enter" href="#register">Reserve My Free Spot <ArrowRight size={20} weight="bold" /></a>
           </div>
           <div className="event-dock hero-enter">
@@ -241,7 +237,7 @@ export default function Home() {
 
         <section className="registration-section" id="register">
           <div className="registration-copy chapter-reveal">
-            <p className="section-kicker">Registration</p><h2>Register for the soft skills training and take on a new mindset that will shape your future.</h2><div className="registration-price"><s>{siteConfig.registration.priceWas}</s><strong>Free</strong></div>
+            <p className="section-kicker">Registration</p><h2>Register for the soft skills training and take on a new mindset that will shape your future.</h2><div className="registration-price"><strong>{siteConfig.registration.priceNow}</strong></div>
             <div className="availability"><div><span>Registration window</span><b>Spaces are limited</b></div><div className="availability-track"><span /></div><p>Confirmed availability will be shown here when registration goes live.</p></div>
             <div className="registration-reminder"><Check size={18} weight="bold" /> 2 hours a day <Check size={18} weight="bold" /> 2 days <Check size={18} weight="bold" /> 100% free</div>
           </div>

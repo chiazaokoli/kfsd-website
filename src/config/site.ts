@@ -13,7 +13,6 @@ export const siteConfig = {
     venue: "Live on Zoom",
   },
   registration: {
-    priceWas: "N25,000",
     priceNow: "Completely free",
     slotsTaken: null as number | null,
     slotsTotal: 500,
