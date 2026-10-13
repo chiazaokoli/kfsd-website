@@ -23,7 +23,7 @@ button, a, summary, input, select { -webkit-tap-highlight-color: transparent; }
 button { border: 0; }
 :focus-visible { outline: 3px solid var(--lime); outline-offset: 4px; }
 img { display: block; }
-.site-shell { width: 100%; max-width: 100%; overflow-x: hidden; background-color: var(--section-bg, var(--paper)); transition: background-color 750ms ease-in-out; }
+.site-shell { width: 100%; max-width: 100%; overflow-x: hidden; background-color: var(--section-bg, var(--paper)); transition: background-color 300ms ease-in-out; }
 .grid-flow-dense { grid-auto-flow: dense; }
 
 /* Keep the existing radii as a fallback. Newer engines shape the corner natively. */
