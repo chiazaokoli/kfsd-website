@@ -66,6 +66,14 @@ const learningSteps = [
   { title: "Apply", copy: "Take what you learn into school, work and life.", icon: ListChecks },
 ];
 
+const speakers = [
+  { name: "Adaeze Okafor", topic: "Communication" },
+  { name: "Tunde Adeyemi", topic: "Leadership" },
+  { name: "Zainab Bello", topic: "Critical thinking" },
+  { name: "Chidi Nwosu", topic: "Resilience" },
+  { name: "Amara Eze", topic: "Integrity" },
+];
+
 const faqs = [
   ["Is it really free?", "Yes, completely free."],
   ["Who can join?", "Students in high school, university, technical or vocational colleges and other educational institutions."],
@@ -417,8 +425,8 @@ export default function Home() {
         </section>
 
         <section className="proof-section">
-          <div className="proof-header chapter-reveal"><p className="section-kicker">People and proof</p><h2>Know who is behind the room before you join it.</h2><p>Speaker profiles, verified student stories and real footage will appear here as soon as the organiser approves them.</p></div>
-          <div className="speaker-placeholder-grid">{["Leadership", "Communication", "Career readiness", "Youth development"].map((area, index) => <article key={area}><span className="portrait-placeholder"><Student size={42} weight="thin" /></span><div><small>Profile {String(index + 1).padStart(2, "0")}</small><h3>{area} facilitator</h3><p>Verified profile coming soon</p></div></article>)}</div>
+          <div className="proof-header chapter-reveal"><p className="section-kicker">The speakers</p><h2>Five voices. Five skills. A fresh perspective.</h2><p>Meet the faces of each topic. Names and portraits are placeholders until the speaker lineup is confirmed.</p></div>
+          <div className="speaker-placeholder-grid">{speakers.map(({ name, topic }, index) => <article key={topic}><div className="speaker-portrait" aria-hidden="true" style={{ backgroundImage: `url(${assetPrefix}/images/speaker-placeholders.webp)`, backgroundPosition: `${index * 25}% top` }} /><div className="speaker-details"><small>Sample profile</small><h3>{name}</h3><p>{topic}</p></div></article>)}</div>
           <div className="story-carousel" aria-label="Participant story placeholders">
             <article className="video-story"><Image src={`${assetPrefix}/images/reflection.webp`} alt="Students reflecting together" fill unoptimized sizes="(max-width: 800px) 90vw, 45vw" /><span className="video-shade" /><div><span className="play-icon"><Play size={23} weight="fill" /></span><p>Video stories coming soon</p></div></article>
             {["Confidence", "Time management", "Speaking up"].map((topic) => <article className="story-placeholder" key={topic}><HandHeart size={27} weight="duotone" /><p>{topic}</p><span>Approved participant story coming soon</span></article>)}
