@@ -72,12 +72,35 @@ function getCountdown(): Countdown {
 
 export default function Home() {
   const pageRef = useRef<HTMLElement>(null);
+  const topbarRef = useRef<HTMLElement>(null);
+  const heroCtaRef = useRef<HTMLAnchorElement>(null);
+  const [showNavCta, setShowNavCta] = useState(false);
   const [countdown, setCountdown] = useState<Countdown>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [activeStep, setActiveStep] = useState(0);
   const [activeDay, setActiveDay] = useState(0);
   const [localTime, setLocalTime] = useState("");
   const [formStatus, setFormStatus] = useState("");
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  useEffect(() => {
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const cta = heroCtaRef.current;
+      const topbar = topbarRef.current;
+      if (cta && topbar) setShowNavCta(cta.getBoundingClientRect().bottom <= topbar.getBoundingClientRect().bottom);
+    };
+    const scheduleUpdate = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    };
+    scheduleUpdate();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+    };
+  }, []);
   useEffect(() => {
     const updateCountdown = () => setCountdown(getCountdown());
     updateCountdown();
@@ -137,10 +160,10 @@ export default function Home() {
   return (
     <>
       <main ref={pageRef} className="site-shell" id="top">
-        <header className="topbar">
+        <header ref={topbarRef} className={`topbar${showNavCta ? " has-cta" : ""}`}>
           <a className="brand" href="#top" aria-label="KFSD Soft Skills Training home"><span className="brand-mark" aria-hidden="true"><Sparkle size={16} weight="fill" /></span><span>KFSD <b>Soft Skills Training</b></span></a>
           <nav aria-label="Main navigation"><a href="#skills">Skills</a><a href="#schedule">Schedule</a><a href="#organiser">About CKL</a></nav>
-          <a className="topbar-cta" href="#register">Register Free <ArrowUpRight size={17} weight="bold" /></a>
+          <a className="topbar-cta" href="#register" aria-hidden={!showNavCta} tabIndex={showNavCta ? 0 : -1}>Reserve My Free Spot <ArrowRight size={17} weight="bold" /></a>
         </header>
 
         <section className="new-hero" aria-labelledby="hero-title">
@@ -150,7 +173,7 @@ export default function Home() {
             <p className="edition-badge hero-enter"><span className="edition-badge-icon"><Medal size={15} weight="duotone" aria-hidden="true" /></span><span>{siteConfig.edition}</span></p>
             <h1 id="hero-title" aria-label="Learn the soft skills that set you apart in 2 days."><span aria-hidden="true">{heroLeadWords.map((word, index) => <Fragment key={word}>{index > 0 && " "}<span className="hero-word">{heroLetters(word, heroLeadWords.slice(0, index).join("").length)}</span></Fragment>)}{" "}<span className="hero-ending">{heroLetters(heroEnding, heroEndingStart)}</span></span></h1>
             <p className="hero-subhead hero-enter">Learn from experienced professionals and become more career-ready.</p>
-            <a className="primary-cta hero-enter" href="#register">Reserve My Free Spot <ArrowRight size={20} weight="bold" /></a>
+            <a ref={heroCtaRef} className="primary-cta hero-enter" href="#register">Reserve My Free Spot <ArrowRight size={20} weight="bold" /></a>
           </div>
           <div className="event-dock hero-enter">
             <div><CalendarBlank size={22} weight="duotone" /><span>{siteConfig.event.dateLabel}</span></div>
