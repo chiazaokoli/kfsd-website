@@ -14,6 +14,7 @@ import {
 import { siteConfig } from "../src/config/site";
 import GradeSketch, { paintRuns, paintRunPath } from "../src/components/GradeSketch";
 import SmoothCorners from "../src/components/SmoothCorners";
+import LearningFlow from "../src/components/LearningFlow";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 const assetPrefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -132,6 +133,7 @@ export default function Home() {
         if (element && element.getBoundingClientRect().top <= entryLine) activeSection = index;
       });
       shell.classList.toggle("matter-background-active", activeSection === 1);
+      shell.classList.toggle("schedule-background-active", activeSection === 4);
       const color = activeSection < 0 ? (mobile ? [5, 7, 12] : [217, 255, 99]) : sections[activeSection].color;
       const nextColor = `rgb(${color.join(", ")})`;
       const enteringStory = activeSection === 0 && lastActiveSection < 0;
@@ -160,6 +162,7 @@ export default function Home() {
       shell?.style.removeProperty("transition-duration");
       shell?.classList.remove("skills-background-active");
       shell?.classList.remove("matter-background-active");
+      shell?.classList.remove("schedule-background-active");
     };
   }, []);
   useEffect(() => {
@@ -390,6 +393,7 @@ export default function Home() {
         <section ref={learningSectionRef} className="learning-section">
           <div className="section-heading learning-heading chapter-reveal"><h2>No boring lectures. You’ll actually do things.</h2></div>
           <div className="learning-steps">
+            <LearningFlow activeStep={activeStep} />
             {learningSteps.map(({ title, copy, icon: Icon }, index) => {
               const active = activeStep === index;
               return <button className={`learning-step${active ? " active" : ""}`} type="button" key={title} aria-expanded={active} onClick={() => setActiveStep(index)} onMouseEnter={() => { if (window.innerWidth > 800) setActiveStep(index); }} onFocus={() => setActiveStep(index)}>
