@@ -117,6 +117,8 @@ export default function Home() {
     const sections = sectionColors.map(([selector, color]) => ({ element: shell?.querySelector<HTMLElement>(selector), color }));
     const matterStatement = shell?.querySelector<HTMLElement>(".matter-section .reveal-statement");
     const skillsIndex = sectionColors.findIndex(([selector]) => selector === ".skills-section");
+    const twoDaysIndex = sectionColors.findIndex(([selector]) => selector === ".two-days-section");
+    const twoDaysHeading = shell?.querySelector<HTMLElement>(".two-days-section h2");
     let skillsHandoffComplete = false;
     const update = () => {
       frame = 0;
@@ -138,7 +140,10 @@ export default function Home() {
       sections.forEach(({ element }, index) => {
         if (mobile && index === skillsIndex && !skillsHandoffComplete) return;
         const entryLine = index === 0 ? window.innerHeight : window.innerHeight * 0.8;
-        if (element && element.getBoundingClientRect().top <= entryLine) activeSection = index;
+        const boundary = mobile && index === twoDaysIndex && twoDaysHeading
+          ? twoDaysHeading.getBoundingClientRect().bottom
+          : element?.getBoundingClientRect().top;
+        if (boundary !== undefined && boundary <= entryLine) activeSection = index;
       });
       shell.classList.toggle("matter-background-active", activeSection === 1);
       shell.classList.toggle("schedule-background-active", activeSection === 4);
