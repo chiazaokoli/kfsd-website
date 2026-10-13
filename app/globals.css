@@ -125,6 +125,7 @@ img { display: block; }
 .matter-section h2 { max-width: 1050px; margin: 0; font-size: clamp(3rem, 6.5vw, 7rem); font-weight: 520; letter-spacing: -.075em; line-height: .95; }
 .grade-sketch { display: block; width: 100%; height: auto; overflow: visible; color: var(--cream); transform: rotate(-7deg); }
 .grade-stroke { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.grade-stamp, .grade-splash { opacity: 0; }
 .reveal-statement { position: relative; z-index: 2; max-width: 1190px; margin: 0; color: var(--cream); font-size: clamp(1.65rem, 3.1vw, 3.7rem); font-weight: 430; letter-spacing: -.045em; line-height: 1.25; }
 .reveal-word { opacity: .12; }
 
@@ -388,4 +389,5 @@ img { display: block; }
   .motion-image, .chapter-reveal { opacity: 1; transform: none; }
   .hero-letter { animation: none !important; color: var(--white); -webkit-text-fill-color: var(--white); }
   .grade-stroke { stroke-dashoffset: 0; }
+  .grade-stamp, .grade-splash { opacity: 1; }
 }
