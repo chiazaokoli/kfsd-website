@@ -121,12 +121,16 @@ img { display: block; }
 .countdown-grid span { color: rgba(11,16,28,.64); font-size: .59rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
 
 /* Story */
-.hook-section { display: grid; grid-template-columns: minmax(0, 1fr) minmax(360px, .8fr); gap: clamp(55px, 8vw, 130px); align-items: center; padding: clamp(120px, 13vw, 200px) max(5vw, 28px); background: var(--paper); }
+.hook-section { display: grid; grid-template-columns: minmax(0, 1fr) minmax(360px, .8fr); gap: clamp(55px, 8vw, 130px); align-items: center; padding: clamp(120px, 13vw, 200px) max(5vw, 28px); }
 .hook-copy { max-width: 720px; }
+.hook-copy { transition: color 0s 150ms; }
+.site-shell.matter-background-active .hook-copy { color: var(--white); }
 .section-kicker { color: var(--blue); }
 .hook-copy h2, .section-heading h2, .schedule-intro h2, .proof-header h2, .organiser-copy h2, .faq-section-new h2 { margin: 0; font-size: clamp(2.7rem, 5.4vw, 5.4rem); font-weight: 550; letter-spacing: -.065em; line-height: 1; text-wrap: balance; }
 .question-list { margin: 48px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--line-dark); }
 .question-list li { display: grid; grid-template-columns: 45px 1fr; gap: 20px; align-items: start; padding: 20px 0; border-bottom: 1px solid var(--line-dark); }
+.question-list, .question-list li { transition: border-color 0s 150ms; }
+.site-shell.matter-background-active :is(.question-list, .question-list li) { border-color: rgba(255,255,255,.18); }
 .question-list span { padding-top: 4px; color: var(--blue); font-size: .65rem; font-weight: 700; letter-spacing: .13em; }
 .question-list p { margin: 0; font-size: clamp(.96rem, 1.3vw, 1.14rem); line-height: 1.5; }
 .hook-answer { margin: 32px 0 0; color: var(--blue); font-size: clamp(1.8rem, 3.3vw, 3.5rem); font-weight: 600; letter-spacing: -.055em; }
@@ -303,7 +307,7 @@ img { display: block; }
 .footer-bottom p { margin: 0; }
 
 /* A shared background changes color as each section enters the viewport. */
-:is(.skills-section, .learning-section, .schedule-section, .proof-section, .organiser-section, .two-days-section, .faq-section-new, .new-footer) { background: transparent; }
+:is(.hook-section, .skills-section, .learning-section, .schedule-section, .proof-section, .organiser-section, .two-days-section, .faq-section-new, .new-footer) { background: transparent; }
 .matter-section { background: radial-gradient(circle at 80% 30%, rgba(49,92,255,.22), transparent 30%); }
 .registration-section { background: radial-gradient(circle at 15% 20%, rgba(49,92,255,.36), transparent 35%); }
 

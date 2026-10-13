@@ -102,6 +102,7 @@ export default function Home() {
     let frame = 0;
     let readyFrame = 0;
     let lastColor = "";
+    let lastActiveSection = -1;
     const shell = pageRef.current;
     const sections = sectionColors.map(([selector, color]) => ({ element: shell?.querySelector<HTMLElement>(selector), color }));
     const matterStatement = shell?.querySelector<HTMLElement>(".matter-section .reveal-statement");
@@ -125,12 +126,17 @@ export default function Home() {
       let activeSection = -1;
       sections.forEach(({ element }, index) => {
         if (mobile && index === skillsIndex && !skillsHandoffComplete) return;
-        if (element && element.getBoundingClientRect().top <= window.innerHeight * 0.8) activeSection = index;
+        const entryLine = index === 0 ? window.innerHeight : window.innerHeight * 0.8;
+        if (element && element.getBoundingClientRect().top <= entryLine) activeSection = index;
       });
+      shell.classList.toggle("matter-background-active", activeSection === 1);
       const color = activeSection < 0 ? (mobile ? [5, 7, 12] : [217, 255, 99]) : sections[activeSection].color;
       const nextColor = `rgb(${color.join(", ")})`;
+      const enteringStory = activeSection === 0 && lastActiveSection < 0;
+      lastActiveSection = activeSection;
       if (nextColor === lastColor) return;
-      if (!lastColor) {
+      if (!lastColor || enteringStory) {
+        window.cancelAnimationFrame(readyFrame);
         shell.style.transitionDuration = "0ms";
         readyFrame = window.requestAnimationFrame(() => { shell.style.transitionDuration = ""; });
       }
@@ -151,6 +157,7 @@ export default function Home() {
       shell?.style.removeProperty("--section-bg");
       shell?.style.removeProperty("transition-duration");
       shell?.classList.remove("skills-background-active");
+      shell?.classList.remove("matter-background-active");
     };
   }, []);
   useEffect(() => {
