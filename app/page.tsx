@@ -115,7 +115,7 @@ export default function Home() {
       if (!shell) return;
       const mobile = window.innerWidth <= 800;
       if (mobile && matterStatement) {
-        const clearance = (topbar?.getBoundingClientRect().bottom ?? 58) + 20;
+        const clearance = Math.max((topbar?.getBoundingClientRect().bottom ?? 58) + 20, window.innerHeight * 0.2);
         const statementBottom = matterStatement.getBoundingClientRect().bottom;
         if (skillsHandoffComplete ? statementBottom > clearance + 20 : statementBottom <= clearance) {
           skillsHandoffComplete = !skillsHandoffComplete;

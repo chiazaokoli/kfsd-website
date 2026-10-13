@@ -352,6 +352,8 @@ img { display: block; }
   .section-heading .section-kicker { margin-bottom: 22px; }
   .skills-grid { display: grid; grid-template-columns: 1fr; grid-template-rows: none; perspective: 1000px; }
   .skills-section .section-heading { color: var(--white); transition: color 300ms ease-in-out; }
+  .matter-section .reveal-statement { transition: color 300ms ease-in-out; }
+  .site-shell.skills-background-active .matter-section .reveal-statement { color: var(--ink); }
   .site-shell.skills-background-active .skills-section .section-heading { color: var(--ink); }
   .skill-card, .skill-card:nth-child(1), .skill-card:nth-child(2), .skill-third { grid-column: auto; min-height: 440px; }
   .skill-third { min-height: 0; }
