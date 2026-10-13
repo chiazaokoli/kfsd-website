@@ -20,6 +20,19 @@ const assetPrefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const heroLeadWords = ["Learn", "the", "soft", "skills", "that", "set", "you", "apart", "in"];
 const heroEnding = "2 days.";
 const heroEndingStart = heroLeadWords.join("").length;
+const sectionColors = [
+  [".hook-section", [251, 250, 246]],
+  [".matter-section", [11, 16, 28]],
+  [".skills-section", [242, 240, 232]],
+  [".learning-section", [11, 16, 28]],
+  [".schedule-section", [251, 250, 246]],
+  [".proof-section", [242, 240, 232]],
+  [".organiser-section", [49, 92, 255]],
+  [".two-days-section", [217, 255, 99]],
+  [".registration-section", [11, 16, 28]],
+  [".faq-section-new", [251, 250, 246]],
+  [".new-footer", [11, 16, 28]],
+] as const;
 
 function heroLetters(text: string, startIndex: number) {
   return [...text].map((letter, index) => letter === " " ? " " : (
@@ -87,11 +100,24 @@ export default function Home() {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   useEffect(() => {
     let frame = 0;
+    const shell = pageRef.current;
+    const sections = sectionColors.map(([selector, color]) => ({ element: shell?.querySelector<HTMLElement>(selector), color }));
     const update = () => {
       frame = 0;
       const cta = heroCtaRef.current;
       const topbar = topbarRef.current;
       if (cta && topbar) setShowNavCta(cta.getBoundingClientRect().bottom <= topbar.getBoundingClientRect().bottom);
+      if (!shell) return;
+      const viewportHeight = window.innerHeight;
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      let current = window.innerWidth <= 800 ? [5, 7, 12] : [217, 255, 99];
+      sections.forEach(({ element, color }) => {
+        if (!element) return;
+        const progress = Math.max(0, Math.min(1, (viewportHeight * 0.95 - element.getBoundingClientRect().top) / (viewportHeight * 0.3)));
+        const amount = reducedMotion ? Number(progress >= 0.5) : progress;
+        current = current.map((channel, index) => channel + (color[index] - channel) * amount);
+      });
+      shell.style.setProperty("--section-bg", `rgb(${current.map(Math.round).join(", ")})`);
     };
     const scheduleUpdate = () => {
       if (!frame) frame = window.requestAnimationFrame(update);
@@ -103,6 +129,7 @@ export default function Home() {
       window.cancelAnimationFrame(frame);
       window.removeEventListener("scroll", scheduleUpdate);
       window.removeEventListener("resize", scheduleUpdate);
+      shell?.style.removeProperty("--section-bg");
     };
   }, []);
   useEffect(() => {

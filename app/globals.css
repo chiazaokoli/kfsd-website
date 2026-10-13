@@ -23,7 +23,7 @@ button, a, summary, input, select { -webkit-tap-highlight-color: transparent; }
 button { border: 0; }
 :focus-visible { outline: 3px solid var(--lime); outline-offset: 4px; }
 img { display: block; }
-.site-shell { width: 100%; max-width: 100%; overflow-x: hidden; background: var(--paper); }
+.site-shell { width: 100%; max-width: 100%; overflow-x: hidden; background: var(--section-bg, var(--paper)); }
 .grid-flow-dense { grid-auto-flow: dense; }
 
 /* Keep the existing radii as a fallback. Newer engines shape the corner natively. */
@@ -302,25 +302,10 @@ img { display: block; }
 .footer-bottom { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; padding-top: 26px; color: rgba(255,255,255,.48); border-top: 1px solid rgba(255,255,255,.15); font-size: .64rem; }
 .footer-bottom p { margin: 0; }
 
-/* Blend section colors within their existing top spacing. */
-:is(.hook-section, .matter-section, .skills-section, .learning-section, .schedule-section, .proof-section, .two-days-section, .registration-section, .faq-section-new, .new-footer) {
-  background-image: linear-gradient(to bottom, var(--section-from), transparent);
-  background-position: top;
-  background-size: 100% 108px;
-  background-repeat: no-repeat;
-}
-.hook-section { --section-from: var(--lime); }
-.matter-section { --section-from: var(--paper); background-image: linear-gradient(to bottom, var(--section-from), transparent), radial-gradient(circle at 80% 30%, rgba(49,92,255,.22), transparent 30%); background-size: 100% 108px, auto; }
-.skills-section { --section-from: var(--ink); }
-.learning-section { --section-from: var(--cream); }
-.schedule-section { --section-from: var(--ink); }
-.proof-section { --section-from: var(--paper); }
-.organiser-section { position: relative; }
-.organiser-section::before { position: absolute; z-index: 2; top: 0; right: 0; left: 0; height: 108px; background: linear-gradient(to bottom, var(--cream), transparent); content: ""; pointer-events: none; }
-.two-days-section { --section-from: var(--blue); }
-.registration-section { --section-from: var(--lime); background-image: linear-gradient(to bottom, var(--section-from), transparent), radial-gradient(circle at 15% 20%, rgba(49,92,255,.36), transparent 35%); background-size: 100% 108px, auto; }
-.faq-section-new { --section-from: var(--ink); }
-.new-footer { --section-from: var(--paper); background-size: 100% 76px; }
+/* A shared background changes color as each section enters the viewport. */
+:is(.hook-section, .skills-section, .learning-section, .schedule-section, .proof-section, .organiser-section, .two-days-section, .faq-section-new, .new-footer) { background: transparent; }
+.matter-section { background: radial-gradient(circle at 80% 30%, rgba(49,92,255,.22), transparent 30%); }
+.registration-section { background: radial-gradient(circle at 15% 20%, rgba(49,92,255,.36), transparent 35%); }
 
 @media (max-width: 1050px) {
   .topbar nav { display: none; }
@@ -358,10 +343,9 @@ img { display: block; }
   .countdown-band > p:last-child { text-align: center; }
   .countdown-grid { justify-content: space-between; gap: 18px; }
   .hook-section { grid-template-columns: 1fr; padding: 110px 22px; }
-  .hook-section { --section-from: #05070c; background-image: linear-gradient(to top, var(--ink), var(--paper)), linear-gradient(to bottom, var(--section-from), transparent); background-position: bottom, top; background-size: 100% 108px, 100% 108px; }
   .hook-visual { height: 125vw; max-height: 690px; order: -1; }
   .matter-section, .skills-section, .learning-section, .schedule-section, .proof-section, .registration-section, .faq-section-new { padding: 110px 22px; }
-  .matter-section { padding-top: 64px; background-image: radial-gradient(circle at 80% 30%, rgba(49,92,255,.22), transparent 30%); background-size: auto; }
+  .matter-section { padding-top: 64px; }
   .matter-heading { display: flex; flex-direction: column; align-items: stretch; gap: 18px; margin-bottom: 36px; }
   .grade-sketch { order: -1; align-self: flex-end; width: clamp(145px, 39vw, 190px); margin-right: 8px; }
   .section-heading { display: block; }
