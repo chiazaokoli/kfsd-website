@@ -105,7 +105,6 @@ export default function Home() {
     const shell = pageRef.current;
     const sections = sectionColors.map(([selector, color]) => ({ element: shell?.querySelector<HTMLElement>(selector), color }));
     const matterStatement = shell?.querySelector<HTMLElement>(".matter-section .reveal-statement");
-    const skillsHeading = shell?.querySelector<HTMLElement>(".skills-section .section-heading");
     const skillsIndex = sectionColors.findIndex(([selector]) => selector === ".skills-section");
     let skillsHandoffComplete = false;
     const update = () => {
@@ -123,7 +122,6 @@ export default function Home() {
         }
       }
       shell.classList.toggle("skills-background-active", mobile && skillsHandoffComplete);
-      shell.classList.toggle("skills-heading-visible", mobile && !!skillsHeading && skillsHeading.getBoundingClientRect().bottom <= window.innerHeight);
       let activeSection = -1;
       sections.forEach(({ element }, index) => {
         if (mobile && index === skillsIndex && !skillsHandoffComplete) return;
@@ -153,7 +151,6 @@ export default function Home() {
       shell?.style.removeProperty("--section-bg");
       shell?.style.removeProperty("transition-duration");
       shell?.classList.remove("skills-background-active");
-      shell?.classList.remove("skills-heading-visible");
     };
   }, []);
   useEffect(() => {
