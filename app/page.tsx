@@ -409,9 +409,9 @@ export default function Home() {
           <div className="schedule-layout">
             <div className="schedule-intro"><h2>Order of the day</h2><p>Both days run from 10:00AM to 12:00PM West Africa Time.</p><div className="local-time-card"><GlobeHemisphereWest size={25} weight="duotone" /><div><strong>Not in Nigeria?</strong><span>{localTime || "Converting 10:00AM WAT to your local time…"}</span></div></div></div>
             <div className="schedule-panel chapter-reveal">
-              <div className="day-tabs" role="tablist" aria-label="Training days">{siteConfig.schedules.map((day, index) => <button key={day.label} role="tab" aria-selected={activeDay === index} onClick={() => setActiveDay(index)}>{day.label}</button>)}</div>
+              <div className="day-tabs" data-active-day={activeDay} role="tablist" aria-label="Training days">{siteConfig.schedules.map((day, index) => <button key={day.label} role="tab" aria-selected={activeDay === index} onClick={() => setActiveDay(index)}>{day.label}</button>)}</div>
               <div className="schedule-title"><div><span>{activeSchedule.date}</span><h3>{activeSchedule.title}</h3></div><Clock size={31} weight="duotone" /></div>
-              <ol className="agenda-list">{activeSchedule.items.map(([time, item]) => <li key={`${time}-${item}`}><time>{time}</time><span>{item}</span></li>)}</ol><p className="schedule-note">Schedule may be adjusted slightly.</p>
+              <ol className="agenda-list">{activeSchedule.items.map(([time, item]) => <li key={`${time}-${item}`}><time>{time}</time><span>{item}</span></li>)}</ol>
             </div>
           </div>
         </section>
