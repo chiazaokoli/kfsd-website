@@ -238,6 +238,7 @@ export default function Home() {
 
     if (reducedMotion) {
       gsap.set([...revealWords, ...revealItems, ...motionImages], { opacity: 1, scale: 1, y: 0 });
+      gsap.set(".organiser-image", { borderRadius: 0 });
       pageRef.current?.classList.add("skills-heading-revealed");
       gsap.set(gradeStrokes, { strokeDashoffset: 0 });
       gsap.set(".grade-stamp, .grade-splash, .grade-paint, .grade-drip", { opacity: 1, scale: 1, y: 0 });
@@ -251,7 +252,13 @@ export default function Home() {
       scrollTrigger: { trigger: ".reveal-statement", start: "top 78%", end: "bottom 40%", scrub: 0.55 },
     });
     revealItems.forEach((item) => gsap.from(item, { opacity: 0, y: 48, duration: 0.9, ease: "power3.out", scrollTrigger: { trigger: item, start: "top 88%" } }));
-    motionImages.forEach((image) => gsap.fromTo(image, { scale: 0.88, opacity: 0.55 }, { scale: 1, opacity: 1, ease: "none", scrollTrigger: { trigger: image, start: "top 92%", end: "center 50%", scrub: 0.6 } }));
+    motionImages.forEach((image) => {
+      const organiser = image.matches(".organiser-image");
+      gsap.fromTo(image,
+        { scale: 0.88, opacity: 0.55, ...(organiser ? { borderRadius: 32 } : {}) },
+        { scale: 1, opacity: 1, ...(organiser ? { borderRadius: 0 } : {}), ease: "none", scrollTrigger: { trigger: image, start: "top 92%", end: "center 50%", scrub: 0.6 } },
+      );
+    });
 
     gsap.set(".grade-stamp", { scale: 1.8, rotation: -16, y: -18, transformOrigin: "50% 50%" });
     gsap.set(".grade-paint", { scaleX: 0.18, scaleY: 0.12, svgOrigin: "124 110" });
