@@ -28,7 +28,7 @@ img { display: block; }
 
 /* Keep the existing radii as a fallback. Newer engines shape the corner natively. */
 @supports (corner-shape: squircle) {
-  :is(.brand-mark, .topbar-cta, .primary-cta, .event-dock, .event-dock > a, .skill-card, .learning-panel, .local-time-card, .schedule-panel, .day-tabs, .day-tabs button, .speaker-placeholder-grid article, .story-carousel article, .registration-form, .registration-form button, .footer-lead > a:last-child) {
+  :is(.brand-mark, .topbar-cta, .primary-cta, .event-dock, .event-dock > a, .skill-card, .learning-step, .local-time-card, .schedule-panel, .day-tabs, .day-tabs button, .speaker-placeholder-grid article, .story-carousel article, .registration-form, .registration-form button, .footer-lead > a:last-child) {
     corner-shape: squircle;
   }
 }
@@ -178,21 +178,21 @@ img { display: block; }
 .skill-card p { max-width: 560px; margin: 20px 0 0; color: currentColor; font-size: .86rem; line-height: 1.65; opacity: .75; }
 
 /* Learning */
-.learning-section { padding: clamp(120px, 14vw, 210px) max(4vw, 24px); color: var(--white); background: var(--ink); }
-.learning-heading { align-items: start; }
-.learning-heading h2 { max-width: 1030px; }
-.learning-accordion { display: flex; height: 640px; gap: 8px; overflow: hidden; }
-.learning-panel { position: relative; min-width: 65px; flex: 1 1 0; overflow: hidden; padding: 0; color: var(--white); border-radius: 18px; background: var(--ink-soft); cursor: pointer; transition: flex 650ms cubic-bezier(.2,.78,.2,1); }
-.learning-panel.active { flex: 7 1 0; }
-.learning-panel img { object-fit: cover; filter: saturate(.9); transition: transform 800ms ease, filter 600ms ease; }
-.learning-panel:hover img, .learning-panel.active img { transform: scale(1.04); filter: saturate(1.05); }
-.learning-shade { position: absolute; inset: 0; background: linear-gradient(to top, rgba(6,10,18,.9), rgba(6,10,18,.02) 62%); }
-.learning-index { position: absolute; top: 20px; left: 50%; color: rgba(255,255,255,.72); font-size: .62rem; font-weight: 700; letter-spacing: .14em; transform: translateX(-50%); }
-.learning-label { position: absolute; right: 22px; bottom: 24px; left: 22px; display: grid; min-width: 260px; grid-template-columns: 30px 1fr; gap: 5px 10px; align-items: center; text-align: left; opacity: 0; transform: translateY(15px); transition: opacity 320ms ease 180ms, transform 320ms ease 180ms; }
-.learning-panel.active .learning-label { opacity: 1; transform: translateY(0); }
-.learning-label svg { grid-row: span 2; color: var(--lime); }
-.learning-label strong { font-size: clamp(1.5rem, 2.3vw, 2.8rem); letter-spacing: -.045em; }
-.learning-label small { color: rgba(255,255,255,.72); font-size: .78rem; }
+.learning-section { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1fr); gap: clamp(60px, 8vw, 140px); align-items: start; padding: clamp(120px, 14vw, 210px) max(4vw, 24px); color: var(--white); background: var(--ink); }
+.learning-heading { position: sticky; top: 115px; align-items: start; margin-bottom: 0; }
+.learning-heading h2 { max-width: 660px; }
+.learning-steps { display: grid; gap: 10px; width: 100%; max-width: 690px; }
+.learning-step { position: relative; display: grid; width: 100%; min-height: 112px; grid-template-columns: 40px minmax(0, 1fr) 26px; gap: 16px; align-items: center; padding: 20px 25px; color: rgba(255,255,255,.52); border: 1px solid transparent; border-radius: 22px; background: transparent; cursor: pointer; text-align: left; transform: scale(1); transition: color 280ms ease, background-color 280ms ease, border-color 280ms ease, box-shadow 280ms ease, transform 380ms cubic-bezier(.2,.78,.2,1); }
+.learning-step.active { z-index: 1; color: var(--ink); border-color: rgba(255,255,255,.65); background: var(--cream); box-shadow: 0 22px 60px rgba(0,0,0,.24); transform: scale(1.025); }
+.learning-step-icon { display: grid; width: 40px; height: 40px; place-items: center; color: var(--lime); }
+.learning-step.active .learning-step-icon { color: var(--blue); }
+.learning-step-text { display: block; min-width: 0; }
+.learning-step-text strong { display: block; font-size: clamp(1.05rem, 1.5vw, 1.35rem); font-weight: 650; letter-spacing: -.035em; line-height: 1.2; }
+.learning-step-text small { display: block; max-height: 0; overflow: hidden; color: #555d65; font-size: .81rem; line-height: 1.55; opacity: 0; transition: max-height 340ms ease, margin-top 340ms ease, opacity 220ms ease; }
+.learning-step.active .learning-step-text small { max-height: 80px; margin-top: 8px; opacity: 1; }
+.learning-step-index { align-self: start; margin-top: 5px; font-size: .61rem; font-weight: 700; letter-spacing: .1em; opacity: .55; }
+.learning-step.active .learning-step-index { color: var(--blue); opacity: 1; }
+.learning-step:focus-visible { outline-offset: 5px; }
 
 /* Schedule */
 .schedule-section { padding: clamp(120px, 14vw, 210px) max(5vw, 28px); background: var(--paper); }
@@ -317,7 +317,7 @@ img { display: block; }
   .event-dock { grid-template-columns: 1fr 1fr 1fr 58px; }
   .event-dock > div { padding: 0 15px; font-size: .69rem; }
   .skills-grid { grid-template-rows: 480px 360px; }
-  .learning-accordion { height: 560px; }
+  .learning-section { gap: 40px; }
   .proof-header { grid-template-columns: 1fr; gap: 30px; }
   .proof-header .section-kicker { grid-column: auto; margin-bottom: -8px; }
   .proof-header > p:last-child { max-width: 650px; }
@@ -366,11 +366,15 @@ img { display: block; }
   .skill-third .skill-card-content { position: relative; inset: auto; padding: 90px 20px 20px; }
   .skill-third .skill-meta { top: 20px; right: 20px; left: 20px; }
   .skill-third p { margin-top: 14px; }
-  .learning-accordion { height: auto; flex-direction: column; overflow: visible; }
-  .learning-panel, .learning-panel.active { min-height: 92px; flex: none; }
-  .learning-panel.active { min-height: 420px; }
-  .learning-index { top: 50%; left: 22px; transform: translateY(-50%); }
-  .learning-panel.active .learning-index { top: 20px; left: 50%; transform: translateX(-50%); }
+  .learning-section { display: block; }
+  .learning-heading { position: static; margin-bottom: 45px; }
+  .learning-steps { gap: 6px; }
+  .learning-step { min-height: 114px; grid-template-columns: 34px minmax(0, 1fr) 20px; gap: 11px; padding: 16px 17px; }
+  .learning-step.active { transform: scale(1.025); }
+  .learning-step-icon { width: 34px; height: 34px; }
+  .learning-step-icon svg { width: 24px; height: 24px; }
+  .learning-step-text strong { font-size: 1.03rem; }
+  .learning-step-text small { font-size: .77rem; }
   .schedule-layout { min-height: 0; grid-template-columns: 1fr; gap: 60px; }
   .schedule-intro { max-width: none; }
   .speaker-placeholder-grid { grid-template-columns: 1fr 1fr; }

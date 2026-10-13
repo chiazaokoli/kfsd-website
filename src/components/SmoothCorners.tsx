@@ -9,7 +9,7 @@ const targets = [
   ".event-dock",
   ".event-dock > a",
   ".skill-card",
-  ".learning-panel",
+  ".learning-step",
   ".local-time-card",
   ".schedule-panel",
   ".day-tabs",

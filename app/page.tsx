@@ -57,12 +57,12 @@ const skills = [
 ];
 
 const learningSteps = [
-  { title: "Learn", copy: "Hear from experienced professionals.", icon: Student, image: "/images/student-speaker.webp" },
-  { title: "Ask questions", copy: "Get answers live.", icon: Question, image: "/images/listening.webp" },
-  { title: "Interact", copy: "Join group activities and polls.", icon: UsersThree, image: "/images/collaboration.webp" },
-  { title: "Reflect", copy: "Think about what it means for you.", icon: Brain, image: "/images/reflection.webp" },
-  { title: "Practice", copy: "Try the skills in real scenarios.", icon: Lightning, image: "/images/student-speaker.webp" },
-  { title: "Apply", copy: "Take them into school, work and life.", icon: ListChecks, image: "/images/collaboration.webp" },
+  { title: "Learn", copy: "Hear practical lessons from experienced professionals.", icon: Student },
+  { title: "Ask questions", copy: "Bring your questions and get answers live.", icon: Question },
+  { title: "Interact", copy: "Join group activities and polls with other students.", icon: UsersThree },
+  { title: "Reflect", copy: "Connect each idea to your own experiences.", icon: Brain },
+  { title: "Practice", copy: "Try the skills in realistic scenarios, not just in theory.", icon: Lightning },
+  { title: "Apply", copy: "Take what you learn into school, work and life.", icon: ListChecks },
 ];
 
 const faqs = [
@@ -90,6 +90,7 @@ export default function Home() {
   const topbarRef = useRef<HTMLElement>(null);
   const heroCtaRef = useRef<HTMLAnchorElement>(null);
   const countdownRef = useRef<HTMLElement>(null);
+  const learningSectionRef = useRef<HTMLElement>(null);
   const [showNavCta, setShowNavCta] = useState(false);
   const [countdownInView, setCountdownInView] = useState(false);
   const [countdown, setCountdown] = useState<Countdown>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
@@ -182,6 +183,36 @@ export default function Home() {
     }, { threshold: [0, 0.995] });
     observer.observe(section);
     return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    let frame = 0;
+    const updateFocusedStep = () => {
+      frame = 0;
+      const section = learningSectionRef.current;
+      if (!section || window.innerWidth > 800) return;
+      const bounds = section.getBoundingClientRect();
+      if (bounds.bottom < 0 || bounds.top > window.innerHeight) return;
+      const focusLine = window.innerHeight * 0.55;
+      const steps = section.querySelectorAll<HTMLElement>(".learning-step");
+      let closest = 0;
+      let distance = Infinity;
+      steps.forEach((step, index) => {
+        const rect = step.getBoundingClientRect();
+        const nextDistance = Math.abs(rect.top + rect.height / 2 - focusLine);
+        if (nextDistance < distance) { distance = nextDistance; closest = index; }
+      });
+      setActiveStep((current) => current === closest ? current : closest);
+    };
+    const scheduleUpdate = () => { if (!frame) frame = window.requestAnimationFrame(updateFocusedStep); };
+    scheduleUpdate();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+    };
   }, []);
 
   useGSAP(() => {
@@ -356,13 +387,15 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="learning-section">
+        <section ref={learningSectionRef} className="learning-section">
           <div className="section-heading learning-heading chapter-reveal"><h2>No boring lectures. You’ll actually do things.</h2></div>
-          <div className="learning-accordion">
-            {learningSteps.map(({ title, copy, icon: Icon, image }, index) => {
+          <div className="learning-steps">
+            {learningSteps.map(({ title, copy, icon: Icon }, index) => {
               const active = activeStep === index;
-              return <button className={`learning-panel ${active ? "active" : ""}`} type="button" key={title} aria-expanded={active} onClick={() => setActiveStep(index)} onMouseEnter={() => setActiveStep(index)}>
-                <Image src={`${assetPrefix}${image}`} alt="" fill unoptimized sizes="(max-width: 800px) 100vw, 50vw" /><span className="learning-shade" /><span className="learning-index">0{index + 1}</span><span className="learning-label"><Icon size={24} weight="duotone" /><strong>{title}</strong><small>{copy}</small></span>
+              return <button className={`learning-step${active ? " active" : ""}`} type="button" key={title} aria-expanded={active} onClick={() => setActiveStep(index)} onMouseEnter={() => { if (window.innerWidth > 800) setActiveStep(index); }} onFocus={() => setActiveStep(index)}>
+                <span className="learning-step-icon"><Icon size={26} weight="duotone" /></span>
+                <span className="learning-step-text"><strong>{title}</strong><small aria-hidden={!active}>{copy}</small></span>
+                <span className="learning-step-index" aria-hidden="true">0{index + 1}</span>
               </button>;
             })}
           </div>
