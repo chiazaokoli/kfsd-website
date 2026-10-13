@@ -192,20 +192,18 @@ export default function Home() {
     matchMedia.add("(max-width: 800px)", () => {
       const cards = gsap.utils.toArray<HTMLElement>(".skill-card");
       const originalLayers = cards.map((card) => card.style.zIndex);
-      const blur = "blur(8px)";
-      const viewportMiddle = window.innerHeight / 2;
-      let focusedIndex = cards.reduce((last, card, index) => {
-        const bounds = card.getBoundingClientRect();
-        return bounds.top + bounds.height / 2 <= viewportMiddle ? index : last;
-      }, 0);
-      gsap.set(cards, { filter: blur });
-      gsap.set(cards[focusedIndex], { filter: "blur(0px)" });
-      const focusCard = (index: number) => {
-        const nextIndex = Math.max(0, index);
-        if (nextIndex === focusedIndex) return;
-        focusedIndex = nextIndex;
-        gsap.to(cards, { filter: blur, duration: 0.32, ease: "power2.out", overwrite: true });
-        gsap.to(cards[focusedIndex], { filter: "blur(0px)", duration: 0.32, ease: "power2.out", overwrite: true });
+      const updateFocus = () => {
+        const viewportHeight = window.innerHeight;
+        const transitions = cards.map((card, index) => {
+          if (index === 0) return 1;
+          const top = card.getBoundingClientRect().top;
+          return gsap.utils.clamp(0, 1, (viewportHeight * 0.8 - top) / (viewportHeight * 0.15));
+        });
+        cards.forEach((card, index) => {
+          const focus = transitions[index] * (1 - (transitions[index + 1] ?? 0));
+          const blur = 8 * (1 - focus) ** 2;
+          gsap.set(card, { filter: `blur(${blur.toFixed(2)}px)` });
+        });
       };
       cards.forEach((card) => {
         gsap.set(card, { transformOrigin: "50% 50%", willChange: "transform, filter" });
@@ -213,9 +211,8 @@ export default function Home() {
           .fromTo(card, { scale: 0.94 }, { scale: 1.045, duration: 0.5, ease: "none" })
           .to(card, { scale: 0.94, duration: 0.5, ease: "none" });
       });
-      cards.forEach((card, index) => {
-        ScrollTrigger.create({ trigger: card, start: "center center", onEnter: () => focusCard(index), onLeaveBack: () => focusCard(index - 1) });
-      });
+      ScrollTrigger.create({ trigger: ".skills-grid", start: "top bottom", end: "bottom top", onUpdate: updateFocus, onRefresh: updateFocus });
+      updateFocus();
       return () => {
         gsap.killTweensOf(cards);
         cards.forEach((card, index) => { card.style.zIndex = originalLayers[index]; card.style.filter = ""; });
