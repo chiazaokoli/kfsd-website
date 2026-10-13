@@ -190,6 +190,7 @@ export default function Home() {
 
   useEffect(() => {
     let frame = 0;
+    let scrollPause = 0;
     const updateFocusedStep = () => {
       frame = 0;
       const section = learningSectionRef.current;
@@ -208,12 +209,17 @@ export default function Home() {
       setActiveStep((current) => current === closest ? current : closest);
     };
     const scheduleUpdate = () => { if (!frame) frame = window.requestAnimationFrame(updateFocusedStep); };
+    const onScroll = () => {
+      window.clearTimeout(scrollPause);
+      scrollPause = window.setTimeout(scheduleUpdate, 160);
+    };
     scheduleUpdate();
-    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", scheduleUpdate);
     return () => {
       window.cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", scheduleUpdate);
+      window.clearTimeout(scrollPause);
+      window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", scheduleUpdate);
     };
   }, []);
