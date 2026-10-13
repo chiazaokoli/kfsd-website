@@ -207,7 +207,7 @@ export default function Home() {
         </section>
 
         <section className="skills-section" id="skills">
-          <div className="section-heading chapter-reveal"><p className="section-kicker">What you’ll learn</p><h2>5 skills that change how people see you</h2></div>
+          <div className="section-heading chapter-reveal"><h2>5 skills you’ll learn that change how people see you</h2></div>
           <div className="skills-grid grid-flow-dense">
             {skills.map(({ tag, title, copy, icon: Icon, className, image }) => (
               <article className={`skill-card ${className}`} key={tag}>
