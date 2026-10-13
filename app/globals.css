@@ -66,12 +66,13 @@ img { display: block; }
 .edition-badge svg { color: var(--lime); filter: drop-shadow(0 1px 3px rgba(217,255,99,.25)); }
 .new-hero h1 { max-width: 1240px; margin: 0 auto; font-size: clamp(3.4rem, 7vw, 7.3rem); font-weight: 550; letter-spacing: -.075em; line-height: 1; text-wrap: balance; }
 .hero-word, .hero-ending { display: inline-block; white-space: nowrap; }
-.hero-letter { display: inline-block; color: var(--white); animation: hero-pink-black-sweep 430ms ease-in-out var(--letter-delay) both; }
-@keyframes hero-pink-black-sweep {
+.hero-letter { display: inline-block; color: var(--white); animation: hero-orange-black-sweep 430ms ease-in-out var(--letter-delay) both; }
+@keyframes hero-orange-black-sweep {
   0%, 100% { color: var(--white); }
-  25% { color: #f2a5e3; }
-  42%, 54% { color: #d36af2; }
-  55%, 78% { color: #000; }
+  20% { color: #ffd18a; }
+  36%, 65% { color: #ff922e; }
+  66%, 72% { color: #000; }
+  73% { color: var(--white); }
 }
 .hero-subhead { max-width: 610px; margin: 27px auto 0; color: rgba(255,255,255,.82); font-size: clamp(1.03rem, 1.5vw, 1.3rem); line-height: 1.55; }
 .primary-cta { display: inline-flex; min-height: 58px; align-items: center; gap: 13px; margin-top: 15px; padding: 0 25px; color: var(--ink); border-radius: 13px; background: var(--lime); box-shadow: 0 16px 50px rgba(0,0,0,.22); font-size: .93rem; font-weight: 750; transition: transform 220ms ease, box-shadow 220ms ease; }
