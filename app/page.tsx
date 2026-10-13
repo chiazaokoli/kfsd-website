@@ -13,6 +13,7 @@ import {
 } from "@phosphor-icons/react";
 import { siteConfig } from "../src/config/site";
 import GradeSketch, { paintRuns, paintRunPath } from "../src/components/GradeSketch";
+import SmoothCorners from "../src/components/SmoothCorners";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 const assetPrefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -216,6 +217,7 @@ export default function Home() {
   return (
     <>
       <main ref={pageRef} className="site-shell" id="top">
+        <SmoothCorners />
         <header ref={topbarRef} className={`topbar${showNavCta ? " has-cta" : ""}`}>
           <a className="brand" href="#top" aria-label="KFSD Soft Skills Training home"><span className="brand-mark" aria-hidden="true"><Sparkle size={16} weight="fill" /></span><span>KFSD <b>Soft Skills Training</b></span></a>
           <nav aria-label="Main navigation"><a href="#skills">Skills</a><a href="#schedule">Schedule</a><a href="#organiser">About CKL</a></nav>
