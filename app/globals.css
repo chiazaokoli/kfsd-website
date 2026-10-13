@@ -146,8 +146,7 @@ img { display: block; }
 .skill-dark { color: var(--white); background: var(--ink); }
 .skill-lime .skill-overlay, .skill-cream .skill-overlay, .skill-dark .skill-overlay { display: none; }
 .skill-card-content { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: clamp(26px, 3vw, 46px); }
-.skill-meta { position: absolute; top: clamp(26px, 3vw, 44px); right: clamp(26px, 3vw, 44px); left: clamp(26px, 3vw, 44px); display: flex; align-items: center; justify-content: space-between; }
-.skill-meta span { font-size: .64rem; font-weight: 750; letter-spacing: .15em; text-transform: uppercase; }
+.skill-meta { position: absolute; top: clamp(26px, 3vw, 44px); right: clamp(26px, 3vw, 44px); left: clamp(26px, 3vw, 44px); display: flex; align-items: center; justify-content: flex-end; }
 .skill-blue .skill-meta svg, .skill-photo .skill-meta svg, .skill-dark .skill-meta svg { color: var(--lime); }
 .skill-card h3 { max-width: 590px; margin: 0; font-size: clamp(2rem, 3.5vw, 4rem); font-weight: 550; letter-spacing: -.06em; line-height: 1; text-wrap: balance; }
 .skill-third h3 { font-size: clamp(1.7rem, 2.5vw, 2.8rem); }

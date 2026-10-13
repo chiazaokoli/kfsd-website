@@ -34,11 +34,11 @@ const questions = [
 ];
 
 const skills = [
-  { tag: "Leadership", title: "Lead with Confidence", copy: "Learn how to lead yourself and others, take responsibility, show initiative and positively influence the people around you.", icon: CrownSimple, className: "skill-wide skill-blue", image: "/images/student-speaker.webp" },
-  { tag: "Critical Thinking", title: "Think Critically", copy: "Learn to analyse information, question assumptions, see different perspectives and make smart decisions.", icon: Brain, className: "skill-wide skill-photo", image: "/images/collaboration.webp" },
-  { tag: "Communication", title: "Communicate Clearly", copy: "Express your ideas clearly, listen well and speak with confidence to any audience.", icon: ChatCircleDots, className: "skill-third skill-lime" },
-  { tag: "Resilience", title: "Build Resilience", copy: "Handle setbacks, challenges and pressure while keeping a positive, solution-focused mindset.", icon: Mountains, className: "skill-third skill-cream" },
-  { tag: "Integrity", title: "Act with Integrity", copy: "Understand why honesty, accountability and doing the right thing matter in your personal and professional life.", icon: ShieldCheck, className: "skill-third skill-dark" },
+  { title: "Lead with Confidence", copy: "Learn how to lead yourself and others, take responsibility, show initiative and positively influence the people around you.", icon: CrownSimple, className: "skill-wide skill-blue", image: "/images/student-speaker.webp" },
+  { title: "Think Critically", copy: "Learn to analyse information, question assumptions, see different perspectives and make smart decisions.", icon: Brain, className: "skill-wide skill-photo", image: "/images/collaboration.webp" },
+  { title: "Communicate Clearly", copy: "Express your ideas clearly, listen well and speak with confidence to any audience.", icon: ChatCircleDots, className: "skill-third skill-lime" },
+  { title: "Build Resilience", copy: "Handle setbacks, challenges and pressure while keeping a positive, solution-focused mindset.", icon: Mountains, className: "skill-third skill-cream" },
+  { title: "Act with Integrity", copy: "Understand why honesty, accountability and doing the right thing matter in your personal and professional life.", icon: ShieldCheck, className: "skill-third skill-dark" },
 ];
 
 const learningSteps = [
@@ -209,11 +209,11 @@ export default function Home() {
         <section className="skills-section" id="skills">
           <div className="section-heading chapter-reveal"><h2>5 skills you’ll learn that change how people see you</h2></div>
           <div className="skills-grid grid-flow-dense">
-            {skills.map(({ tag, title, copy, icon: Icon, className, image }) => (
-              <article className={`skill-card ${className}`} key={tag}>
+            {skills.map(({ title, copy, icon: Icon, className, image }) => (
+              <article className={`skill-card ${className}`} key={title}>
                 {image && <Image src={`${assetPrefix}${image}`} alt="" fill unoptimized sizes="(max-width: 760px) 100vw, 58vw" className="skill-image" />}
                 <div className="skill-overlay" aria-hidden="true" />
-                <div className="skill-card-content"><div className="skill-meta"><span>{tag}</span><Icon size={30} weight="duotone" /></div><h3>{title}</h3><p>{copy}</p></div>
+                <div className="skill-card-content"><div className="skill-meta"><Icon size={30} weight="duotone" /></div><h3>{title}</h3><p>{copy}</p></div>
               </article>
             ))}
           </div>
