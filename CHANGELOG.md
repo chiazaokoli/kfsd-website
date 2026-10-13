@@ -10,6 +10,9 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-13
 
+- `48d4274` — Reverted `29227aa` at the user's request. Restored the shared
+  background transitions for the organiser copy and “Why just two days?” on mobile.
+  File: `app/globals.css`.
 - `29227aa` — Fixed mobile contrast when scrolling between the organiser copy
   and “Why just two days?”. The copy keeps its blue background and the following
   section keeps its lime background, so the shared page background cannot place
