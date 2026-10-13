@@ -53,7 +53,6 @@ export default function LearningFlow({ activeStep }: { activeStep: number }) {
       let exitRoute = "";
       if (activeRect) {
         const left = activeRect.left - listRect.left;
-        const right = activeRect.right - listRect.left;
         const top = activeRect.top - listRect.top;
         const bottom = activeRect.bottom - listRect.top;
         const activeElement = steps[activeStep];
@@ -74,11 +73,10 @@ export default function LearningFlow({ activeStep }: { activeStep: number }) {
           }
           if (index > 0) route += ` L ${x} ${top - 17} Q ${x} ${top} ${left + radius} ${top}`;
           entryRoute = route;
-          route += ` L ${right - radius} ${top}`;
-          corner((sin, cos) => [right - radius + radius * sin, top + radius * (1 - cos)]);
-          route += ` L ${right} ${bottom - radius}`;
-          corner((sin, cos) => [right - radius * (1 - cos), bottom - radius + radius * sin]);
-          route += ` L ${left + radius} ${bottom}`;
+          // Sweep down the near edge, rather than taking a full lap around the card.
+          corner((sin, cos) => [left + radius * (1 - sin), top + radius * (1 - cos)]);
+          route += ` L ${left} ${bottom - radius}`;
+          corner((sin, cos) => [left + radius * (1 - cos), bottom - radius + radius * sin]);
           exitRoute = route;
           route += ` Q ${x} ${bottom + 4} ${x} ${bottom + 17}`;
         });
@@ -94,7 +92,7 @@ export default function LearningFlow({ activeStep }: { activeStep: number }) {
       times = [0];
       for (let i = 1; i <= segments; i++) {
         const midpoint = length * (i - .5) / segments;
-        // The pulse accelerates toward the card, races around it, then eases away.
+        // The pulse accelerates into the card's left edge, then eases away.
         const pull = activeRect ? smoothstep((midpoint - entry + 95) / 95) * (1 - smoothstep((midpoint - exit) / 110)) : 0;
         times.push(times[i - 1] + length / segments / (175 * (1 + 2.9 * pull)));
       }
@@ -116,7 +114,7 @@ export default function LearningFlow({ activeStep }: { activeStep: number }) {
       const distance = Math.min(length, length * (index - 1 + fraction) / segments);
       const left: string[] = [];
       const right: string[] = [];
-      const halfLength = 24;
+      const halfLength = 17;
       const samples = 12;
       for (let i = 0; i <= samples; i++) {
         const offset = (i / samples * 2 - 1) * halfLength;
@@ -125,7 +123,7 @@ export default function LearningFlow({ activeStep }: { activeStep: number }) {
         const before = track.getPointAtLength(Math.max(0, position - 2));
         const after = track.getPointAtLength(Math.min(length, position + 2));
         const tangent = Math.hypot(after.x - before.x, after.y - before.y) || 1;
-        const width = 3.5 * Math.pow(Math.max(0, 1 - Math.abs(offset) / halfLength), .65);
+        const width = 1.25 * Math.pow(Math.max(0, 1 - Math.abs(offset) / halfLength), .65);
         const nx = -(after.y - before.y) / tangent * width;
         const ny = (after.x - before.x) / tangent * width;
         left.push(`${point.x + nx} ${point.y + ny}`);

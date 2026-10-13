@@ -195,10 +195,6 @@ export default function Home() {
       const section = learningSectionRef.current;
       if (!section || window.innerWidth > 800) return;
       const bounds = section.getBoundingClientRect();
-      if (bounds.bottom <= window.innerHeight * 0.8) {
-        setActiveStep((current) => current === -1 ? current : -1);
-        return;
-      }
       if (bounds.bottom < 0 || bounds.top > window.innerHeight) return;
       const focusLine = window.innerHeight * 0.55;
       const steps = section.querySelectorAll<HTMLElement>(".learning-step");

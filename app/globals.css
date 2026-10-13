@@ -185,7 +185,7 @@ img { display: block; }
 .learning-flow { position: absolute; z-index: 3; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
 .learning-flow-track { stroke: rgba(190,207,233,.22); stroke-width: 1.6; vector-effect: non-scaling-stroke; }
 .learning-flow-pulse, .learning-flow-glow { fill: var(--lime); transition: opacity 160ms ease; }
-.learning-flow-glow { opacity: .62; filter: blur(6px); }
+.learning-flow-glow { opacity: .42; filter: blur(4px); }
 .learning-step { position: relative; z-index: 4; display: grid; width: 100%; min-height: 112px; grid-template-columns: 40px minmax(0, 1fr) 26px; gap: 16px; align-items: center; padding: 20px 25px; color: rgba(255,255,255,.52); border: 1px solid transparent; border-radius: 22px; background: transparent; cursor: pointer; text-align: left; transform: scale(1); transition: color 280ms ease, background-color 280ms ease, border-color 280ms ease, box-shadow 280ms ease, transform 380ms cubic-bezier(.2,.78,.2,1); }
 .learning-step.active { z-index: 2; color: var(--ink); border-color: rgba(217,255,99,.45); background: var(--cream); box-shadow: 0 22px 60px rgba(0,0,0,.24); transform: scale(1.025); }
 .learning-step-icon { display: grid; width: 40px; height: 40px; place-items: center; color: var(--lime); border: 1px solid rgba(190,207,233,.34); border-radius: 50%; background: var(--ink); }
