@@ -149,7 +149,7 @@ export default function Home() {
     gsap.set(".grade-stamp", { scale: 1.8, rotation: -16, y: -18, transformOrigin: "50% 50%" });
     gsap.set(".grade-paint", { scaleX: 0.18, scaleY: 0.12, svgOrigin: "124 110" });
     const paintTimeline = gsap.timeline({ scrollTrigger: { trigger: ".grade-sketch", start: "top 78%", once: true } })
-      .to(".grade-score", { strokeDashoffset: 0, duration: 0.27, stagger: 0.055, ease: "power1.inOut" })
+      .to(".grade-score", { strokeDashoffset: 0, duration: 0.42, stagger: 0.085, ease: "power1.inOut" })
       .set(".grade-stamp", { opacity: 1 }, "+=0.08")
       .to(".grade-stamp", { scale: 0.94, rotation: 0, y: 2, duration: 0.16, ease: "power3.in" })
       .addLabel("impact")
