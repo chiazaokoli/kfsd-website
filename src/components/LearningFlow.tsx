@@ -78,7 +78,7 @@ export default function LearningFlow({ activeStep }: { activeStep: number }) {
           route += ` L ${left} ${bottom - radius}`;
           corner((sin, cos) => [left + radius * (1 - cos), bottom - radius + radius * sin]);
           exitRoute = route;
-          route += ` Q ${x} ${bottom + 4} ${x} ${bottom + 17}`;
+          if (index < steps.length - 1) route += ` Q ${x} ${bottom + 4} ${x} ${bottom + 17}`;
         });
       } else {
         steps.forEach((_, index) => { if (index > 0) route += ` L ${x} ${iconY(index)}`; });
