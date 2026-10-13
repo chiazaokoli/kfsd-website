@@ -10,6 +10,11 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-13
 
+- `29227aa` — Fixed mobile contrast when scrolling between the organiser copy
+  and “Why just two days?”. The copy keeps its blue background and the following
+  section keeps its lime background, so the shared page background cannot place
+  white organiser text on lime in either scroll direction.
+  File: `app/globals.css`.
 - `7c032bd` — The organiser image starts with 32px rounded corners and animates
   to 0px as its existing scroll expansion reaches full size. Reduced-motion users
   see the final square-cornered image without the animation.
