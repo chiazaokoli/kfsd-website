@@ -40,16 +40,6 @@ function heroLetters(text: string, startIndex: number) {
   ));
 }
 
-function layoutBottomInViewport(element: HTMLElement) {
-  let bottom = element.offsetHeight;
-  let current: HTMLElement | null = element;
-  while (current) {
-    bottom += current.offsetTop;
-    current = current.offsetParent as HTMLElement | null;
-  }
-  return bottom - window.scrollY;
-}
-
 const questions = [
   "You struggle with rallying your friends around a task.",
   "You want to be liked more by people.",
@@ -114,11 +104,8 @@ export default function Home() {
     let lastColor = "";
     const shell = pageRef.current;
     const sections = sectionColors.map(([selector, color]) => ({ element: shell?.querySelector<HTMLElement>(selector), color }));
-    const hookAnswer = shell?.querySelector<HTMLElement>(".hook-answer");
     const matterStatement = shell?.querySelector<HTMLElement>(".matter-section .reveal-statement");
-    const matterIndex = sectionColors.findIndex(([selector]) => selector === ".matter-section");
     const skillsIndex = sectionColors.findIndex(([selector]) => selector === ".skills-section");
-    let matterHandoffComplete = false;
     let skillsHandoffComplete = false;
     const update = () => {
       frame = 0;
@@ -127,13 +114,6 @@ export default function Home() {
       if (cta && topbar) setShowNavCta(cta.getBoundingClientRect().bottom <= topbar.getBoundingClientRect().bottom);
       if (!shell) return;
       const mobile = window.innerWidth <= 800;
-      if (mobile && hookAnswer) {
-        const clearance = (topbar?.getBoundingClientRect().bottom ?? 58) + 20;
-        const answerBottom = layoutBottomInViewport(hookAnswer);
-        if (matterHandoffComplete ? answerBottom > clearance + 20 : answerBottom <= clearance) {
-          matterHandoffComplete = !matterHandoffComplete;
-        }
-      }
       if (mobile && matterStatement) {
         const clearance = (topbar?.getBoundingClientRect().bottom ?? 58) + 20;
         const statementBottom = matterStatement.getBoundingClientRect().bottom;
@@ -141,11 +121,9 @@ export default function Home() {
           skillsHandoffComplete = !skillsHandoffComplete;
         }
       }
-      shell.classList.toggle("matter-background-active", mobile && matterHandoffComplete);
       shell.classList.toggle("skills-background-active", mobile && skillsHandoffComplete);
       let activeSection = -1;
       sections.forEach(({ element }, index) => {
-        if (mobile && index === matterIndex && !matterHandoffComplete) return;
         if (mobile && index === skillsIndex && !skillsHandoffComplete) return;
         if (element && element.getBoundingClientRect().top <= window.innerHeight * 0.8) activeSection = index;
       });
@@ -172,7 +150,6 @@ export default function Home() {
       window.removeEventListener("resize", scheduleUpdate);
       shell?.style.removeProperty("--section-bg");
       shell?.style.removeProperty("transition-duration");
-      shell?.classList.remove("matter-background-active");
       shell?.classList.remove("skills-background-active");
     };
   }, []);
