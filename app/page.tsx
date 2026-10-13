@@ -12,6 +12,7 @@ import {
   Sparkle, Student, UsersThree, Medal,
 } from "@phosphor-icons/react";
 import { siteConfig } from "../src/config/site";
+import GradeSketch, { paintRuns, paintRunPath } from "../src/components/GradeSketch";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 const assetPrefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -146,21 +147,45 @@ export default function Home() {
     motionImages.forEach((image) => gsap.fromTo(image, { scale: 0.88, opacity: 0.55 }, { scale: 1, opacity: 1, ease: "none", scrollTrigger: { trigger: image, start: "top 92%", end: "center 50%", scrub: 0.6 } }));
 
     gsap.set(".grade-stamp", { scale: 1.8, rotation: -16, y: -18, transformOrigin: "50% 50%" });
-    gsap.utils.toArray<SVGEllipseElement>(".grade-splash").forEach((drop) => {
-      gsap.set(drop, { x: (165 - Number(drop.getAttribute("cx"))) * 0.65, y: (105 - Number(drop.getAttribute("cy"))) * 0.65, scale: 0.15, transformOrigin: "50% 50%" });
-    });
-    gsap.set(".grade-paint", { scale: 0.45, y: -10, transformOrigin: "50% 50%" });
-    gsap.set(".grade-drip", { scaleY: 0.08, transformOrigin: "50% 0%" });
-    gsap.timeline({ scrollTrigger: { trigger: ".grade-sketch", start: "top 78%", once: true } })
+    gsap.set(".grade-paint", { scaleX: 0.18, scaleY: 0.12, svgOrigin: "124 110" });
+    const paintTimeline = gsap.timeline({ scrollTrigger: { trigger: ".grade-sketch", start: "top 78%", once: true } })
       .to(".grade-score", { strokeDashoffset: 0, duration: 0.27, stagger: 0.055, ease: "power1.inOut" })
       .set(".grade-stamp", { opacity: 1 }, "+=0.08")
       .to(".grade-stamp", { scale: 0.94, rotation: 0, y: 2, duration: 0.16, ease: "power3.in" })
       .addLabel("impact")
       .to(".grade-stamp", { scale: 1, y: 0, duration: 0.13, ease: "power2.out" }, "impact")
-      .to(".grade-splash", { x: 0, y: 0, scale: 1, opacity: 0.9, duration: 0.25, ease: "power3.out", stagger: 0.008 }, "impact")
-      .to(".grade-paint", { scale: 1, y: 0, opacity: 1, duration: 0.28, ease: "power3.out" }, "impact")
-      .to(".grade-drip", { scaleY: 1, opacity: 1, duration: 2.2, ease: "power1.in", stagger: 0.18 }, "impact+=0.16")
-      .to(".grade-splash", { opacity: 0.7, duration: 0.35 }, "impact+=0.3");
+      .set(".grade-paint", { opacity: 1 }, "impact")
+      .to(".grade-paint", { scaleX: 1.02, scaleY: 0.97, duration: 0.14, ease: "power3.out" }, "impact")
+      .to(".grade-paint", { scaleX: 1, scaleY: 1, duration: 0.18, ease: "power1.out" }, "impact+=0.14");
+
+    gsap.utils.toArray<SVGPathElement>(".grade-splash").forEach((drop, index) => {
+      const dx = (Number(drop.dataset.x) - 124) * 0.8;
+      const dy = (Number(drop.dataset.y) - 110) * 0.8;
+      const duration = Number(drop.dataset.flight);
+      const gravity = 24 * duration * duration;
+      const flight = { progress: 0 };
+      gsap.set(drop, { x: -dx, y: -dy, scale: 0.5, transformOrigin: "50% 50%" });
+      const departure = `impact+=${0.018 + (index % 4) * 0.012}`;
+      paintTimeline.set(drop, { opacity: 1 }, departure).to(flight, {
+        progress: 1, duration, ease: "none",
+        onUpdate: () => {
+          const t = flight.progress;
+          // Fast ejection slows through drag; gravity bends the last part of the flight.
+          const travel = (1 - Math.exp(-5 * t)) / (1 - Math.exp(-5));
+          gsap.set(drop, { x: -dx * (1 - travel), y: -dy * (1 - travel) + gravity * (t * t - travel), scale: 0.5 + 0.5 * travel });
+        },
+      }, departure);
+    });
+    gsap.utils.toArray<SVGPathElement>(".grade-drip").forEach((drip, index) => {
+      const run = paintRuns[index];
+      const flow = { progress: 0.015 };
+      drip.setAttribute("d", paintRunPath(run, flow.progress));
+      const onset = `impact+=${run.delay}`;
+      paintTimeline.set(drip, { opacity: 1 }, onset).to(flow, {
+        progress: 1, duration: run.duration, ease: "power1.inOut",
+        onUpdate: () => drip.setAttribute("d", paintRunPath(run, flow.progress)),
+      }, onset);
+    });
 
     const matchMedia = gsap.matchMedia();
     matchMedia.add("(min-width: 901px)", () => {
@@ -235,52 +260,7 @@ export default function Home() {
         <section className="matter-section">
           <div className="matter-heading">
             <h2>Your future needs more than good grades.</h2>
-            <svg className="grade-sketch" viewBox="0 0 240 285" role="img" aria-label="95 out of 100, questioned: are good grades enough?">
-              <g className="grade-paint" fill="#bf2748" aria-hidden="true">
-                <path d="M116 49 C121 47 126 52 131 53 L139 29 C142 19 149 22 146 34 L143 56 C149 57 155 51 161 48 L179 32 C186 27 190 31 184 39 L171 57 C176 58 181 54 188 55 L207 46 C218 42 222 50 211 55 L193 64 C195 69 200 71 204 76 L224 69 C236 65 238 73 227 79 L208 86 C210 93 208 99 211 104 L232 105 C242 107 239 116 228 116 L211 116 C208 125 206 132 202 137 L222 153 C231 160 225 167 216 160 L197 148 C192 153 185 158 181 161 L192 184 C198 196 191 201 185 190 L174 169 C167 173 159 172 153 177 L159 201 C162 213 153 217 150 205 L145 180 C138 181 130 177 124 181 L115 210 C112 222 103 220 107 207 L113 181 C104 181 96 177 91 175 L73 194 C65 204 58 197 66 187 L82 168 C76 165 71 159 67 155 L42 169 C30 175 26 167 38 160 L60 146 C57 141 54 134 51 128 L27 132 C15 133 14 124 26 123 L50 118 C49 111 52 105 51 100 L29 91 C19 87 23 78 34 82 L57 89 C61 83 63 78 66 74 L50 56 C42 47 49 41 57 50 L73 67 C79 61 85 58 91 56 L81 35 C76 23 84 19 89 31 L100 54 C105 51 110 51 116 49 Z" />
-                <path d="M39 69 C32 60 27 59 20 57 C26 67 31 71 39 69 Z" />
-                <path d="M202 28 C209 21 215 20 222 18 C216 27 209 31 202 28 Z" />
-                <ellipse cx="17" cy="108" rx="4" ry="2.5" />
-                <ellipse cx="34" cy="187" rx="4.5" ry="3" />
-                <ellipse cx="222" cy="172" rx="5" ry="3" />
-                <ellipse cx="226" cy="42" rx="3" ry="4" />
-                <ellipse cx="77" cy="24" rx="3" ry="5" />
-              </g>
-              <g fill="#bf2748" aria-hidden="true">
-                <path className="grade-drip" d="M84 165 C80 180 79 210 82 237 C84 251 93 252 95 237 C98 214 89 185 91 165 Z" />
-                <path className="grade-drip" d="M116 179 C112 194 111 232 114 263 C116 279 127 279 129 263 C132 235 122 197 124 178 Z" />
-                <path className="grade-drip" d="M159 173 C155 186 155 215 158 239 C160 252 169 253 171 239 C174 217 165 188 167 172 Z" />
-                <path className="grade-drip" d="M190 151 C187 165 186 184 188 203 C190 217 199 217 201 204 C203 186 195 168 197 150 Z" />
-              </g>
-              <g fill="none" stroke="currentColor" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round">
-                <path className="grade-stroke grade-score" pathLength="1" d="M99 42 C87 29 65 36 64 52 C63 72 85 74 98 56 M100 38 C100 58 98 78 82 94" />
-                <path className="grade-stroke grade-score" pathLength="1" d="M157 35 L124 37 L120 62 C133 54 154 58 154 75 C154 94 130 101 116 88" />
-                <path className="grade-stroke grade-score" pathLength="1" d="M40 114 C82 111 129 113 176 108" />
-                <path className="grade-stroke grade-score" pathLength="1" d="M44 151 L58 137 L55 190 M43 191 L69 189" />
-                <path className="grade-stroke grade-score" pathLength="1" d="M99 135 C75 136 73 190 93 193 C115 195 122 137 101 135 L99 135" />
-                <path className="grade-stroke grade-score" pathLength="1" d="M149 133 C126 135 124 187 144 190 C166 192 172 135 151 133 L149 133" />
-              </g>
-              <g fill="#ff555f" aria-hidden="true">
-                <ellipse className="grade-splash" cx="120" cy="43" rx="2.3" ry="4.8" />
-                <ellipse className="grade-splash" cx="151" cy="29" rx="3" ry="4.4" />
-                <ellipse className="grade-splash" cx="194" cy="35" rx="2.2" ry="3.8" />
-                <ellipse className="grade-splash" cx="219" cy="57" rx="4.8" ry="2.6" />
-                <ellipse className="grade-splash" cx="226" cy="92" rx="3.8" ry="2" />
-                <ellipse className="grade-splash" cx="213" cy="117" rx="2.6" ry="4.2" />
-                <ellipse className="grade-splash" cx="196" cy="153" rx="3.3" ry="4.5" />
-                <ellipse className="grade-splash" cx="176" cy="180" rx="2.1" ry="3.7" />
-                <ellipse className="grade-splash" cx="136" cy="160" rx="3.7" ry="2.5" />
-                <ellipse className="grade-splash" cx="112" cy="101" rx="4.5" ry="2.3" />
-                <ellipse className="grade-splash" cx="226" cy="130" rx="1.5" ry="1.8" />
-                <ellipse className="grade-splash" cx="131" cy="23" rx="1.6" ry="1.6" />
-              </g>
-              <g className="grade-stamp">
-                <g fill="none" stroke="#ff555f" strokeWidth="11" strokeLinecap="round" strokeLinejoin="round" transform="rotate(12 165 115)">
-                  <path d="M137 76 C140 48 180 44 195 64 C214 89 187 100 173 111 C165 117 165 125 166 132" />
-                  <path d="M166 154 L166 156" />
-                </g>
-              </g>
-            </svg>
+            <GradeSketch />
           </div>
           <p className="reveal-statement">{"Soft skills are what everyone ignores, but they are just as important as technical skills. They help you communicate, lead, work with others, think clearly and handle tough moments. These are the skills that decide who gets noticed and who gets ahead in school, at work and in life.".split(" ").map((word, index) => <span className="reveal-word" key={`${word}-${index}`}>{word}{" "}</span>)}</p>
         </section>

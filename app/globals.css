@@ -123,7 +123,7 @@ img { display: block; }
 .matter-section { position: relative; padding: clamp(130px, 15vw, 230px) max(5vw, 28px); overflow: hidden; color: var(--white); background: radial-gradient(circle at 80% 30%, rgba(49,92,255,.22), transparent 30%), var(--ink); }
 .matter-heading { display: grid; grid-template-columns: minmax(0, 1fr) clamp(180px, 21vw, 280px); align-items: center; gap: 32px; margin-bottom: 50px; }
 .matter-section h2 { max-width: 1050px; margin: 0; font-size: clamp(3rem, 6.5vw, 7rem); font-weight: 520; letter-spacing: -.075em; line-height: .95; }
-.grade-sketch { display: block; width: 100%; height: auto; overflow: visible; color: var(--cream); transform: rotate(-7deg); }
+.grade-sketch { display: block; width: 100%; height: auto; overflow: visible; color: var(--cream); }
 .grade-stroke { stroke-dasharray: 1; stroke-dashoffset: 1; }
 .grade-stamp, .grade-splash, .grade-paint, .grade-drip { opacity: 0; }
 .reveal-statement { position: relative; z-index: 2; max-width: 1190px; margin: 0; color: var(--cream); font-size: clamp(1.65rem, 3.1vw, 3.7rem); font-weight: 430; letter-spacing: -.045em; line-height: 1.25; }
