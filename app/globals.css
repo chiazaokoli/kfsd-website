@@ -351,7 +351,7 @@ img { display: block; }
   .section-heading { display: block; }
   .section-heading .section-kicker { margin-bottom: 22px; }
   .skills-grid { display: grid; grid-template-columns: 1fr; grid-template-rows: none; perspective: 1000px; }
-  .skills-section .section-heading { color: var(--white); opacity: .05; transition: color 300ms ease-in-out, opacity 300ms ease-in-out; }
+  .skills-section .section-heading { color: var(--white); opacity: 0; transition: color 300ms ease-in-out, opacity 300ms ease-in-out; }
   .matter-section .reveal-statement { transition: color 300ms ease-in-out; }
   .site-shell.skills-background-active .matter-section .reveal-statement { color: var(--ink); }
   .site-shell.skills-background-active .skills-section .section-heading { color: var(--ink); opacity: 1; }
