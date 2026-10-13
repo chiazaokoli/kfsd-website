@@ -7,8 +7,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ArrowDown, ArrowRight, ArrowUpRight, Brain, CalendarBlank, ChatCircleDots,
-  Check, Clock, CrownSimple, GlobeHemisphereWest, HandHeart, Lightning,
-  ListChecks, MicrophoneStage, Mountains, Play, Question, ShieldCheck,
+  Check, Clock, CrownSimple, GlobeHemisphereWest, Lightning,
+  ListChecks, MicrophoneStage, Mountains, Question, ShieldCheck,
   Sparkle, Student, UsersThree, Medal,
 } from "@phosphor-icons/react";
 import { siteConfig } from "../src/config/site";
@@ -427,10 +427,6 @@ export default function Home() {
         <section className="proof-section">
           <div className="proof-header chapter-reveal"><p className="section-kicker">The speakers</p><h2>Five voices. Five skills. A fresh perspective.</h2><p>Meet the faces of each topic. Names and portraits are placeholders until the speaker lineup is confirmed.</p></div>
           <div className="speaker-placeholder-grid">{speakers.map(({ name, topic }, index) => <article key={topic}><div className="speaker-portrait" aria-hidden="true" style={{ backgroundImage: `url(${assetPrefix}/images/speaker-placeholders.webp)`, backgroundPosition: `${index * 25}% top` }} /><div className="speaker-details"><h3>{name}</h3><p>{topic}</p></div></article>)}</div>
-          <div className="story-carousel" aria-label="Participant story placeholders">
-            <article className="video-story"><Image src={`${assetPrefix}/images/reflection.webp`} alt="Students reflecting together" fill unoptimized sizes="(max-width: 800px) 90vw, 45vw" /><span className="video-shade" /><div><span className="play-icon"><Play size={23} weight="fill" /></span><p>Video stories coming soon</p></div></article>
-            {["Confidence", "Time management", "Speaking up"].map((topic) => <article className="story-placeholder" key={topic}><HandHeart size={27} weight="duotone" /><p>{topic}</p><span>Approved participant story coming soon</span></article>)}
-          </div>
         </section>
 
         <section className="organiser-section" id="organiser">

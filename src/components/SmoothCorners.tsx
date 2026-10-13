@@ -15,7 +15,6 @@ const targets = [
   ".day-tabs",
   ".day-tabs button",
   ".speaker-placeholder-grid article",
-  ".story-carousel article",
   ".registration-form",
   ".registration-form button",
   ".footer-lead > a:last-child",
