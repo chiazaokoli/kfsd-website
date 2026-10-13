@@ -112,6 +112,7 @@ export default function Home() {
       frame = 0;
       const cta = heroCtaRef.current;
       const topbar = topbarRef.current;
+      topbar?.classList.toggle("is-scrolled", window.scrollY > 0);
       if (cta && topbar) setShowNavCta(cta.getBoundingClientRect().bottom <= topbar.getBoundingClientRect().bottom);
       if (!shell) return;
       const mobile = window.innerWidth <= 800;
