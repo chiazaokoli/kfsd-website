@@ -382,8 +382,13 @@ img { display: block; }
   .learning-step-icon svg { width: 24px; height: 24px; }
   .learning-step-text strong { font-size: 1.03rem; }
   .learning-step-text small { font-size: .77rem; }
-  .schedule-layout { min-height: 0; grid-template-columns: 1fr; gap: 60px; }
+  .schedule-section { padding-inline: 0; }
+  .schedule-layout { min-height: 0; grid-template-columns: 1fr; gap: 0; }
   .schedule-intro { max-width: none; }
+  .schedule-intro h2, .schedule-intro > p:not(.section-kicker) { margin-inline: 22px; }
+  .local-time-card, .schedule-panel { border-radius: 0; }
+  .schedule-panel { box-shadow: none; }
+  .smooth-corner-fallback.schedule-panel { filter: none; }
   .speaker-placeholder-grid { grid-template-columns: 1fr 1fr; }
   .portrait-placeholder { height: 210px; }
   .story-carousel { grid-auto-columns: 82vw; }

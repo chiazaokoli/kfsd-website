@@ -223,7 +223,7 @@ export default function Home() {
     const revealWords = gsap.utils.toArray<HTMLElement>(".reveal-word");
     const finalRevealWord = revealWords.at(-1);
     const revealItems = gsap.utils.toArray<HTMLElement>(".chapter-reveal").filter((item) =>
-      window.innerWidth > 800 || !item.matches(".skills-section .section-heading")
+      window.innerWidth > 800 || !item.matches(".skills-section .section-heading, .schedule-panel")
     );
     const motionImages = gsap.utils.toArray<HTMLElement>(".motion-image");
     const gradeStrokes = gsap.utils.toArray<SVGPathElement>(".grade-stroke");
