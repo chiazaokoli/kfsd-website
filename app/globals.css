@@ -66,7 +66,7 @@ img { display: block; }
 .edition-badge svg { color: var(--lime); filter: drop-shadow(0 1px 3px rgba(217,255,99,.25)); }
 .new-hero h1 { max-width: 1240px; margin: 0 auto; font-size: clamp(3.4rem, 7vw, 7.3rem); font-weight: 550; letter-spacing: -.075em; line-height: 1; text-wrap: balance; }
 .hero-word, .hero-ending { display: inline-block; white-space: nowrap; }
-.hero-letter { display: inline-block; color: var(--white); animation: hero-letter-reveal 275ms linear var(--letter-delay) both; }
+.hero-letter { display: inline-block; color: var(--white); animation: hero-letter-reveal 1100ms linear var(--letter-delay) both; }
 @keyframes hero-letter-reveal {
   0% { color: var(--lime); clip-path: inset(0 100% 0 0); filter: blur(.12em); transform: translateY(.1em); }
   20%, 38% { color: var(--lime); clip-path: inset(0); filter: blur(0); transform: translateY(0); }
