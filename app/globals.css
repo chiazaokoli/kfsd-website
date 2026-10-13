@@ -346,6 +346,9 @@ img { display: block; }
   .hook-visual { height: 125vw; max-height: 690px; order: -1; }
   .matter-section, .skills-section, .learning-section, .schedule-section, .proof-section, .registration-section, .faq-section-new { padding: 110px 22px; }
   .matter-section { padding-top: 64px; }
+  .matter-section, .matter-section .reveal-statement, .matter-section .grade-sketch { color: var(--ink); transition: color 300ms ease-in-out; }
+  .site-shell.matter-background-active .matter-section { color: var(--white); }
+  .site-shell.matter-background-active .matter-section .reveal-statement, .site-shell.matter-background-active .matter-section .grade-sketch { color: var(--cream); }
   .matter-heading { display: flex; flex-direction: column; align-items: stretch; gap: 18px; margin-bottom: 36px; }
   .grade-sketch { order: -1; align-self: flex-end; width: clamp(145px, 39vw, 190px); margin-right: 8px; }
   .section-heading { display: block; }
