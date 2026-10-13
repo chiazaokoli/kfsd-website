@@ -192,13 +192,34 @@ export default function Home() {
     matchMedia.add("(max-width: 800px)", () => {
       const cards = gsap.utils.toArray<HTMLElement>(".skill-card");
       const originalLayers = cards.map((card) => card.style.zIndex);
+      const blur = "blur(8px)";
+      const viewportMiddle = window.innerHeight / 2;
+      let focusedIndex = cards.reduce((last, card, index) => {
+        const bounds = card.getBoundingClientRect();
+        return bounds.top + bounds.height / 2 <= viewportMiddle ? index : last;
+      }, 0);
+      gsap.set(cards, { filter: blur });
+      gsap.set(cards[focusedIndex], { filter: "blur(0px)" });
+      const focusCard = (index: number) => {
+        const nextIndex = Math.max(0, index);
+        if (nextIndex === focusedIndex) return;
+        focusedIndex = nextIndex;
+        gsap.to(cards, { filter: blur, duration: 0.32, ease: "power2.out", overwrite: true });
+        gsap.to(cards[focusedIndex], { filter: "blur(0px)", duration: 0.32, ease: "power2.out", overwrite: true });
+      };
       cards.forEach((card) => {
         gsap.set(card, { transformOrigin: "50% 50%", willChange: "transform, filter" });
         gsap.timeline({ scrollTrigger: { trigger: card, start: "top bottom", end: "bottom top", scrub: 0.25, onUpdate: (self) => { card.style.zIndex = self.progress > 0.35 && self.progress < 0.65 ? "3" : "1"; } } })
-          .fromTo(card, { scale: 0.94, filter: "blur(2.5px)" }, { scale: 1.045, filter: "blur(0px)", duration: 0.5, ease: "none" })
-          .to(card, { scale: 0.94, filter: "blur(2.5px)", duration: 0.5, ease: "none" });
+          .fromTo(card, { scale: 0.94 }, { scale: 1.045, duration: 0.5, ease: "none" })
+          .to(card, { scale: 0.94, duration: 0.5, ease: "none" });
       });
-      return () => cards.forEach((card, index) => { card.style.zIndex = originalLayers[index]; });
+      cards.forEach((card, index) => {
+        ScrollTrigger.create({ trigger: card, start: "center center", onEnter: () => focusCard(index), onLeaveBack: () => focusCard(index - 1) });
+      });
+      return () => {
+        gsap.killTweensOf(cards);
+        cards.forEach((card, index) => { card.style.zIndex = originalLayers[index]; card.style.filter = ""; });
+      };
     });
     matchMedia.add("(min-width: 901px)", () => {
       ScrollTrigger.create({ trigger: ".schedule-layout", start: "top 110px", end: "bottom bottom-=80", pin: ".schedule-intro", pinSpacing: false });
