@@ -330,8 +330,8 @@ img { display: block; }
   .section-heading .section-kicker { margin-bottom: 22px; }
   .skills-grid { display: grid; grid-template-columns: 1fr; grid-template-rows: none; }
   .skill-card, .skill-card:nth-child(1), .skill-card:nth-child(2), .skill-third { grid-column: auto; min-height: 440px; }
-  .skill-third { min-height: 220px; }
-  .skill-third .skill-card-content { padding: 20px; }
+  .skill-third { min-height: 0; }
+  .skill-third .skill-card-content { position: relative; inset: auto; padding: 90px 20px 20px; }
   .skill-third .skill-meta { top: 20px; right: 20px; left: 20px; }
   .skill-third p { margin-top: 14px; }
   .learning-accordion { height: auto; flex-direction: column; overflow: visible; }
@@ -375,7 +375,7 @@ img { display: block; }
   .matter-section h2 { font-size: 3.1rem; }
   .reveal-statement { font-size: 1.48rem; }
   .skill-card { min-height: 400px; }
-  .skill-third { min-height: 220px; }
+  .skill-third { min-height: 0; }
   .speaker-placeholder-grid { grid-template-columns: 1fr; }
   .form-row { grid-template-columns: 1fr; }
   .registration-copy h2 { font-size: 2.85rem; }
