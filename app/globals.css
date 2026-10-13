@@ -66,11 +66,11 @@ img { display: block; }
 .edition-badge svg { color: var(--lime); filter: drop-shadow(0 1px 3px rgba(217,255,99,.25)); }
 .new-hero h1 { max-width: 1240px; margin: 0 auto; font-size: clamp(3.4rem, 7vw, 7.3rem); font-weight: 550; letter-spacing: -.075em; line-height: 1; text-wrap: balance; }
 .hero-word, .hero-ending { display: inline-block; white-space: nowrap; }
-.hero-letter { display: inline-block; color: var(--white); animation: hero-green-black-sweep 430ms ease-in-out var(--letter-delay) both; }
-@keyframes hero-green-black-sweep {
+.hero-letter { display: inline-block; color: var(--white); animation: hero-pink-black-sweep 430ms ease-in-out var(--letter-delay) both; }
+@keyframes hero-pink-black-sweep {
   0%, 100% { color: var(--white); }
-  25% { color: #a7f5a0; }
-  42%, 54% { color: #37e776; }
+  25% { color: #f2a5e3; }
+  42%, 54% { color: #d36af2; }
   55%, 78% { color: #000; }
 }
 .hero-subhead { max-width: 610px; margin: 27px auto 0; color: rgba(255,255,255,.82); font-size: clamp(1.03rem, 1.5vw, 1.3rem); line-height: 1.55; }
@@ -340,7 +340,7 @@ img { display: block; }
   .splash-moment small { position: absolute; right: 0; bottom: 22px; padding: 0; }
   .splash-footer { right: 20px; bottom: 24px; left: 20px; }
   .hero-kicker { font-size: .63rem; }
-  .new-hero h1 { font-size: 3rem; line-height: 1.02; }
+  .new-hero h1 { font-size: clamp(2.25rem, 11.15vw, 3rem); letter-spacing: -.055em; line-height: 1.02; }
   .hero-subhead { font-size: .94rem; }
   .primary-cta { min-height: 50px; gap: 10px; padding: 0 19px; font-size: .84rem; }
   .primary-cta svg { width: 18px; height: 18px; }
