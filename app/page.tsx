@@ -27,11 +27,11 @@ function heroLetters(text: string, startIndex: number) {
 }
 
 const questions = [
-  "Do you struggle with rallying your friends around a task?",
-  "Do you want to be liked more by people?",
-  "Do you want to keep to deadlines and manage your time better?",
-  "Do you want people to listen when you speak?",
-  "Do you want to speak publicly without feeling nervous?",
+  "You struggle with rallying your friends around a task.",
+  "You want to be liked more by people.",
+  "You want to keep to deadlines and manage your time better.",
+  "You want people to listen when you speak.",
+  "You want to speak publicly without feeling nervous.",
 ];
 
 const skills = [
