@@ -104,17 +104,30 @@ export default function Home() {
     let lastColor = "";
     const shell = pageRef.current;
     const sections = sectionColors.map(([selector, color]) => ({ element: shell?.querySelector<HTMLElement>(selector), color }));
+    const matterStatement = shell?.querySelector<HTMLElement>(".matter-section .reveal-statement");
+    const skillsIndex = sectionColors.findIndex(([selector]) => selector === ".skills-section");
+    let skillsHandoffComplete = false;
     const update = () => {
       frame = 0;
       const cta = heroCtaRef.current;
       const topbar = topbarRef.current;
       if (cta && topbar) setShowNavCta(cta.getBoundingClientRect().bottom <= topbar.getBoundingClientRect().bottom);
       if (!shell) return;
+      const mobile = window.innerWidth <= 800;
+      if (mobile && matterStatement) {
+        const clearance = (topbar?.getBoundingClientRect().bottom ?? 58) + 20;
+        const statementBottom = matterStatement.getBoundingClientRect().bottom;
+        if (skillsHandoffComplete ? statementBottom > clearance + 20 : statementBottom <= clearance) {
+          skillsHandoffComplete = !skillsHandoffComplete;
+        }
+      }
+      shell.classList.toggle("skills-background-active", mobile && skillsHandoffComplete);
       let activeSection = -1;
       sections.forEach(({ element }, index) => {
+        if (mobile && index === skillsIndex && !skillsHandoffComplete) return;
         if (element && element.getBoundingClientRect().top <= window.innerHeight * 0.8) activeSection = index;
       });
-      const color = activeSection < 0 ? (window.innerWidth <= 800 ? [5, 7, 12] : [217, 255, 99]) : sections[activeSection].color;
+      const color = activeSection < 0 ? (mobile ? [5, 7, 12] : [217, 255, 99]) : sections[activeSection].color;
       const nextColor = `rgb(${color.join(", ")})`;
       if (nextColor === lastColor) return;
       if (!lastColor) {
@@ -137,6 +150,7 @@ export default function Home() {
       window.removeEventListener("resize", scheduleUpdate);
       shell?.style.removeProperty("--section-bg");
       shell?.style.removeProperty("transition-duration");
+      shell?.classList.remove("skills-background-active");
     };
   }, []);
   useEffect(() => {
