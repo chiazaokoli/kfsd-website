@@ -192,30 +192,27 @@ export default function Home() {
     matchMedia.add("(max-width: 800px)", () => {
       const cards = gsap.utils.toArray<HTMLElement>(".skill-card");
       const originalLayers = cards.map((card) => card.style.zIndex);
-      const updateFocus = () => {
-        const viewportHeight = window.innerHeight;
-        const transitions = cards.map((card, index) => {
-          if (index === 0) return 1;
-          const top = card.getBoundingClientRect().top;
-          return gsap.utils.clamp(0, 1, (viewportHeight * 0.8 - top) / (viewportHeight * 0.15));
-        });
-        cards.forEach((card, index) => {
-          const focus = transitions[index] * (1 - (transitions[index + 1] ?? 0));
-          const blur = 8 * (1 - focus) ** 2;
-          gsap.set(card, { filter: `blur(${blur.toFixed(2)}px)` });
-        });
+      const grid = document.querySelector<HTMLElement>(".skills-grid");
+      const overlay = document.querySelector<HTMLElement>(".skills-focus-overlay");
+      const positionOverlay = () => {
+        if (!grid || !overlay) return;
+        const bounds = grid.getBoundingClientRect();
+        const visible = bounds.top < window.innerHeight && bounds.bottom > 0;
+        overlay.style.visibility = visible ? "visible" : "hidden";
+        if (!visible) return;
+        overlay.style.clipPath = `inset(${Math.max(0, bounds.top)}px ${Math.max(0, window.innerWidth - bounds.right)}px ${Math.max(0, window.innerHeight - bounds.bottom)}px ${Math.max(0, bounds.left)}px)`;
       };
       cards.forEach((card) => {
-        gsap.set(card, { transformOrigin: "50% 50%", willChange: "transform, filter" });
+        gsap.set(card, { transformOrigin: "50% 50%", willChange: "transform" });
         gsap.timeline({ scrollTrigger: { trigger: card, start: "top bottom", end: "bottom top", scrub: 0.25, onUpdate: (self) => { card.style.zIndex = self.progress > 0.35 && self.progress < 0.65 ? "3" : "1"; } } })
           .fromTo(card, { scale: 0.94 }, { scale: 1.045, duration: 0.5, ease: "none" })
           .to(card, { scale: 0.94, duration: 0.5, ease: "none" });
       });
-      ScrollTrigger.create({ trigger: ".skills-grid", start: "top bottom", end: "bottom top", onUpdate: updateFocus, onRefresh: updateFocus });
-      updateFocus();
+      ScrollTrigger.create({ trigger: ".skills-grid", start: "top bottom", end: "bottom top", onUpdate: positionOverlay, onRefresh: positionOverlay, onLeave: positionOverlay, onLeaveBack: positionOverlay });
+      positionOverlay();
       return () => {
-        gsap.killTweensOf(cards);
-        cards.forEach((card, index) => { card.style.zIndex = originalLayers[index]; card.style.filter = ""; });
+        cards.forEach((card, index) => { card.style.zIndex = originalLayers[index]; });
+        if (overlay) { overlay.style.visibility = ""; overlay.style.clipPath = ""; }
       };
     });
     matchMedia.add("(min-width: 901px)", () => {
@@ -307,6 +304,7 @@ export default function Home() {
               </article>
             ))}
           </div>
+          <div className="skills-focus-overlay" aria-hidden="true" />
         </section>
 
         <section className="learning-section">
