@@ -376,8 +376,8 @@ img { display: block; }
   .speaker-placeholder-grid { grid-template-columns: 1fr 1fr; margin-inline: -22px; }
   .organiser-section { grid-template-columns: 1fr; }
   .organiser-image { min-height: 520px; }
-  .organiser-copy { padding: 90px 22px; }
-  .two-days-section { grid-template-columns: 1fr; gap: 40px; padding: 110px 22px; }
+  .organiser-copy { padding: 90px 22px; background: var(--blue); }
+  .two-days-section { grid-template-columns: 1fr; gap: 40px; padding: 110px 22px; background: var(--lime); }
   .registration-section { grid-template-columns: 1fr; }
   .faq-section-new { grid-template-columns: 1fr; }
   .footer-lead { grid-template-columns: 1fr; }
