@@ -100,6 +100,8 @@ export default function Home() {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   useEffect(() => {
     let frame = 0;
+    let readyFrame = 0;
+    let lastColor = "";
     const shell = pageRef.current;
     const sections = sectionColors.map(([selector, color]) => ({ element: shell?.querySelector<HTMLElement>(selector), color }));
     const update = () => {
@@ -108,16 +110,19 @@ export default function Home() {
       const topbar = topbarRef.current;
       if (cta && topbar) setShowNavCta(cta.getBoundingClientRect().bottom <= topbar.getBoundingClientRect().bottom);
       if (!shell) return;
-      const viewportHeight = window.innerHeight;
-      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      let current = window.innerWidth <= 800 ? [5, 7, 12] : [217, 255, 99];
-      sections.forEach(({ element, color }) => {
-        if (!element) return;
-        const progress = Math.max(0, Math.min(1, (viewportHeight * 0.95 - element.getBoundingClientRect().top) / (viewportHeight * 0.3)));
-        const amount = reducedMotion ? Number(progress >= 0.5) : progress;
-        current = current.map((channel, index) => channel + (color[index] - channel) * amount);
+      let activeSection = -1;
+      sections.forEach(({ element }, index) => {
+        if (element && element.getBoundingClientRect().top <= window.innerHeight * 0.8) activeSection = index;
       });
-      shell.style.setProperty("--section-bg", `rgb(${current.map(Math.round).join(", ")})`);
+      const color = activeSection < 0 ? (window.innerWidth <= 800 ? [5, 7, 12] : [217, 255, 99]) : sections[activeSection].color;
+      const nextColor = `rgb(${color.join(", ")})`;
+      if (nextColor === lastColor) return;
+      if (!lastColor) {
+        shell.style.transitionDuration = "0ms";
+        readyFrame = window.requestAnimationFrame(() => { shell.style.transitionDuration = ""; });
+      }
+      shell.style.setProperty("--section-bg", nextColor);
+      lastColor = nextColor;
     };
     const scheduleUpdate = () => {
       if (!frame) frame = window.requestAnimationFrame(update);
@@ -127,9 +132,11 @@ export default function Home() {
     window.addEventListener("resize", scheduleUpdate);
     return () => {
       window.cancelAnimationFrame(frame);
+      window.cancelAnimationFrame(readyFrame);
       window.removeEventListener("scroll", scheduleUpdate);
       window.removeEventListener("resize", scheduleUpdate);
       shell?.style.removeProperty("--section-bg");
+      shell?.style.removeProperty("transition-duration");
     };
   }, []);
   useEffect(() => {
