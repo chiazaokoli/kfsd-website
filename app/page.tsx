@@ -179,7 +179,9 @@ export default function Home() {
   useGSAP(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const revealWords = gsap.utils.toArray<HTMLElement>(".reveal-word");
-    const revealItems = gsap.utils.toArray<HTMLElement>(".chapter-reveal");
+    const revealItems = gsap.utils.toArray<HTMLElement>(".chapter-reveal").filter((item) =>
+      window.innerWidth > 800 || !item.matches(".skills-section .section-heading")
+    );
     const motionImages = gsap.utils.toArray<HTMLElement>(".motion-image");
     const gradeStrokes = gsap.utils.toArray<SVGPathElement>(".grade-stroke");
 
