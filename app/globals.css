@@ -121,7 +121,7 @@ img { display: block; }
 .countdown-grid span { color: rgba(11,16,28,.64); font-size: .59rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
 
 /* Story */
-.hook-section { display: grid; grid-template-columns: minmax(0, 1fr) minmax(360px, .8fr); gap: clamp(55px, 8vw, 130px); align-items: center; padding: clamp(120px, 13vw, 200px) max(5vw, 28px); background: var(--paper); }
+.hook-section { display: grid; grid-template-columns: minmax(0, 1fr) minmax(360px, .8fr); gap: clamp(55px, 8vw, 130px); align-items: center; padding: clamp(120px, 13vw, 200px) max(5vw, 28px); background: linear-gradient(to bottom, var(--paper) 0 80%, transparent 100%); }
 .hook-copy { max-width: 720px; }
 .section-kicker { color: var(--blue); }
 .hook-copy h2, .section-heading h2, .schedule-intro h2, .proof-header h2, .organiser-copy h2, .faq-section-new h2 { margin: 0; font-size: clamp(2.7rem, 5.4vw, 5.4rem); font-weight: 550; letter-spacing: -.065em; line-height: 1; text-wrap: balance; }
