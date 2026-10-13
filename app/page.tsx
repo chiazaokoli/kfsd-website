@@ -74,7 +74,9 @@ export default function Home() {
   const pageRef = useRef<HTMLElement>(null);
   const topbarRef = useRef<HTMLElement>(null);
   const heroCtaRef = useRef<HTMLAnchorElement>(null);
+  const countdownRef = useRef<HTMLElement>(null);
   const [showNavCta, setShowNavCta] = useState(false);
+  const [countdownInView, setCountdownInView] = useState(false);
   const [countdown, setCountdown] = useState<Countdown>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [activeStep, setActiveStep] = useState(0);
   const [activeDay, setActiveDay] = useState(0);
@@ -113,6 +115,15 @@ export default function Home() {
       window.clearInterval(timer);
       window.clearTimeout(localTimeTimer);
     };
+  }, []);
+  useEffect(() => {
+    const section = countdownRef.current;
+    if (!section) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      setCountdownInView(entry.intersectionRatio >= 0.995);
+    }, { threshold: [0, 0.995] });
+    observer.observe(section);
+    return () => observer.disconnect();
   }, []);
 
   useGSAP(() => {
@@ -183,7 +194,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="countdown-band" aria-label="Countdown to the training">
+        <section ref={countdownRef} className={`countdown-band${countdownInView ? " countdown-band-active" : ""}`} aria-label="Countdown to the training">
           <p>We start in</p>
           <div className="countdown-grid">{Object.entries(countdown).map(([label, value]) => <div key={label}><strong>{String(value).padStart(2, "0")}</strong><span>{label}</span></div>)}</div>
           <p>25 Nov · 10:00 WAT</p>

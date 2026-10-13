@@ -309,7 +309,10 @@ img { display: block; }
   .event-dock { right: 18px; bottom: 18px; left: 18px; grid-template-columns: 1fr; padding: 10px 13px; }
   .event-dock > div { min-height: 38px; padding: 0; border-right: 0; border-bottom: 1px solid rgba(255,255,255,.12); }
   .event-dock > a { display: none; }
-  .countdown-band { grid-template-columns: 1fr; gap: 25px; padding: 42px 22px; }
+  .countdown-band { grid-template-columns: 1fr; gap: 25px; padding: 42px 22px; color: rgba(255,255,255,.64); background: var(--ink); transition: background-color 650ms ease, color 650ms ease; }
+  .countdown-band .countdown-grid span { color: rgba(255,255,255,.48); transition: color 650ms ease; }
+  .countdown-band-active { color: var(--ink); background: var(--lime); }
+  .countdown-band-active .countdown-grid span { color: rgba(11,16,28,.64); }
   .countdown-band > p { text-align: center; }
   .countdown-band > p:last-child { text-align: center; }
   .countdown-grid { justify-content: space-between; gap: 18px; }
