@@ -10,6 +10,10 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-13
 
+- `70b6e04` — Delayed the mobile blue-to-lime background transition until the
+  entire “2 hours. 2 days. A lifetime of difference.” heading reaches the 80%
+  viewport line. Reverse scrolling uses the same heading boundary.
+  File: `app/page.tsx`.
 - `48d4274` — Reverted `29227aa` at the user's request. Restored the shared
   background transitions for the organiser copy and “Why just two days?” on mobile.
   File: `app/globals.css`.
