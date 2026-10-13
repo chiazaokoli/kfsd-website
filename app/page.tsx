@@ -136,7 +136,7 @@ export default function Home() {
     if (reducedMotion) {
       gsap.set([...revealWords, ...revealItems, ...motionImages], { opacity: 1, scale: 1, y: 0 });
       gsap.set(gradeStrokes, { strokeDashoffset: 0 });
-      gsap.set(".grade-stamp, .grade-splash", { opacity: 1 });
+      gsap.set(".grade-stamp, .grade-splash, .grade-paint, .grade-drip", { opacity: 1, scale: 1, y: 0 });
       return;
     }
 
@@ -149,14 +149,18 @@ export default function Home() {
     gsap.utils.toArray<SVGEllipseElement>(".grade-splash").forEach((drop) => {
       gsap.set(drop, { x: (165 - Number(drop.getAttribute("cx"))) * 0.65, y: (105 - Number(drop.getAttribute("cy"))) * 0.65, scale: 0.15, transformOrigin: "50% 50%" });
     });
+    gsap.set(".grade-paint", { scale: 0.45, y: -10, transformOrigin: "50% 50%" });
+    gsap.set(".grade-drip", { scaleY: 0.08, transformOrigin: "50% 0%" });
     gsap.timeline({ scrollTrigger: { trigger: ".grade-sketch", start: "top 78%", once: true } })
-      .to(".grade-score", { strokeDashoffset: 0, duration: 0.18, stagger: 0.13, ease: "power1.inOut" })
-      .set(".grade-stamp", { opacity: 1 }, "+=0.12")
+      .to(".grade-score", { strokeDashoffset: 0, duration: 0.27, stagger: 0.055, ease: "power1.inOut" })
+      .set(".grade-stamp", { opacity: 1 }, "+=0.08")
       .to(".grade-stamp", { scale: 0.94, rotation: 0, y: 2, duration: 0.16, ease: "power3.in" })
       .addLabel("impact")
       .to(".grade-stamp", { scale: 1, y: 0, duration: 0.13, ease: "power2.out" }, "impact")
       .to(".grade-splash", { x: 0, y: 0, scale: 1, opacity: 0.9, duration: 0.25, ease: "power3.out", stagger: 0.008 }, "impact")
-      .to(".grade-splash", { opacity: 0.65, duration: 0.35 });
+      .to(".grade-paint", { scale: 1, y: 0, opacity: 1, duration: 0.28, ease: "power3.out" }, "impact")
+      .to(".grade-drip", { scaleY: 1, opacity: 1, duration: 2.2, ease: "power1.in", stagger: 0.18 }, "impact+=0.16")
+      .to(".grade-splash", { opacity: 0.7, duration: 0.35 }, "impact+=0.3");
 
     const matchMedia = gsap.matchMedia();
     matchMedia.add("(min-width: 901px)", () => {
@@ -231,7 +235,7 @@ export default function Home() {
         <section className="matter-section">
           <div className="matter-heading">
             <h2>Your future needs more than good grades.</h2>
-            <svg className="grade-sketch" viewBox="0 0 240 230" role="img" aria-label="95 out of 100, questioned: are good grades enough?">
+            <svg className="grade-sketch" viewBox="0 0 240 285" role="img" aria-label="95 out of 100, questioned: are good grades enough?">
               <g fill="none" stroke="currentColor" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round">
                 <path className="grade-stroke grade-score" pathLength="1" d="M99 42 C87 29 65 36 64 52 C63 72 85 74 98 56 M100 38 C100 58 98 78 82 94" />
                 <path className="grade-stroke grade-score" pathLength="1" d="M157 35 L124 37 L120 62 C133 54 154 58 154 75 C154 94 130 101 116 88" />
@@ -259,6 +263,17 @@ export default function Home() {
                   <path d="M137 76 C140 48 180 44 195 64 C214 89 187 100 173 111 C165 117 165 125 166 132" />
                   <path d="M166 154 L166 156" />
                 </g>
+              </g>
+              <g fill="#ff555f" aria-hidden="true">
+                <path className="grade-drip" d="M75 220 C72 231 73 246 75 263 C76 270 83 270 84 263 C86 250 80 232 82 220 Z" />
+                <path className="grade-drip" d="M111 223 C108 235 109 259 112 273 C114 279 121 279 122 272 C123 259 118 239 119 222 Z" />
+                <path className="grade-drip" d="M154 219 C150 231 150 247 153 257 C155 264 162 265 164 257 C166 245 160 231 163 219 Z" />
+                <path className="grade-drip" d="M193 215 C189 226 191 241 193 249 C195 256 201 255 203 249 C205 240 198 226 200 215 Z" />
+                <path className="grade-paint" d="M47 218 C40 213 44 208 54 209 L44 201 C42 197 48 195 53 199 L68 207 C72 200 77 201 80 208 L91 201 C96 198 101 203 99 209 C111 203 117 206 120 211 C128 206 134 208 139 212 L149 204 C156 200 160 204 157 210 C169 205 174 209 178 211 L197 204 C205 200 210 205 203 211 L219 211 C227 212 226 218 217 220 L205 223 C204 230 197 232 191 228 C181 234 170 229 165 226 C157 233 145 231 139 226 C128 233 120 230 113 226 C103 234 92 230 86 226 C74 232 65 228 59 225 L47 225 C39 224 39 219 47 218 Z" />
+                <ellipse className="grade-paint" cx="45" cy="237" rx="4" ry="2.5" />
+                <ellipse className="grade-paint" cx="63" cy="244" rx="2" ry="3.8" />
+                <ellipse className="grade-paint" cx="209" cy="237" rx="3.8" ry="2.2" />
+                <ellipse className="grade-paint" cx="221" cy="224" rx="1.8" ry="3" />
               </g>
             </svg>
           </div>
