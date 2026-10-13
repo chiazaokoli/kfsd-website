@@ -192,28 +192,14 @@ export default function Home() {
     matchMedia.add("(max-width: 800px)", () => {
       const cards = gsap.utils.toArray<HTMLElement>(".skill-card");
       const originalLayers = cards.map((card) => card.style.zIndex);
-      const grid = document.querySelector<HTMLElement>(".skills-grid");
-      const overlay = document.querySelector<HTMLElement>(".skills-focus-overlay");
-      const positionOverlay = () => {
-        if (!grid || !overlay) return;
-        const bounds = grid.getBoundingClientRect();
-        const visible = bounds.top < window.innerHeight && bounds.bottom > 0;
-        overlay.style.visibility = visible ? "visible" : "hidden";
-        if (!visible) return;
-        overlay.style.clipPath = `inset(${Math.max(0, bounds.top)}px ${Math.max(0, window.innerWidth - bounds.right)}px ${Math.max(0, window.innerHeight - bounds.bottom)}px ${Math.max(0, bounds.left)}px)`;
-      };
-      cards.forEach((card) => {
+      cards.forEach((card, index) => {
+        const lean = index % 2 === 0 ? -1.4 : 1.4;
         gsap.set(card, { transformOrigin: "50% 50%", willChange: "transform" });
         gsap.timeline({ scrollTrigger: { trigger: card, start: "top bottom", end: "bottom top", scrub: 0.25, onUpdate: (self) => { card.style.zIndex = self.progress > 0.35 && self.progress < 0.65 ? "3" : "1"; } } })
-          .fromTo(card, { scale: 0.94 }, { scale: 1.045, duration: 0.5, ease: "none" })
-          .to(card, { scale: 0.94, duration: 0.5, ease: "none" });
+          .fromTo(card, { scale: 0.94, rotationX: 3.5, rotation: lean }, { scale: 1.045, rotationX: 0, rotation: 0, duration: 0.5, ease: "none" })
+          .to(card, { scale: 0.94, rotationX: -3.5, rotation: -lean, duration: 0.5, ease: "none" });
       });
-      ScrollTrigger.create({ trigger: ".skills-grid", start: "top bottom", end: "bottom top", onUpdate: positionOverlay, onRefresh: positionOverlay, onLeave: positionOverlay, onLeaveBack: positionOverlay });
-      positionOverlay();
-      return () => {
-        cards.forEach((card, index) => { card.style.zIndex = originalLayers[index]; });
-        if (overlay) { overlay.style.visibility = ""; overlay.style.clipPath = ""; }
-      };
+      return () => cards.forEach((card, index) => { card.style.zIndex = originalLayers[index]; });
     });
     matchMedia.add("(min-width: 901px)", () => {
       ScrollTrigger.create({ trigger: ".schedule-layout", start: "top 110px", end: "bottom bottom-=80", pin: ".schedule-intro", pinSpacing: false });
@@ -304,7 +290,6 @@ export default function Home() {
               </article>
             ))}
           </div>
-          <div className="skills-focus-overlay" aria-hidden="true" />
         </section>
 
         <section className="learning-section">
