@@ -192,12 +192,11 @@ export default function Home() {
     matchMedia.add("(max-width: 800px)", () => {
       const cards = gsap.utils.toArray<HTMLElement>(".skill-card");
       const originalLayers = cards.map((card) => card.style.zIndex);
-      cards.forEach((card, index) => {
-        const lean = index % 2 === 0 ? -1.4 : 1.4;
-        gsap.set(card, { transformOrigin: "50% 50%", willChange: "transform" });
+      cards.forEach((card) => {
+        gsap.set(card, { transformOrigin: "50% 50%", willChange: "transform, filter" });
         gsap.timeline({ scrollTrigger: { trigger: card, start: "top bottom", end: "bottom top", scrub: 0.25, onUpdate: (self) => { card.style.zIndex = self.progress > 0.35 && self.progress < 0.65 ? "3" : "1"; } } })
-          .fromTo(card, { scale: 0.94, rotationX: 3.5, rotation: lean }, { scale: 1.045, rotationX: 0, rotation: 0, duration: 0.5, ease: "none" })
-          .to(card, { scale: 0.94, rotationX: -3.5, rotation: -lean, duration: 0.5, ease: "none" });
+          .fromTo(card, { scale: 0.94, filter: "blur(2.5px)" }, { scale: 1.045, filter: "blur(0px)", duration: 0.5, ease: "none" })
+          .to(card, { scale: 0.94, filter: "blur(2.5px)", duration: 0.5, ease: "none" });
       });
       return () => cards.forEach((card, index) => { card.style.zIndex = originalLayers[index]; });
     });
