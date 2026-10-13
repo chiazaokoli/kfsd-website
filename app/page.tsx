@@ -131,9 +131,11 @@ export default function Home() {
     const revealWords = gsap.utils.toArray<HTMLElement>(".reveal-word");
     const revealItems = gsap.utils.toArray<HTMLElement>(".chapter-reveal");
     const motionImages = gsap.utils.toArray<HTMLElement>(".motion-image");
+    const gradeStrokes = gsap.utils.toArray<SVGPathElement>(".grade-stroke");
 
     if (reducedMotion) {
       gsap.set([...revealWords, ...revealItems, ...motionImages], { opacity: 1, scale: 1, y: 0 });
+      gsap.set(gradeStrokes, { strokeDashoffset: 0 });
       return;
     }
 
@@ -141,6 +143,11 @@ export default function Home() {
     gsap.fromTo(revealWords, { opacity: 0.12 }, { opacity: 1, stagger: 0.045, ease: "none", scrollTrigger: { trigger: ".reveal-statement", start: "top 78%", end: "bottom 40%", scrub: 0.55 } });
     revealItems.forEach((item) => gsap.from(item, { opacity: 0, y: 48, duration: 0.9, ease: "power3.out", scrollTrigger: { trigger: item, start: "top 88%" } }));
     motionImages.forEach((image) => gsap.fromTo(image, { scale: 0.88, opacity: 0.55 }, { scale: 1, opacity: 1, ease: "none", scrollTrigger: { trigger: image, start: "top 92%", end: "center 50%", scrub: 0.6 } }));
+
+    gsap.timeline({ scrollTrigger: { trigger: ".grade-sketch", start: "top 78%", once: true } })
+      .to(".grade-score", { strokeDashoffset: 0, duration: 0.38, stagger: 0.32, ease: "power1.inOut" })
+      .to(".grade-question", { strokeDashoffset: 0, duration: 0.6, ease: "power2.out" }, "+=0.18")
+      .to(".grade-question-dot", { strokeDashoffset: 0, duration: 0.12 });
 
     const matchMedia = gsap.matchMedia();
     matchMedia.add("(min-width: 901px)", () => {
@@ -213,7 +220,23 @@ export default function Home() {
         </section>
 
         <section className="matter-section">
-          <h2>Your future needs more than good grades.</h2>
+          <div className="matter-heading">
+            <h2>Your future needs more than good grades.</h2>
+            <svg className="grade-sketch" viewBox="0 0 240 230" role="img" aria-label="95 out of 100, questioned: are good grades enough?">
+              <g fill="none" stroke="currentColor" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round">
+                <path className="grade-stroke grade-score" pathLength="1" d="M99 42 C87 29 65 36 64 52 C63 72 85 74 98 56 M100 38 C100 58 98 78 82 94" />
+                <path className="grade-stroke grade-score" pathLength="1" d="M157 35 L124 37 L120 62 C133 54 154 58 154 75 C154 94 130 101 116 88" />
+                <path className="grade-stroke grade-score" pathLength="1" d="M40 114 C82 111 129 113 176 108" />
+                <path className="grade-stroke grade-score" pathLength="1" d="M44 151 L58 137 L55 190 M43 191 L69 189" />
+                <path className="grade-stroke grade-score" pathLength="1" d="M99 135 C75 136 73 190 93 193 C115 195 122 137 101 135 L99 135" />
+                <path className="grade-stroke grade-score" pathLength="1" d="M149 133 C126 135 124 187 144 190 C166 192 172 135 151 133 L149 133" />
+              </g>
+              <g fill="none" stroke="#ff555f" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" transform="rotate(12 165 115)">
+                <path className="grade-stroke grade-question" pathLength="1" d="M137 76 C140 48 180 44 195 64 C214 89 187 100 173 111 C165 117 165 125 166 132" />
+                <path className="grade-stroke grade-question-dot" pathLength="1" d="M166 154 L166 156" />
+              </g>
+            </svg>
+          </div>
           <p className="reveal-statement">{"Soft skills are what everyone ignores, but they are just as important as technical skills. They help you communicate, lead, work with others, think clearly and handle tough moments. These are the skills that decide who gets noticed and who gets ahead in school, at work and in life.".split(" ").map((word, index) => <span className="reveal-word" key={`${word}-${index}`}>{word}{" "}</span>)}</p>
         </section>
 
