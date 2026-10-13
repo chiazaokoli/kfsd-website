@@ -134,7 +134,7 @@ img { display: block; }
 .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 40px; margin-bottom: 72px; }
 .section-heading .section-kicker { flex: 0 0 auto; }
 .section-heading h2 { max-width: 900px; }
-.skills-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: 520px 300px; gap: 12px; }
+.skills-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: 520px 390px; gap: 12px; }
 .skill-card { position: relative; min-width: 0; overflow: hidden; border-radius: 24px; isolation: isolate; }
 .skill-card:nth-child(1) { grid-column: span 5; }
 .skill-card:nth-child(2) { grid-column: span 7; }
@@ -290,7 +290,7 @@ img { display: block; }
   .new-hero { min-height: 850px; }
   .event-dock { grid-template-columns: 1fr 1fr 1fr 58px; }
   .event-dock > div { padding: 0 15px; font-size: .69rem; }
-  .skills-grid { grid-template-rows: 480px 300px; }
+  .skills-grid { grid-template-rows: 480px 360px; }
   .learning-accordion { height: 560px; }
   .proof-header { grid-template-columns: 1fr; gap: 30px; }
   .proof-header .section-kicker { grid-column: auto; margin-bottom: -8px; }
@@ -330,7 +330,10 @@ img { display: block; }
   .section-heading .section-kicker { margin-bottom: 22px; }
   .skills-grid { display: grid; grid-template-columns: 1fr; grid-template-rows: none; }
   .skill-card, .skill-card:nth-child(1), .skill-card:nth-child(2), .skill-third { grid-column: auto; min-height: 440px; }
-  .skill-third { min-height: 260px; }
+  .skill-third { min-height: 220px; }
+  .skill-third .skill-card-content { padding: 20px; }
+  .skill-third .skill-meta { top: 20px; right: 20px; left: 20px; }
+  .skill-third p { margin-top: 14px; }
   .learning-accordion { height: auto; flex-direction: column; overflow: visible; }
   .learning-panel, .learning-panel.active { min-height: 92px; flex: none; }
   .learning-panel.active { min-height: 420px; }
@@ -372,7 +375,7 @@ img { display: block; }
   .matter-section h2 { font-size: 3.1rem; }
   .reveal-statement { font-size: 1.48rem; }
   .skill-card { min-height: 400px; }
-  .skill-third { min-height: 260px; }
+  .skill-third { min-height: 220px; }
   .speaker-placeholder-grid { grid-template-columns: 1fr; }
   .form-row { grid-template-columns: 1fr; }
   .registration-copy h2 { font-size: 2.85rem; }
