@@ -189,6 +189,18 @@ export default function Home() {
     });
 
     const matchMedia = gsap.matchMedia();
+    matchMedia.add("(max-width: 800px)", () => {
+      const cards = gsap.utils.toArray<HTMLElement>(".skill-card");
+      const originalLayers = cards.map((card) => card.style.zIndex);
+      cards.forEach((card, index) => {
+        const lean = index % 2 === 0 ? -1.4 : 1.4;
+        gsap.set(card, { transformOrigin: "50% 50%", willChange: "transform" });
+        gsap.timeline({ scrollTrigger: { trigger: card, start: "top bottom", end: "bottom top", scrub: 0.25, onUpdate: (self) => { card.style.zIndex = self.progress > 0.35 && self.progress < 0.65 ? "3" : "1"; } } })
+          .fromTo(card, { scale: 0.94, rotationX: 3.5, rotation: lean }, { scale: 1.045, rotationX: 0, rotation: 0, duration: 0.5, ease: "none" })
+          .to(card, { scale: 0.94, rotationX: -3.5, rotation: -lean, duration: 0.5, ease: "none" });
+      });
+      return () => cards.forEach((card, index) => { card.style.zIndex = originalLayers[index]; });
+    });
     matchMedia.add("(min-width: 901px)", () => {
       ScrollTrigger.create({ trigger: ".schedule-layout", start: "top 110px", end: "bottom bottom-=80", pin: ".schedule-intro", pinSpacing: false });
     });

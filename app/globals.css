@@ -345,7 +345,7 @@ img { display: block; }
   .grade-sketch { order: -1; align-self: flex-end; width: clamp(145px, 39vw, 190px); margin-right: 8px; }
   .section-heading { display: block; }
   .section-heading .section-kicker { margin-bottom: 22px; }
-  .skills-grid { display: grid; grid-template-columns: 1fr; grid-template-rows: none; }
+  .skills-grid { display: grid; grid-template-columns: 1fr; grid-template-rows: none; perspective: 1000px; }
   .skill-card, .skill-card:nth-child(1), .skill-card:nth-child(2), .skill-third { grid-column: auto; min-height: 440px; }
   .skill-third { min-height: 0; }
   .skill-third .skill-card-content { position: relative; inset: auto; padding: 90px 20px 20px; }
