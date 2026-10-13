@@ -10,6 +10,10 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-13
 
+- `7c032bd` — The organiser image starts with 32px rounded corners and animates
+  to 0px as its existing scroll expansion reaches full size. Reduced-motion users
+  see the final square-cornered image without the animation.
+  Files: `app/page.tsx`, `app/globals.css`.
 - `4194e8d` — Removed the video stories and participant story placeholder carousel
   below the speaker grid, including its unused styles and icons. The reflection
   image remains available in `public/images/reflection.webp` for future use.
