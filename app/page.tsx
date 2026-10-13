@@ -186,6 +186,7 @@ export default function Home() {
   useGSAP(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const revealWords = gsap.utils.toArray<HTMLElement>(".reveal-word");
+    const finalRevealWord = revealWords.at(-1);
     const revealItems = gsap.utils.toArray<HTMLElement>(".chapter-reveal").filter((item) =>
       window.innerWidth > 800 || !item.matches(".skills-section .section-heading")
     );
@@ -194,13 +195,18 @@ export default function Home() {
 
     if (reducedMotion) {
       gsap.set([...revealWords, ...revealItems, ...motionImages], { opacity: 1, scale: 1, y: 0 });
+      pageRef.current?.classList.add("skills-heading-revealed");
       gsap.set(gradeStrokes, { strokeDashoffset: 0 });
       gsap.set(".grade-stamp, .grade-splash, .grade-paint, .grade-drip", { opacity: 1, scale: 1, y: 0 });
       return;
     }
 
     gsap.from(".hero-enter", { opacity: 0, y: 34, duration: 1, stagger: 0.1, ease: "power3.out" });
-    gsap.fromTo(revealWords, { opacity: 0.12 }, { opacity: 1, stagger: 0.045, ease: "none", scrollTrigger: { trigger: ".reveal-statement", start: "top 78%", end: "bottom 40%", scrub: 0.55 } });
+    gsap.fromTo(revealWords, { opacity: 0.12 }, {
+      opacity: 1, stagger: 0.045, ease: "none",
+      onUpdate: () => pageRef.current?.classList.toggle("skills-heading-revealed", !!finalRevealWord && Number(gsap.getProperty(finalRevealWord, "opacity")) >= 0.995),
+      scrollTrigger: { trigger: ".reveal-statement", start: "top 78%", end: "bottom 40%", scrub: 0.55 },
+    });
     revealItems.forEach((item) => gsap.from(item, { opacity: 0, y: 48, duration: 0.9, ease: "power3.out", scrollTrigger: { trigger: item, start: "top 88%" } }));
     motionImages.forEach((image) => gsap.fromTo(image, { scale: 0.88, opacity: 0.55 }, { scale: 1, opacity: 1, ease: "none", scrollTrigger: { trigger: image, start: "top 92%", end: "center 50%", scrub: 0.6 } }));
 
