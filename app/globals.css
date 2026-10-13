@@ -232,13 +232,12 @@ img { display: block; }
 .proof-header .section-kicker { grid-column: 1 / -1; margin-bottom: -35px; }
 .proof-header h2 { max-width: 900px; }
 .proof-header > p:last-child { margin: 0; color: #636874; font-size: .9rem; line-height: 1.7; }
-.speaker-placeholder-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 60px; }
-.speaker-placeholder-grid article { overflow: hidden; border: 1px solid var(--line-dark); border-radius: 18px; background: var(--paper); }
+.speaker-placeholder-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; margin-top: 60px; margin-inline: calc(-1 * max(5vw, 28px)); }
+.speaker-placeholder-grid article { overflow: hidden; border: 0; border-radius: 0; background: var(--paper); }
 .speaker-portrait { aspect-ratio: 4 / 5; background-color: var(--cream); background-size: 500% auto; background-repeat: no-repeat; }
 .speaker-details { padding: 24px; }
-.speaker-placeholder-grid small { color: var(--blue); font-size: .59rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
-.speaker-placeholder-grid h3 { margin: 10px 0 9px; font-size: 1.15rem; letter-spacing: -.035em; }
-.speaker-placeholder-grid p { margin: 0; color: var(--blue); font-size: .85rem; font-weight: 600; line-height: 1.5; }
+.speaker-placeholder-grid h3 { margin: 0 0 9px; color: var(--ink); font-size: 1.15rem; letter-spacing: -.035em; }
+.speaker-placeholder-grid p { margin: 0; color: #686b72; font-size: .85rem; font-weight: 500; line-height: 1.5; }
 .story-carousel { display: grid; grid-auto-columns: minmax(280px, 34vw); grid-auto-flow: column; gap: 10px; margin-top: 80px; overflow-x: auto; padding-bottom: 15px; scroll-snap-type: x mandatory; }
 .story-carousel article { min-height: 380px; scroll-snap-align: start; border-radius: 20px; }
 .video-story { position: relative; grid-column: span 2; min-width: min(680px, 82vw); overflow: hidden; color: var(--white); }
@@ -387,7 +386,7 @@ img { display: block; }
   .local-time-card, .schedule-panel { border-radius: 0; }
   .schedule-panel { box-shadow: none; }
   .smooth-corner-fallback.schedule-panel { filter: none; }
-  .speaker-placeholder-grid { grid-template-columns: 1fr 1fr; }
+  .speaker-placeholder-grid { grid-template-columns: 1fr 1fr; margin-inline: -22px; }
   .story-carousel { grid-auto-columns: 82vw; }
   .video-story { min-width: 82vw; }
   .organiser-section { grid-template-columns: 1fr; }
@@ -421,7 +420,7 @@ img { display: block; }
   .reveal-statement { font-size: 1.48rem; }
   .skill-card { min-height: 400px; }
   .skill-third { min-height: 0; }
-  .speaker-placeholder-grid { gap: 12px; margin-top: 40px; }
+  .speaker-placeholder-grid { margin-top: 40px; }
   .speaker-details { padding: 18px 14px; }
   .speaker-placeholder-grid h3 { font-size: 1rem; line-height: 1.35; }
   .speaker-placeholder-grid p { font-size: .78rem; }
