@@ -236,6 +236,22 @@ export default function Home() {
           <div className="matter-heading">
             <h2>Your future needs more than good grades.</h2>
             <svg className="grade-sketch" viewBox="0 0 240 285" role="img" aria-label="95 out of 100, questioned: are good grades enough?">
+              <g className="grade-paint" fill="#bf2748" aria-hidden="true">
+                <path d="M116 49 C121 47 126 52 131 53 L139 29 C142 19 149 22 146 34 L143 56 C149 57 155 51 161 48 L179 32 C186 27 190 31 184 39 L171 57 C176 58 181 54 188 55 L207 46 C218 42 222 50 211 55 L193 64 C195 69 200 71 204 76 L224 69 C236 65 238 73 227 79 L208 86 C210 93 208 99 211 104 L232 105 C242 107 239 116 228 116 L211 116 C208 125 206 132 202 137 L222 153 C231 160 225 167 216 160 L197 148 C192 153 185 158 181 161 L192 184 C198 196 191 201 185 190 L174 169 C167 173 159 172 153 177 L159 201 C162 213 153 217 150 205 L145 180 C138 181 130 177 124 181 L115 210 C112 222 103 220 107 207 L113 181 C104 181 96 177 91 175 L73 194 C65 204 58 197 66 187 L82 168 C76 165 71 159 67 155 L42 169 C30 175 26 167 38 160 L60 146 C57 141 54 134 51 128 L27 132 C15 133 14 124 26 123 L50 118 C49 111 52 105 51 100 L29 91 C19 87 23 78 34 82 L57 89 C61 83 63 78 66 74 L50 56 C42 47 49 41 57 50 L73 67 C79 61 85 58 91 56 L81 35 C76 23 84 19 89 31 L100 54 C105 51 110 51 116 49 Z" />
+                <path d="M39 69 C32 60 27 59 20 57 C26 67 31 71 39 69 Z" />
+                <path d="M202 28 C209 21 215 20 222 18 C216 27 209 31 202 28 Z" />
+                <ellipse cx="17" cy="108" rx="4" ry="2.5" />
+                <ellipse cx="34" cy="187" rx="4.5" ry="3" />
+                <ellipse cx="222" cy="172" rx="5" ry="3" />
+                <ellipse cx="226" cy="42" rx="3" ry="4" />
+                <ellipse cx="77" cy="24" rx="3" ry="5" />
+              </g>
+              <g fill="#bf2748" aria-hidden="true">
+                <path className="grade-drip" d="M84 165 C80 180 79 210 82 237 C84 251 93 252 95 237 C98 214 89 185 91 165 Z" />
+                <path className="grade-drip" d="M116 179 C112 194 111 232 114 263 C116 279 127 279 129 263 C132 235 122 197 124 178 Z" />
+                <path className="grade-drip" d="M159 173 C155 186 155 215 158 239 C160 252 169 253 171 239 C174 217 165 188 167 172 Z" />
+                <path className="grade-drip" d="M190 151 C187 165 186 184 188 203 C190 217 199 217 201 204 C203 186 195 168 197 150 Z" />
+              </g>
               <g fill="none" stroke="currentColor" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round">
                 <path className="grade-stroke grade-score" pathLength="1" d="M99 42 C87 29 65 36 64 52 C63 72 85 74 98 56 M100 38 C100 58 98 78 82 94" />
                 <path className="grade-stroke grade-score" pathLength="1" d="M157 35 L124 37 L120 62 C133 54 154 58 154 75 C154 94 130 101 116 88" />
@@ -263,17 +279,6 @@ export default function Home() {
                   <path d="M137 76 C140 48 180 44 195 64 C214 89 187 100 173 111 C165 117 165 125 166 132" />
                   <path d="M166 154 L166 156" />
                 </g>
-              </g>
-              <g fill="#ff555f" aria-hidden="true">
-                <path className="grade-drip" d="M75 220 C72 231 73 246 75 263 C76 270 83 270 84 263 C86 250 80 232 82 220 Z" />
-                <path className="grade-drip" d="M111 223 C108 235 109 259 112 273 C114 279 121 279 122 272 C123 259 118 239 119 222 Z" />
-                <path className="grade-drip" d="M154 219 C150 231 150 247 153 257 C155 264 162 265 164 257 C166 245 160 231 163 219 Z" />
-                <path className="grade-drip" d="M193 215 C189 226 191 241 193 249 C195 256 201 255 203 249 C205 240 198 226 200 215 Z" />
-                <path className="grade-paint" d="M47 218 C40 213 44 208 54 209 L44 201 C42 197 48 195 53 199 L68 207 C72 200 77 201 80 208 L91 201 C96 198 101 203 99 209 C111 203 117 206 120 211 C128 206 134 208 139 212 L149 204 C156 200 160 204 157 210 C169 205 174 209 178 211 L197 204 C205 200 210 205 203 211 L219 211 C227 212 226 218 217 220 L205 223 C204 230 197 232 191 228 C181 234 170 229 165 226 C157 233 145 231 139 226 C128 233 120 230 113 226 C103 234 92 230 86 226 C74 232 65 228 59 225 L47 225 C39 224 39 219 47 218 Z" />
-                <ellipse className="grade-paint" cx="45" cy="237" rx="4" ry="2.5" />
-                <ellipse className="grade-paint" cx="63" cy="244" rx="2" ry="3.8" />
-                <ellipse className="grade-paint" cx="209" cy="237" rx="3.8" ry="2.2" />
-                <ellipse className="grade-paint" cx="221" cy="224" rx="1.8" ry="3" />
               </g>
             </svg>
           </div>
