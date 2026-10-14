@@ -10,6 +10,10 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-14
 
+- `4ea085a` — Set hero event date, time and Zoom details to 13px regular text,
+  removed the bottom rule below Zoom, and changed the hero CTA to 15px medium
+  sentence-case text. Matched the sticky CTA wording. Files: `app/page.tsx`,
+  `app/globals.css`.
 - `d412d78` — Removed the organiser affiliations note and shield icon. Hid the
   oversized decorative “2” on mobile because its clipped stroke appeared as
   a stray rectangle above “Why just two days?”. Files: `app/page.tsx`,
