@@ -3,9 +3,9 @@
 These patterns are opt-in. Apply a pattern only to the section pair the user
 names; naming a pattern does not authorize changes elsewhere on the page.
 
-## Heading-complete transition
+## Background color transition
 
-**Shortcut:** “Apply the heading-complete transition between [section A] and
+**Shortcut:** “Apply the background color transition between [section A] and
 [section B].”
 
 ### Requested behavior
