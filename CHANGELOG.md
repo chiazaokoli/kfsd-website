@@ -10,6 +10,10 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-14
 
+- `b1c100f` — Set the final “Ready to set yourself apart?” CTA in a rounded
+  green, teal and warm-toned gradient card, with a light registration button
+  and a stacked mobile layout. Files: `app/page.tsx`, `app/globals.css`,
+  `src/components/SmoothCorners.tsx`.
 - `9a89573` — Removed the mobile gap below the registration form so its white
   surface joins Q&A directly. Kept Q&A white and switched the shared background
   instantly at that seam in both scroll directions. Files: `app/page.tsx`,
