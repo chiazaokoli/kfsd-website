@@ -413,7 +413,7 @@ export default function Home() {
         </section>
 
         <section ref={countdownRef} className={`countdown-band${countdownInView ? " countdown-band-active" : ""}`} aria-label="Countdown to the training">
-          <p>We start in</p>
+          <p>we start in</p>
           <div className="countdown-grid">{Object.entries(countdown).map(([label, value]) => <div key={label}><strong>{String(value).padStart(2, "0")}</strong><span>{label}</span></div>)}</div>
           <p>25 Nov · 10:00 WAT</p>
         </section>
