@@ -10,6 +10,9 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-14
 
+- `f2bbabe` — Set the registration submit text to semibold and lifted the
+  mobile hero copy, CTA, and event-details card by roughly one-third of the
+  logo-to-edition gap. File: `app/globals.css`.
 - `85101a8` — Increased speaker topic text to 14px regular and removed the
   leftover letter spacing from its old uppercase styling. File: `app/globals.css`.
 - `a719f8f` — Set speaker topics to sentence case, removed the small “Why
