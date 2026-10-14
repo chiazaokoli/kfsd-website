@@ -10,6 +10,9 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-14
 
+- `4751199` — Lowercased “we start in”; rounded the navbar CTA and day tabs;
+  set speaker topics to 12px regular uppercase and registration labels/field
+  text to 12px medium/14px regular. Files: `app/page.tsx`, `app/globals.css`.
 - `0c77974` — Brightened site fills and dark-background accents to `#22DB79`,
   kept the logo's original green on a light backing, and made the organiser
   text switch between light and dark as the shared background moves between
