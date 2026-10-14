@@ -10,6 +10,9 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-14
 
+- `3174e49` — Gave the footer its solid dark background and stopped the shared
+  background from transitioning into it. Q&A now meets the footer with a hard
+  white-to-dark cut. Files: `app/page.tsx`, `app/globals.css`.
 - `e1a869a` — Removed the final “Ready to set yourself apart?” CTA card and
   its styles. The page now ends with Q&A and a compact brand/details footer.
   Files: `app/page.tsx`, `app/globals.css`.
