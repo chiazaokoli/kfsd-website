@@ -17,7 +17,7 @@ const targets = [
   ".day-tabs button",
   ".speaker-placeholder-grid article",
   ".registration-form",
-  ".registration-form button",
+  ".registration-form button[type='submit']",
 ].join(", ");
 
 const svgNamespace = "http://www.w3.org/2000/svg";

@@ -29,7 +29,7 @@ img { display: block; }
 
 /* Keep the existing radii as a fallback. Newer engines shape the corner natively. */
 @supports (corner-shape: squircle) {
-  :is(.brand-mark, .topbar-cta, .primary-cta, .event-dock, .event-dock > a, .skill-card, .learning-step, .local-time-card, .schedule-panel, .day-tabs, .day-tabs-highlight, .day-tabs button, .speaker-placeholder-grid article, .registration-form, .registration-form button, .level-options, .level-option) {
+  :is(.brand-mark, .topbar-cta, .primary-cta, .event-dock, .event-dock > a, .skill-card, .learning-step, .local-time-card, .schedule-panel, .day-tabs, .day-tabs-highlight, .day-tabs button, .speaker-placeholder-grid article, .registration-form, .registration-form input:not([type="hidden"]), .registration-form select, .registration-form button, .level-options, .level-option) {
     corner-shape: squircle;
   }
 }
@@ -290,7 +290,7 @@ img { display: block; }
 .level-trigger span { min-width: 0; }
 .level-trigger svg { flex: none; transition: transform 180ms ease; }
 .level-trigger[aria-expanded="true"] svg { transform: rotate(180deg); }
-.level-options { display: grid; gap: 4px; padding: 8px; border: 1px solid rgba(11,16,28,.14); border-radius: 18px; background: white; box-shadow: 0 12px 28px rgba(11,16,28,.09); }
+.level-options { display: grid; gap: 4px; padding: 4px; border: 1px solid rgba(11,16,28,.14); border-radius: 18px; background: white; box-shadow: 0 12px 28px rgba(11,16,28,.09); }
 .level-option { display: flex; min-height: 48px; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; border-radius: 12px; cursor: pointer; font-size: .875rem; font-weight: 400; transition: background-color 160ms ease; }
 .level-option:is(.is-active, :hover) { background: #e9f7ee; }
 .level-option[aria-selected="true"]::after { color: var(--blue); content: "✓"; font-size: 1rem; font-weight: 800; }
