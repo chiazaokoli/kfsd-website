@@ -10,6 +10,9 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-14
 
+- `0296817` — Halved the level-menu inset to 4px and matched the level trigger
+  and text inputs at 53px high, 10px radius, and the same smooth corner shape.
+  Files: `app/globals.css`, `src/components/SmoothCorners.tsx`.
 - `8cc8146` — Matched the level picker’s field dimensions to the other inputs
   and styled its dropdown with inset pale-green option highlights and smooth
   iOS-style corners. File: `app/globals.css`.
