@@ -8,6 +8,16 @@ To undo a complete change, use `git revert <commit>` and verify the result befor
 deploying. To restore only part of a design, inspect `git show <commit>` and apply
 the relevant pieces to the current code so later changes are preserved.
 
+## 2026-10-14
+
+- `428e015` — Delayed the mobile lime-to-dark handoff until the full registration
+  heading reaches the 80% viewport line. The preceding two-day section switches
+  to light text on dark; registration uses dark text before the handoff. Faded the
+  registration gradient at the section edges to remove the visible seam.
+  Verified in the development preview at five mobile widths, with lint and
+  type-check. No production build or deployment run, per the user's instruction.
+  Files: `app/page.tsx`, `app/globals.css`.
+
 ## 2026-10-13
 
 - `70b6e04` — Delayed the mobile blue-to-lime background transition until the
