@@ -8,7 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ArrowDown, ArrowRight, ArrowUpRight, Brain, CalendarBlank, ChatCircleDots,
   Clock, CrownSimple, GlobeHemisphereWest, Lightning,
-  ListChecks, MicrophoneStage, Mountains, Question, ShieldCheck,
+  ListChecks, MicrophoneStage, Mountains, PaperPlaneTilt, Question, ShieldCheck,
   Sparkle, Student, UsersThree, Medal,
 } from "@phosphor-icons/react";
 import { siteConfig } from "../src/config/site";
@@ -401,7 +401,7 @@ export default function Home() {
             <p className="edition-badge hero-enter"><span className="edition-badge-icon"><Medal size={15} weight="duotone" aria-hidden="true" /></span><span>{siteConfig.edition}</span></p>
             <h1 id="hero-title" aria-label="Learn the soft skills that set you apart in 2 days."><span aria-hidden="true">{heroLeadWords.map((word, index) => <Fragment key={word}>{index > 0 && " "}<span className="hero-word">{heroLetters(word, heroLeadWords.slice(0, index).join("").length)}</span></Fragment>)}{" "}<span className="hero-ending">{heroLetters(heroEnding, heroEndingStart)}</span></span></h1>
             <p className="hero-subhead hero-enter">Learn from experienced professionals and become more career-ready.</p>
-            <a ref={heroCtaRef} className="primary-cta hero-enter" href="#register"><span className="cta-copy">Reserve my free spot</span><ArrowRight size={20} weight="bold" /></a>
+            <a ref={heroCtaRef} className="primary-cta hero-enter" href="#register"><span className="cta-copy">Reserve my free spot</span><PaperPlaneTilt size={20} weight="fill" /></a>
           </div>
           <div className="event-dock hero-enter">
             <div><CalendarBlank size={22} weight="duotone" /><span>{siteConfig.event.dateLabel}</span></div>
