@@ -10,6 +10,9 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-14
 
+- `8cc8146` — Matched the level picker’s field dimensions to the other inputs
+  and styled its dropdown with inset pale-green option highlights and smooth
+  iOS-style corners. File: `app/globals.css`.
 - `f2bbabe` — Set the registration submit text to semibold and lifted the
   mobile hero copy, CTA, and event-details card by roughly one-third of the
   logo-to-edition gap. File: `app/globals.css`.
