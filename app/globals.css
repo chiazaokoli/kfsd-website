@@ -202,7 +202,7 @@ img { display: block; }
 .learning-step.active .learning-step-icon { color: var(--blue); border-color: rgba(49,92,255,.13); background: rgba(49,92,255,.08); }
 .learning-step-text { display: block; min-width: 0; }
 .learning-step-text strong { display: block; font-size: clamp(1.05rem, 1.5vw, 1.35rem); font-weight: 650; letter-spacing: -.035em; line-height: 1.2; }
-.learning-step-text small { display: block; max-height: 0; overflow: hidden; color: #555d65; font-size: .875rem; font-weight: 400; line-height: 1.55; opacity: 0; transition: max-height 340ms ease, margin-top 340ms ease, opacity 220ms ease; }
+.learning-step-text small { display: block; max-height: 0; overflow: hidden; color: #555d65; font-size: .8125rem; font-weight: 400; line-height: 1.55; opacity: 0; transition: max-height 340ms ease, margin-top 340ms ease, opacity 220ms ease; }
 .learning-step.active .learning-step-text small { max-height: 110px; margin-top: 8px; opacity: 1; }
 .learning-step-index { align-self: start; margin-top: 5px; font-size: .61rem; font-weight: 700; letter-spacing: .1em; opacity: .55; }
 .learning-step.active .learning-step-index { color: var(--blue); opacity: 1; }
@@ -304,7 +304,7 @@ img { display: block; }
 .faq-list-new { border-top: 1px solid var(--line-dark); }
 .faq-item { border-bottom: 1px solid var(--line-dark); }
 .faq-item h3 { margin: 0; }
-.faq-item h3 button { display: flex; width: 100%; min-height: 88px; align-items: center; justify-content: space-between; gap: 25px; padding: 0; color: inherit; background: none; cursor: pointer; font-size: 1.125rem; font-weight: 600; text-align: left; }
+.faq-item h3 button { display: flex; width: 100%; min-height: 72px; align-items: center; justify-content: space-between; gap: 25px; padding: 0; color: inherit; background: none; cursor: pointer; font-size: 1rem; font-weight: 500; text-align: left; }
 .faq-item h3 button:focus-visible { outline-color: var(--blue); }
 .faq-item h3 button span { color: var(--blue); font-size: 1.7rem; font-weight: 300; transition: transform 300ms ease; }
 .faq-item.is-open h3 button span { transform: rotate(45deg); }
