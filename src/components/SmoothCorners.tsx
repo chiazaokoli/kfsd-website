@@ -13,6 +13,7 @@ const targets = [
   ".local-time-card",
   ".schedule-panel",
   ".day-tabs",
+  ".day-tabs-highlight",
   ".day-tabs button",
   ".speaker-placeholder-grid article",
   ".registration-form",

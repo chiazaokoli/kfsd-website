@@ -6,9 +6,9 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
-  ArrowDown, ArrowRight, ArrowUpRight, Brain, CalendarBlank, ChatCircleDots,
+  ArrowDown, ArrowRight, Brain, CalendarBlank, ChatCircleDots,
   Clock, CrownSimple, GlobeHemisphereWest, Lightning,
-  ListChecks, MicrophoneStage, Mountains, PaperPlaneTilt, Question, ShieldCheck,
+  ListChecks, MicrophoneStage, Mountains, Question, ShieldCheck,
   Student, UsersThree, Medal,
 } from "@phosphor-icons/react";
 import { siteConfig } from "../src/config/site";
@@ -402,7 +402,7 @@ export default function Home() {
             <p className="edition-badge hero-enter"><span className="edition-badge-icon"><Medal size={15} weight="duotone" aria-hidden="true" /></span><span>{siteConfig.edition}</span></p>
             <h1 id="hero-title" aria-label="Learn the soft skills that set you apart in 2 days."><span aria-hidden="true">{heroLeadWords.map((word, index) => <Fragment key={word}>{index > 0 && " "}<span className="hero-word">{heroLetters(word, heroLeadWords.slice(0, index).join("").length)}</span></Fragment>)}{" "}<span className="hero-ending">{heroLetters(heroEnding, heroEndingStart)}</span></span></h1>
             <p className="hero-subhead hero-enter">Learn from experienced professionals and become more career-ready.</p>
-            <a ref={heroCtaRef} className="primary-cta hero-enter" href="#register"><span className="cta-copy">Reserve my free spot</span><PaperPlaneTilt size={20} weight="fill" /></a>
+            <a ref={heroCtaRef} className="primary-cta hero-enter" href="#register"><span className="cta-copy">Reserve my free spot</span><ArrowRight size={20} weight="bold" /></a>
           </div>
           <div className="event-dock hero-enter">
             <div><CalendarBlank size={22} weight="duotone" /><span>{siteConfig.event.dateLabel}</span></div>
@@ -413,7 +413,7 @@ export default function Home() {
         </section>
 
         <section ref={countdownRef} className={`countdown-band${countdownInView ? " countdown-band-active" : ""}`} aria-label="Countdown to the training">
-          <p>we start in</p>
+          <p>We start in</p>
           <div className="countdown-grid">{Object.entries(countdown).map(([label, value]) => <div key={label}><strong>{String(value).padStart(2, "0")}</strong><span>{label}</span></div>)}</div>
           <p>25 Nov · 10:00 WAT</p>
         </section>
@@ -470,7 +470,7 @@ export default function Home() {
           <div className="schedule-layout">
             <div className="schedule-intro"><h2>Order of the day</h2><p>Both days run from 10:00AM to 12:00PM West Africa Time.</p><div className="local-time-card"><GlobeHemisphereWest size={25} weight="duotone" /><div><strong>Not in Nigeria?</strong><span>{localTime || "Converting 10:00AM WAT to your local time…"}</span></div></div></div>
             <div className="schedule-panel chapter-reveal">
-              <div className="day-tabs" data-active-day={activeDay} role="tablist" aria-label="Training days">{siteConfig.schedules.map((day, index) => <button key={day.label} role="tab" aria-selected={activeDay === index} onClick={() => setActiveDay(index)}>{day.label}</button>)}</div>
+              <div className="day-tabs" data-active-day={activeDay} role="tablist" aria-label="Training days"><span className="day-tabs-highlight" aria-hidden="true" />{siteConfig.schedules.map((day, index) => <button key={day.label} role="tab" aria-selected={activeDay === index} onClick={() => setActiveDay(index)}>{day.label}</button>)}</div>
               <div className="schedule-title"><div><span>{activeSchedule.date}</span><h3>{activeSchedule.title}</h3></div><Clock size={31} weight="duotone" /></div>
               <ol className="agenda-list">{activeSchedule.items.map(([time, item]) => <li key={`${time}-${item}`}><time>{time}</time><span>{item}</span></li>)}</ol>
             </div>
@@ -520,7 +520,7 @@ export default function Home() {
               {formErrors.level && <small id="level-error">{formErrors.level}</small>}
             </div>
             <label>School or institution name<input name="school" type="text" autoComplete="organization" placeholder="Your school or institution" aria-describedby={formErrors.school ? "school-error" : undefined} />{formErrors.school && <small id="school-error">{formErrors.school}</small>}</label>
-            <button type="submit">Reserve My Free Spot <ArrowUpRight size={20} weight="bold" /></button><p className="form-reassurance">Your details will only be used for this training.</p>{formStatus && <p className="form-status" role="status">{formStatus}</p>}
+            <button type="submit">Reserve My Free Spot</button><p className="form-reassurance">Your details will only be used for this training.</p>{formStatus && <p className="form-status" role="status">{formStatus}</p>}
           </form>
         </section>
 
