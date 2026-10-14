@@ -10,6 +10,10 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-14
 
+- `d412d78` — Removed the organiser affiliations note and shield icon. Hid the
+  oversized decorative “2” on mobile because its clipped stroke appeared as
+  a stray rectangle above “Why just two days?”. Files: `app/page.tsx`,
+  `app/globals.css`.
 - `a0f73a4` — Animated Q&A answers as they expand and collapse, with rotating
   plus icons, keyboard-operable question buttons, and reduced-motion support.
   Files: `app/page.tsx`, `app/globals.css`.
