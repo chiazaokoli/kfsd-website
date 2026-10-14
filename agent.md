@@ -32,6 +32,7 @@ Build a polished Next.js landing page for the virtual soft skills training waitl
 
 ## Working practices
 
+- Reusable, opt-in design instructions live in `DESIGN_PATTERNS.md`. Read the named pattern when the user asks to apply it.
 - “Don't build” means inspect or discuss only: do not edit code or implement changes.
 - Once the user gives the go-ahead to make changes, implement, verify, run the production build, and deploy to GitHub Pages so the changes are visible on the live site.
 - Inspect the repository and preserve unrelated user changes before editing.
