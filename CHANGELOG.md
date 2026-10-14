@@ -10,6 +10,10 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-14
 
+- `a719f8f` — Set speaker topics to sentence case, removed the small “Why
+  just two days?” and “Good to know” headings, tightened the mobile schedule
+  and form spacing, changed the level picker to a chevron, and enlarged the
+  navbar CTA to 14px medium. Files: `app/page.tsx`, `app/globals.css`.
 - `c9da719` — Reduced Q&A questions to 16px medium in shorter rows, set
   learning-card descriptions to 13px regular, and shortened the hero and
   navbar CTAs to “Reserve my spot”. Files: `app/page.tsx`, `app/globals.css`.
