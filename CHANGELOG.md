@@ -10,6 +10,9 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-14
 
+- `34d3362` — Shifted the mobile hero image crop right to show the student
+  speaker while preserving its aspect ratio with `object-fit: cover`.
+  File: `app/globals.css`.
 - `a2f9633` — Matched all registration text inputs and the level trigger to
   the submit CTA’s 19px smooth radius. File: `app/globals.css`.
 - `0296817` — Halved the level-menu inset to 4px and matched the level trigger
