@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import {
@@ -23,6 +24,7 @@ const moments: Array<{ verb: string; icon: Icon }> = [
   { verb: "Empathizing", icon: HandHeart },
   { verb: "Collaborating", icon: UsersThree },
 ];
+const assetPrefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 export default function SplashScreen({ onComplete }: { onComplete: () => void }) {
   const shellRef = useRef<HTMLDivElement>(null);
@@ -92,7 +94,7 @@ export default function SplashScreen({ onComplete }: { onComplete: () => void })
       <div className="splash-underlay" />
       <div className="splash-curtain">
         <div className="splash-brand">
-          <span className="wordmark-dot" />
+          <Image className="splash-logo" src={`${assetPrefix}/images/kfsd-logo-mark.webp`} alt="" width={25} height={25} unoptimized />
           KFSD Soft Skills Training
         </div>
 

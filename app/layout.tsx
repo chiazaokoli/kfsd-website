@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "KFSD Soft Skills Training | Live Online, 25–26 November 2026",
   description:
     "A free two-day virtual soft skills training for students. Build leadership, communication, critical thinking, resilience and integrity.",
+  icons: { icon: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/kfsd-icon.png` },
 };
 
 export default function RootLayout({

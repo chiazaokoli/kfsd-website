@@ -9,7 +9,7 @@ import {
   ArrowDown, ArrowRight, ArrowUpRight, Brain, CalendarBlank, ChatCircleDots,
   Clock, CrownSimple, GlobeHemisphereWest, Lightning,
   ListChecks, MicrophoneStage, Mountains, PaperPlaneTilt, Question, ShieldCheck,
-  Sparkle, Student, UsersThree, Medal,
+  Student, UsersThree, Medal,
 } from "@phosphor-icons/react";
 import { siteConfig } from "../src/config/site";
 import GradeSketch, { paintRuns, paintRunPath } from "../src/components/GradeSketch";
@@ -389,7 +389,7 @@ export default function Home() {
       <main ref={pageRef} className="site-shell" id="top">
         <SmoothCorners />
         <header ref={topbarRef} className={`topbar${showNavCta ? " has-cta" : ""}`}>
-          <a className="brand" href="#top" aria-label="KFSD Soft Skills Training home"><span className="brand-mark" aria-hidden="true"><Sparkle size={16} weight="fill" /></span><span>KFSD <b>Soft Skills Training</b></span></a>
+          <a className="brand" href="#top" aria-label="KFSD Soft Skills Training home"><span className="brand-mark" aria-hidden="true"><Image src={`${assetPrefix}/images/kfsd-logo-mark.webp`} alt="" width={30} height={30} unoptimized /></span><span>KFSD <b>Soft Skills Training</b></span></a>
           <nav aria-label="Main navigation"><a href="#skills">Skills</a><a href="#schedule">Schedule</a><a href="#organiser">About CKL</a></nav>
           <a className="topbar-cta" href="#register" aria-hidden={!showNavCta} tabIndex={showNavCta ? 0 : -1}><span className="cta-copy">Reserve my free spot</span><ArrowRight size={17} weight="bold" /></a>
         </header>
@@ -531,7 +531,7 @@ export default function Home() {
           </div>;
         })}</div></section>
 
-        <footer className="new-footer"><a className="brand footer-brand" href="#top"><span className="brand-mark"><Sparkle size={16} weight="fill" /></span><span>KFSD <b>Soft Skills Training</b></span></a><div className="footer-bottom"><p>Organised by {siteConfig.organiser}</p><p>{siteConfig.event.dateLabel} · {siteConfig.event.timeLabel}</p><p>Concept imagery shown; verified media coming soon</p><p>© 2026 KFSD</p></div></footer>
+        <footer className="new-footer"><a className="footer-identity" href="#top" aria-label="KFSD Soft Skills Training home"><span className="footer-logo"><Image src={`${assetPrefix}/images/kfsd-logo-full.webp`} alt="Kaiser Foundation for Social Development logo" width={155} height={155} unoptimized /></span><strong>KFSD Soft Skills Training</strong></a><div className="footer-bottom"><p>Organised by {siteConfig.organiser}</p><p>{siteConfig.event.dateLabel} · {siteConfig.event.timeLabel}</p><p>Concept imagery shown; verified media coming soon</p><p>© 2026 KFSD</p></div></footer>
       </main>
     </>
   );
