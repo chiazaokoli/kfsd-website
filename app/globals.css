@@ -274,7 +274,7 @@ img { display: block; }
 .registration-free-badge svg text { transform-box: view-box; transform-origin: center; transform: rotate(-8deg); }
 .registration-form { align-self: start; display: grid; gap: 18px; padding: clamp(24px, 4vw, 46px); color: var(--ink); border-radius: 24px; background: var(--paper); box-shadow: 0 35px 100px rgba(0,0,0,.26); }
 .registration-form label { display: grid; gap: 8px; font-size: .875rem; font-weight: 500; }
-.registration-form input, .registration-form select, .registration-form .level-trigger { box-sizing: border-box; width: 100%; min-height: 53px; height: 53px; padding: 0 15px; color: var(--ink); border: 1px solid rgba(11,16,28,.18); border-radius: 10px; outline: none; background: white; font-size: .875rem; font-weight: 400; }
+.registration-form input, .registration-form select, .registration-form .level-trigger { box-sizing: border-box; width: 100%; min-height: 53px; height: 53px; padding: 0 15px; color: var(--ink); border: 1px solid rgba(11,16,28,.18); border-radius: 19px; outline: none; background: white; font-size: .875rem; font-weight: 400; }
 .registration-form input:focus, .registration-form select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(49,92,255,.12); }
 .registration-form label small { color: #c53e45; font-weight: 500; }
 .level-field { display: grid; min-width: 0; gap: 8px; }
