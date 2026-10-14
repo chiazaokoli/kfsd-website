@@ -29,7 +29,7 @@ const sectionColors = [
   [".schedule-section", [251, 250, 246]],
   [".proof-section", [242, 240, 232]],
   [".organiser-section", [49, 92, 255]],
-  [".two-days-section", [217, 255, 99]],
+  [".two-days-section", [9, 167, 88]],
   [".registration-section", [11, 16, 28]],
   [".faq-section-new", [251, 250, 246]],
 ] as const;
@@ -156,7 +156,7 @@ export default function Home() {
       shell.classList.toggle("matter-background-active", activeSection === 1);
       shell.classList.toggle("schedule-background-active", activeSection === 4);
       shell.classList.toggle("registration-background-active", activeSection === registrationIndex);
-      const color = activeSection < 0 ? (mobile ? [5, 7, 12] : [217, 255, 99]) : sections[activeSection].color;
+      const color = activeSection < 0 ? (mobile ? [5, 7, 12] : [9, 167, 88]) : sections[activeSection].color;
       const nextColor = `rgb(${color.join(", ")})`;
       const enteringStory = activeSection === 0 && lastActiveSection < 0;
       const crossingRegistrationFaq = mobile && ((activeSection === faqIndex && lastActiveSection === registrationIndex) || (activeSection === registrationIndex && lastActiveSection === faqIndex));

@@ -108,7 +108,7 @@ export default function SmoothCorners() {
       const focus = svgElement("path");
       focus.classList.add("smooth-corner-focus-ring");
       focus.setAttribute("fill", "none");
-      focus.setAttribute("stroke", "#d9ff63");
+      focus.setAttribute("stroke", "#09a758");
       focus.setAttribute("stroke-width", "3");
       overlay.append(border, halo, focus);
 
