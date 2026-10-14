@@ -10,6 +10,9 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-14
 
+- `c9da719` — Reduced Q&A questions to 16px medium in shorter rows, set
+  learning-card descriptions to 13px regular, and shortened the hero and
+  navbar CTAs to “Reserve my spot”. Files: `app/page.tsx`, `app/globals.css`.
 - `6cc6a7b` — Matched the day-tab highlight to the tabs' smooth corners and
   refined hero, section, form, Q&A, and footer typography and CTA icons.
   Files: `app/page.tsx`, `app/globals.css`, `src/components/SmoothCorners.tsx`.
