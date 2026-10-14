@@ -10,6 +10,10 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-14
 
+- `35ff522` — Raised the edge-to-edge, square-cornered mobile registration form
+  so the FREE seal overlaps its top edge by half. Softened the submit button's
+  lime and replaced the native level picker with an inline, keyboard-accessible
+  dropdown with balanced chevron padding. Files: `app/page.tsx`, `app/globals.css`.
 - `4b2f9c0` — Tilted the static FREE lettering 8° anticlockwise while the red
   scalloped seal continues rotating behind it. File: `app/globals.css`.
 - `76cb627` — Rotated only the red scalloped seal, keeping the white FREE text
