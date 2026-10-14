@@ -259,7 +259,8 @@ img { display: block; }
 .registration-section { position: relative; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(480px, .8fr); gap: clamp(60px, 9vw, 150px); padding: clamp(120px, 14vw, 210px) max(5vw, 28px); color: var(--white); background: radial-gradient(circle at 15% 20%, rgba(49,92,255,.36), transparent 35%), var(--ink); }
 .registration-copy h2 { max-width: 830px; margin: 0; font-size: clamp(3rem, 5.4vw, 5.8rem); font-weight: 530; letter-spacing: -.07em; line-height: .97; text-wrap: balance; }
 .registration-heading { position: relative; }
-.registration-free-badge { position: absolute; z-index: 2; top: calc(100% - 6px); right: 4px; display: block; width: 96px; height: 96px; transform: rotate(-12deg); pointer-events: none; }
+.registration-free-badge { position: absolute; z-index: 2; top: calc(100% - 6px); right: 4px; display: block; width: 96px; height: 96px; transform-origin: center; animation: free-seal-spin 12s linear infinite; pointer-events: none; }
+@keyframes free-seal-spin { from { transform: rotate(-12deg); } to { transform: rotate(348deg); } }
 .registration-free-badge svg { display: block; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 6px 9px rgba(0,0,0,.24)); }
 .registration-form { align-self: start; display: grid; gap: 18px; padding: clamp(24px, 4vw, 46px); color: var(--ink); border-radius: 24px; background: var(--paper); box-shadow: 0 35px 100px rgba(0,0,0,.26); }
 .registration-form label { display: grid; gap: 8px; font-size: .69rem; font-weight: 700; }
@@ -426,6 +427,7 @@ img { display: block; }
   .motion-image, .chapter-reveal { opacity: 1; transform: none; }
   .organiser-image { border-radius: 0; }
   .hero-letter { animation: none !important; color: var(--white); -webkit-text-fill-color: var(--white); }
+  .registration-free-badge { animation: none !important; transform: rotate(-12deg); }
   .grade-stroke { stroke-dashoffset: 0; }
   .grade-stamp, .grade-splash, .grade-paint, .grade-drip { opacity: 1; }
 }
