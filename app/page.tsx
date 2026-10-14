@@ -7,7 +7,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ArrowDown, ArrowRight, ArrowUpRight, Brain, CalendarBlank, ChatCircleDots,
-  Check, Clock, CrownSimple, GlobeHemisphereWest, Lightning,
+  Clock, CrownSimple, GlobeHemisphereWest, Lightning,
   ListChecks, MicrophoneStage, Mountains, Question, ShieldCheck,
   Sparkle, Student, UsersThree, Medal,
 } from "@phosphor-icons/react";
@@ -443,9 +443,8 @@ export default function Home() {
 
         <section className="registration-section" id="register">
           <div className="registration-copy chapter-reveal">
-            <p className="section-kicker">Registration</p><h2>Register for the soft skills training and take on a new mindset that will shape your future.</h2><div className="registration-price"><strong>{siteConfig.registration.priceNow}</strong></div>
-            <div className="availability"><div><span>Registration window</span><b>Spaces are limited</b></div><div className="availability-track"><span /></div><p>Confirmed availability will be shown here when registration goes live.</p></div>
-            <div className="registration-reminder"><Check size={18} weight="bold" /> 2 hours a day <Check size={18} weight="bold" /> 2 days <Check size={18} weight="bold" /> 100% free</div>
+            <p className="section-kicker">Registration</p><h2>Register for the soft skills training and take on a new mindset that will shape your future.</h2><div className="registration-price"><strong className="registration-free-badge"><Sparkle size={18} weight="fill" aria-hidden="true" />{siteConfig.registration.priceNow}</strong></div>
+            <div className="availability"><div><span>Registration window</span><b>Spaces are limited</b></div><div className="availability-track" aria-hidden="true"><span /></div><p>Confirmed availability will be shown here when registration goes live.</p></div>
           </div>
           <form className="registration-form" onSubmit={handleRegistration} noValidate>
             <label>Full name<input name="fullName" type="text" autoComplete="name" placeholder="Your full name" aria-describedby={formErrors.fullName ? "fullName-error" : undefined} />{formErrors.fullName && <small id="fullName-error">{formErrors.fullName}</small>}</label>
