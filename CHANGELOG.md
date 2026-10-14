@@ -10,6 +10,10 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-14
 
+- `9b91503` — Prepared transparent logo assets from the supplied Kaiser Foundation
+  reference and added them to the splash screen, navigation, footer and favicon.
+  Files: `app/page.tsx`, `app/components/SplashScreen.tsx`, `app/layout.tsx`,
+  `app/globals.css`, `public/images/kfsd-logo-*.webp`, `public/images/kfsd-icon.png`.
 - `a703e12` — Changed the site's lime accents and scroll backgrounds to KFSD
   green (`#09A758`), with coordinated green CTA gradients and contrast tweaks.
   The pre-change restore tag is `restore-before-kfsd-brand-update-2026-10-14`.
