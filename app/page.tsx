@@ -106,6 +106,7 @@ export default function Home() {
   const [countdown, setCountdown] = useState<Countdown>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [activeStep, setActiveStep] = useState(0);
   const [activeDay, setActiveDay] = useState(0);
+  const [openFaqs, setOpenFaqs] = useState<number[]>([]);
   const [localTime, setLocalTime] = useState("");
   const [formStatus, setFormStatus] = useState("");
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
@@ -522,7 +523,13 @@ export default function Home() {
           </form>
         </section>
 
-        <section className="faq-section-new"><div><p className="section-kicker">Good to know</p><h2>Questions, answered.</h2></div><div className="faq-list-new">{faqs.map(([question, answer]) => <details key={question}><summary>{question}<span>+</span></summary><p>{answer}</p></details>)}</div></section>
+        <section className="faq-section-new"><div><p className="section-kicker">Good to know</p><h2>Questions, answered.</h2></div><div className="faq-list-new">{faqs.map(([question, answer], index) => {
+          const open = openFaqs.includes(index);
+          return <div className={`faq-item${open ? " is-open" : ""}`} key={question}>
+            <h3><button id={`faq-question-${index}`} type="button" aria-expanded={open} aria-controls={`faq-answer-${index}`} onClick={() => setOpenFaqs((current) => current.includes(index) ? current.filter((item) => item !== index) : [...current, index])}>{question}<span aria-hidden="true">+</span></button></h3>
+            <div id={`faq-answer-${index}`} className="faq-answer" role="region" aria-labelledby={`faq-question-${index}`} aria-hidden={!open}><div className="faq-answer-inner"><p>{answer}</p></div></div>
+          </div>;
+        })}</div></section>
 
         <footer className="new-footer"><a className="brand footer-brand" href="#top"><span className="brand-mark"><Sparkle size={16} weight="fill" /></span><span>KFSD <b>Soft Skills Training</b></span></a><div className="footer-bottom"><p>Organised by {siteConfig.organiser}</p><p>{siteConfig.event.dateLabel} · {siteConfig.event.timeLabel}</p><p>Concept imagery shown; verified media coming soon</p><p>© 2026 KFSD</p></div></footer>
       </main>
