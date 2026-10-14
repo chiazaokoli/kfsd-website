@@ -17,7 +17,6 @@ const targets = [
   ".speaker-placeholder-grid article",
   ".registration-form",
   ".registration-form button",
-  ".footer-lead > a:last-child",
 ].join(", ");
 
 const svgNamespace = "http://www.w3.org/2000/svg";

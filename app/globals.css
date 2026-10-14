@@ -28,7 +28,7 @@ img { display: block; }
 
 /* Keep the existing radii as a fallback. Newer engines shape the corner natively. */
 @supports (corner-shape: squircle) {
-  :is(.brand-mark, .topbar-cta, .primary-cta, .event-dock, .event-dock > a, .skill-card, .learning-step, .local-time-card, .schedule-panel, .day-tabs, .day-tabs button, .speaker-placeholder-grid article, .registration-form, .registration-form button, .footer-lead > a:last-child) {
+  :is(.brand-mark, .topbar-cta, .primary-cta, .event-dock, .event-dock > a, .skill-card, .learning-step, .local-time-card, .schedule-panel, .day-tabs, .day-tabs button, .speaker-placeholder-grid article, .registration-form, .registration-form button) {
     corner-shape: squircle;
   }
 }
@@ -299,10 +299,11 @@ img { display: block; }
 .faq-list-new details[open] summary span { transform: rotate(45deg); }
 .faq-list-new details p { max-width: 700px; margin: -8px 0 30px; color: #656a76; font-size: .85rem; line-height: 1.7; }
 .new-footer { padding: 85px max(5vw, 28px) 32px; color: var(--white); background: var(--ink); }
-.footer-lead { display: grid; grid-template-columns: 1fr auto; gap: 65px; align-items: end; padding-bottom: 90px; }
-.footer-brand { grid-column: 1 / -1; }
-.footer-lead h2 { max-width: 950px; margin: 0; font-size: clamp(3.4rem, 7vw, 7.8rem); font-weight: 520; letter-spacing: -.075em; line-height: .91; }
-.footer-lead > a:last-child { display: inline-flex; min-height: 58px; align-items: center; gap: 13px; padding: 0 24px; color: var(--ink); border-radius: 12px; background: var(--lime); font-size: .82rem; font-weight: 750; }
+.footer-lead { display: grid; gap: 34px; padding-bottom: 90px; }
+.footer-cta-card { position: relative; isolation: isolate; display: grid; min-height: 360px; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 40px; overflow: hidden; padding: clamp(36px, 5vw, 76px); border: 1px solid rgba(255,255,255,.16); border-radius: 36px; background: radial-gradient(ellipse 65% 110% at 4% 110%, rgba(103,204,166,.78), transparent 72%), radial-gradient(ellipse 67% 100% at 105% 105%, rgba(202,123,95,.58), transparent 72%), radial-gradient(ellipse 72% 110% at 47% -28%, rgba(57,105,108,.5), transparent 76%), linear-gradient(130deg, #183b31, #192a2e 54%, #211e24); box-shadow: 0 30px 75px rgba(0,0,0,.2), inset 0 1px rgba(255,255,255,.1); }
+.footer-cta-card h2 { max-width: 800px; margin: 0; color: var(--white); font-size: clamp(3.4rem, 6.5vw, 7rem); font-weight: 520; letter-spacing: -.075em; line-height: .95; text-wrap: balance; }
+.footer-cta-card > a { display: inline-flex; min-height: 58px; align-items: center; justify-content: center; gap: 13px; padding: 0 24px; color: #19332c; border-radius: 999px; background: #f3f4e9; box-shadow: 0 10px 24px rgba(0,0,0,.12); font-size: .82rem; font-weight: 750; white-space: nowrap; transition: transform 180ms ease, background-color 180ms ease; }
+.footer-cta-card > a:hover { transform: translateY(-2px); background: var(--white); }
 .footer-bottom { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; padding-top: 26px; color: rgba(255,255,255,.48); border-top: 1px solid rgba(255,255,255,.15); font-size: .64rem; }
 .footer-bottom p { margin: 0; }
 
@@ -399,8 +400,8 @@ img { display: block; }
   .two-days-section { transition: color 300ms ease-in-out; }
   .site-shell.registration-background-active .two-days-section { color: var(--white); }
   .faq-section-new { grid-template-columns: 1fr; background: var(--paper); }
-  .footer-lead { grid-template-columns: 1fr; }
-  .footer-lead > a:last-child { justify-self: start; }
+  .footer-cta-card { min-height: 440px; grid-template-columns: 1fr; align-content: space-between; align-items: start; gap: 60px; padding: 38px 28px; border-radius: 28px; }
+  .footer-cta-card > a { justify-self: start; }
   .footer-bottom { grid-template-columns: 1fr 1fr; }
 }
 
@@ -430,7 +431,7 @@ img { display: block; }
   .speaker-placeholder-grid p { font-size: .78rem; }
   .form-row { grid-template-columns: 1fr; }
   .registration-copy h2 { font-size: 2.85rem; }
-  .footer-lead h2 { font-size: 3.5rem; }
+  .footer-cta-card h2 { font-size: clamp(2.65rem, 11vw, 3.5rem); }
   .footer-bottom { grid-template-columns: 1fr; }
 }
 
