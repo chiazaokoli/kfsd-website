@@ -10,6 +10,9 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-14
 
+- `a0f73a4` — Animated Q&A answers as they expand and collapse, with rotating
+  plus icons, keyboard-operable question buttons, and reduced-motion support.
+  Files: `app/page.tsx`, `app/globals.css`.
 - `3174e49` — Gave the footer its solid dark background and stopped the shared
   background from transitioning into it. Q&A now meets the footer with a hard
   white-to-dark cut. Files: `app/page.tsx`, `app/globals.css`.
