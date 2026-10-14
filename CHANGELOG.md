@@ -10,6 +10,11 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-14
 
+- `b180afa` — Replaced the pill with a circular, tilted FREE sticker and a
+  folded corner. Restyled the availability bar with moving diagonal wave bands,
+  a dark outlined track, and a glowing fill edge without a percentage marker.
+  Moved “Spaces are limited” to the left and removed “Registration window”.
+  Files: `app/page.tsx`, `app/globals.css`.
 - `99b6924` — Turned “Completely free” into a pill badge with a sparkle icon.
   Added a thicker gradient availability track, soft glow, and shimmer with
   reduced-motion support. Removed the three duration/free reminders and their
