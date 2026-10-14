@@ -10,6 +10,9 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-14
 
+- `38834e4` — Restyled the hero CTA with an animated cream, cyan and blue
+  gradient, a bright lower glow and 10px iOS-style corners. Kept the sticky
+  CTA's lime styling. File: `app/globals.css`.
 - `4ea085a` — Set hero event date, time and Zoom details to 13px regular text,
   removed the bottom rule below Zoom, and changed the hero CTA to 15px medium
   sentence-case text. Matched the sticky CTA wording. Files: `app/page.tsx`,
