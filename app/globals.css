@@ -247,7 +247,7 @@ img { display: block; }
 .speaker-portrait { aspect-ratio: 4 / 5; background-color: var(--cream); background-size: 500% auto; background-repeat: no-repeat; }
 .speaker-details { padding: 24px; }
 .speaker-placeholder-grid h3 { margin: 0 0 9px; color: var(--ink); font-size: 1.15rem; letter-spacing: -.035em; }
-.speaker-placeholder-grid p { margin: 0; color: #686b72; font-size: .75rem; font-weight: 400; letter-spacing: .04em; line-height: 1.5; }
+.speaker-placeholder-grid p { margin: 0; color: #686b72; font-size: .875rem; font-weight: 400; line-height: 1.5; }
 
 /* Organiser and action */
 .organiser-section { display: grid; grid-template-columns: minmax(360px, 1fr) minmax(0, 1fr); align-items: stretch; background: var(--blue); color: var(--white); }
@@ -441,7 +441,6 @@ img { display: block; }
   .speaker-placeholder-grid { margin-top: 40px; }
   .speaker-details { padding: 18px 14px; }
   .speaker-placeholder-grid h3 { font-size: 1rem; line-height: 1.35; }
-  .speaker-placeholder-grid p { font-size: .75rem; }
   .form-row { grid-template-columns: 1fr; }
   .registration-copy h2 { font-size: 2.85rem; }
   .footer-bottom { grid-template-columns: 1fr; }
