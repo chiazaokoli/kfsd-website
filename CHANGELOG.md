@@ -10,6 +10,11 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-14
 
+- `0c77974` — Brightened site fills and dark-background accents to `#22DB79`,
+  kept the logo's original green on a light backing, and made the organiser
+  text switch between light and dark as the shared background moves between
+  blue and green. Files: `app/globals.css`, `app/page.tsx`,
+  `src/components/SmoothCorners.tsx`.
 - `9b91503` — Prepared transparent logo assets from the supplied Kaiser Foundation
   reference and added them to the splash screen, navigation, footer and favicon.
   Files: `app/page.tsx`, `app/components/SplashScreen.tsx`, `app/layout.tsx`,
