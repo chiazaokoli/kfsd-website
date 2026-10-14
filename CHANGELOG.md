@@ -10,6 +10,8 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-14
 
+- `a2f9633` — Matched all registration text inputs and the level trigger to
+  the submit CTA’s 19px smooth radius. File: `app/globals.css`.
 - `0296817` — Halved the level-menu inset to 4px and matched the level trigger
   and text inputs at 53px high, 10px radius, and the same smooth corner shape.
   Files: `app/globals.css`, `src/components/SmoothCorners.tsx`.
