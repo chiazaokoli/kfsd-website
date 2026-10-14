@@ -32,7 +32,6 @@ const sectionColors = [
   [".two-days-section", [217, 255, 99]],
   [".registration-section", [11, 16, 28]],
   [".faq-section-new", [251, 250, 246]],
-  [".new-footer", [11, 16, 28]],
 ] as const;
 
 function heroLetters(text: string, startIndex: number) {
