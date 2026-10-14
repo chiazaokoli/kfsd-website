@@ -10,6 +10,11 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-14
 
+- `2db97c1` — Updated the FREE sticker to a white-rimmed blue badge with a
+  larger peeled corner, rotated 12° anticlockwise. Positioned it at the heading's
+  bottom-right without a separate content row, keeping it clear of the form.
+  Removed the progress bar and all related availability text and animation styles.
+  Files: `app/page.tsx`, `app/globals.css`.
 - `b180afa` — Replaced the pill with a circular, tilted FREE sticker and a
   folded corner. Restyled the availability bar with moving diagonal wave bands,
   a dark outlined track, and a glowing fill edge without a percentage marker.
