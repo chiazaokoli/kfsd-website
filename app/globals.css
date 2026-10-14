@@ -258,21 +258,9 @@ img { display: block; }
 
 .registration-section { position: relative; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(480px, .8fr); gap: clamp(60px, 9vw, 150px); padding: clamp(120px, 14vw, 210px) max(5vw, 28px); color: var(--white); background: radial-gradient(circle at 15% 20%, rgba(49,92,255,.36), transparent 35%), var(--ink); }
 .registration-copy h2 { max-width: 830px; margin: 0; font-size: clamp(3rem, 5.4vw, 5.8rem); font-weight: 530; letter-spacing: -.07em; line-height: .97; text-wrap: balance; }
-.registration-price { display: flex; align-items: baseline; gap: 17px; margin-top: 37px; }
-.registration-free-badge { position: relative; display: block; width: 124px; height: 124px; color: var(--ink); transform: rotate(-10deg); }
-.registration-free-badge svg { display: block; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 8px 13px rgba(0,0,0,.24)); }
-.free-sticker-face { fill: var(--registration-badge, var(--lime)); transition: fill 300ms ease-in-out; }
-.registration-free-badge > span { position: absolute; top: 49%; left: 48%; transform: translate(-50%, -50%); font-size: 1.8rem; font-weight: 700; letter-spacing: -.06em; line-height: 1; }
-.availability { margin-top: 58px; }
-.availability > div:first-child { display: flex; justify-content: space-between; gap: 20px; font-size: .7rem; }
-.availability b { color: var(--lime); }
-.availability-track { height: 32px; margin-top: 17px; padding: 3px; border: 3px solid var(--blue-deep); border-radius: 999px; background: #11172d; box-shadow: inset 0 2px 6px rgba(0,0,0,.3), 0 0 18px rgba(49,92,255,.18); }
-.availability-track span { position: relative; display: block; width: 72%; height: 100%; border-radius: 999px; background: linear-gradient(90deg, #64e5ff, #7294ff 52%, var(--lime)); box-shadow: 0 0 10px rgba(217,255,99,.3); }
-.availability-track span::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: repeating-linear-gradient(55deg, rgba(255,255,255,.3) 0 14px, transparent 14px 32px); background-size: 64px 100%; animation: availabilityWaves 1.8s linear infinite; }
-.availability-track span::after { content: ""; position: absolute; top: -1px; right: -2px; bottom: -1px; width: 6px; border-radius: 50%; background: #f0ffc1; box-shadow: 0 0 8px var(--lime), 0 0 18px rgba(217,255,99,.85), 0 0 28px rgba(217,255,99,.45); animation: availabilityEdgeGlow 2s ease-in-out infinite alternate; }
-@keyframes availabilityWaves { to { background-position: 64px 0; } }
-@keyframes availabilityEdgeGlow { to { opacity: .75; filter: brightness(1.25); } }
-.availability p { color: rgba(255,255,255,.45); font-size: .65rem; }
+.registration-heading { position: relative; }
+.registration-free-badge { position: absolute; z-index: 2; top: calc(100% - 6px); right: 4px; display: block; width: 96px; height: 96px; transform: rotate(-12deg); pointer-events: none; }
+.registration-free-badge svg { display: block; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 6px 9px rgba(0,0,0,.24)); }
 .registration-form { align-self: start; display: grid; gap: 18px; padding: clamp(24px, 4vw, 46px); color: var(--ink); border-radius: 24px; background: var(--paper); box-shadow: 0 35px 100px rgba(0,0,0,.26); }
 .registration-form label { display: grid; gap: 8px; font-size: .69rem; font-weight: 700; }
 .registration-form input, .registration-form select { width: 100%; min-height: 53px; padding: 0 15px; color: var(--ink); border: 1px solid rgba(11,16,28,.18); border-radius: 10px; outline: none; background: white; font-size: .78rem; }
@@ -317,7 +305,7 @@ img { display: block; }
   .proof-header .section-kicker { grid-column: auto; margin-bottom: -8px; }
   .proof-header > p:last-child { max-width: 650px; }
   .speaker-placeholder-grid { grid-template-columns: 1fr 1fr; }
-  .registration-section { grid-template-columns: 1fr; }
+  .registration-section { grid-template-columns: 1fr; row-gap: 110px; }
   .registration-form { width: min(720px, 100%); }
 }
 
@@ -383,12 +371,10 @@ img { display: block; }
   .organiser-image { min-height: 520px; }
   .organiser-copy { padding: 90px 22px; }
   .two-days-section { grid-template-columns: 1fr; gap: 40px; padding: 110px 22px; }
-  .registration-section { --registration-badge: var(--paper); --registration-accent: var(--ink); --registration-muted: rgba(11,16,28,.72); grid-template-columns: 1fr; color: var(--ink); background: none; transition: color 300ms ease-in-out; }
+  .registration-section { grid-template-columns: 1fr; row-gap: 110px; color: var(--ink); background: none; transition: color 300ms ease-in-out; }
   .registration-section::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 15% 20%, rgba(49,92,255,.36), transparent 35%); mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent); opacity: 0; transition: opacity 300ms ease-in-out; }
   .registration-section > * { position: relative; }
-  .registration-copy .availability b { color: var(--registration-accent); transition: color 300ms ease-in-out; }
-  .registration-copy .availability p { color: var(--registration-muted); transition: color 300ms ease-in-out; }
-  .site-shell.registration-background-active .registration-section { --registration-badge: var(--lime); --registration-accent: var(--lime); --registration-muted: rgba(255,255,255,.72); color: var(--white); }
+  .site-shell.registration-background-active .registration-section { color: var(--white); }
   .site-shell.registration-background-active .registration-section::before { opacity: 1; }
   .two-days-section { transition: color 300ms ease-in-out; }
   .site-shell.registration-background-active .two-days-section { color: var(--white); }
