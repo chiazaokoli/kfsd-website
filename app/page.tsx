@@ -119,6 +119,8 @@ export default function Home() {
     const skillsIndex = sectionColors.findIndex(([selector]) => selector === ".skills-section");
     const twoDaysIndex = sectionColors.findIndex(([selector]) => selector === ".two-days-section");
     const twoDaysHeading = shell?.querySelector<HTMLElement>(".two-days-section h2");
+    const registrationIndex = sectionColors.findIndex(([selector]) => selector === ".registration-section");
+    const registrationHeading = shell?.querySelector<HTMLElement>(".registration-copy h2");
     let skillsHandoffComplete = false;
     const update = () => {
       frame = 0;
@@ -140,13 +142,15 @@ export default function Home() {
       sections.forEach(({ element }, index) => {
         if (mobile && index === skillsIndex && !skillsHandoffComplete) return;
         const entryLine = index === 0 ? window.innerHeight : window.innerHeight * 0.8;
-        const boundary = mobile && index === twoDaysIndex && twoDaysHeading
-          ? twoDaysHeading.getBoundingClientRect().bottom
+        const heading = index === twoDaysIndex ? twoDaysHeading : index === registrationIndex ? registrationHeading : undefined;
+        const boundary = mobile && heading
+          ? heading.getBoundingClientRect().bottom
           : element?.getBoundingClientRect().top;
         if (boundary !== undefined && boundary <= entryLine) activeSection = index;
       });
       shell.classList.toggle("matter-background-active", activeSection === 1);
       shell.classList.toggle("schedule-background-active", activeSection === 4);
+      shell.classList.toggle("registration-background-active", activeSection === registrationIndex);
       const color = activeSection < 0 ? (mobile ? [5, 7, 12] : [217, 255, 99]) : sections[activeSection].color;
       const nextColor = `rgb(${color.join(", ")})`;
       const enteringStory = activeSection === 0 && lastActiveSection < 0;
@@ -176,6 +180,7 @@ export default function Home() {
       shell?.classList.remove("skills-background-active");
       shell?.classList.remove("matter-background-active");
       shell?.classList.remove("schedule-background-active");
+      shell?.classList.remove("registration-background-active");
     };
   }, []);
   useEffect(() => {
