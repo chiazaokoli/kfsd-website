@@ -134,6 +134,7 @@ export default function Home() {
     const twoDaysHeading = shell?.querySelector<HTMLElement>(".two-days-section h2");
     const registrationIndex = sectionColors.findIndex(([selector]) => selector === ".registration-section");
     const registrationHeading = shell?.querySelector<HTMLElement>(".registration-copy h2");
+    const faqIndex = sectionColors.findIndex(([selector]) => selector === ".faq-section-new");
     const update = () => {
       frame = 0;
       const cta = heroCtaRef.current;
@@ -158,9 +159,10 @@ export default function Home() {
       const color = activeSection < 0 ? (mobile ? [5, 7, 12] : [217, 255, 99]) : sections[activeSection].color;
       const nextColor = `rgb(${color.join(", ")})`;
       const enteringStory = activeSection === 0 && lastActiveSection < 0;
+      const crossingRegistrationFaq = mobile && ((activeSection === faqIndex && lastActiveSection === registrationIndex) || (activeSection === registrationIndex && lastActiveSection === faqIndex));
       lastActiveSection = activeSection;
       if (nextColor === lastColor) return;
-      if (!lastColor || enteringStory) {
+      if (!lastColor || enteringStory || crossingRegistrationFaq) {
         window.cancelAnimationFrame(readyFrame);
         shell.style.transitionDuration = "0ms";
         readyFrame = window.requestAnimationFrame(() => { shell.style.transitionDuration = ""; });

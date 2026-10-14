@@ -388,7 +388,7 @@ img { display: block; }
   .organiser-image { min-height: 520px; }
   .organiser-copy { padding: 90px 22px; }
   .two-days-section { grid-template-columns: 1fr; gap: 40px; padding: 110px 22px; }
-  .registration-section { grid-template-columns: 1fr; row-gap: 42px; padding-inline: 0; color: var(--ink); background: none; transition: color 300ms ease-in-out; }
+  .registration-section { grid-template-columns: 1fr; row-gap: 42px; padding-inline: 0; padding-bottom: 0; color: var(--ink); background: none; transition: color 300ms ease-in-out; }
   .registration-section::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 15% 20%, rgba(49,92,255,.36), transparent 35%); mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent); opacity: 0; transition: opacity 300ms ease-in-out; }
   .registration-section > * { position: relative; }
   .registration-copy { z-index: 2; margin-inline: 22px; }
@@ -398,7 +398,7 @@ img { display: block; }
   .site-shell.registration-background-active .registration-section::before { opacity: 1; }
   .two-days-section { transition: color 300ms ease-in-out; }
   .site-shell.registration-background-active .two-days-section { color: var(--white); }
-  .faq-section-new { grid-template-columns: 1fr; }
+  .faq-section-new { grid-template-columns: 1fr; background: var(--paper); }
   .footer-lead { grid-template-columns: 1fr; }
   .footer-lead > a:last-child { justify-self: start; }
   .footer-bottom { grid-template-columns: 1fr 1fr; }
