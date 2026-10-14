@@ -10,6 +10,9 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-14
 
+- `6cc6a7b` — Matched the day-tab highlight to the tabs' smooth corners and
+  refined hero, section, form, Q&A, and footer typography and CTA icons.
+  Files: `app/page.tsx`, `app/globals.css`, `src/components/SmoothCorners.tsx`.
 - `4751199` — Lowercased “we start in”; rounded the navbar CTA and day tabs;
   set speaker topics to 12px regular uppercase and registration labels/field
   text to 12px medium/14px regular. Files: `app/page.tsx`, `app/globals.css`.
