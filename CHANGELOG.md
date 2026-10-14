@@ -10,6 +10,10 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-14
 
+- `9a89573` — Removed the mobile gap below the registration form so its white
+  surface joins Q&A directly. Kept Q&A white and switched the shared background
+  instantly at that seam in both scroll directions. Files: `app/page.tsx`,
+  `app/globals.css`.
 - `35ff522` — Raised the edge-to-edge, square-cornered mobile registration form
   so the FREE seal overlaps its top edge by half. Softened the submit button's
   lime and replaced the native level picker with an inline, keyboard-accessible
