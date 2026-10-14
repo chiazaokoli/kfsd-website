@@ -347,11 +347,12 @@ img { display: block; }
   .section-heading { display: block; }
   .section-heading .section-kicker { margin-bottom: 22px; }
   .skills-grid { display: grid; grid-template-columns: 1fr; grid-template-rows: none; perspective: 1000px; }
-  .skills-section .section-heading { color: var(--white); opacity: 0; transition: color 300ms ease-in-out, opacity 300ms ease-in-out; }
+  .skills-section .section-heading { color: var(--white); opacity: 1; transition: color 300ms ease-in-out; }
+  .matter-section { transition: color 300ms ease-in-out; }
   .matter-section .reveal-statement { transition: color 300ms ease-in-out; }
   .site-shell.skills-background-active .matter-section .reveal-statement { color: var(--ink); }
+  .site-shell.skills-background-active .matter-section { color: var(--ink); }
   .site-shell.skills-background-active .skills-section .section-heading { color: var(--ink); }
-  .site-shell.skills-heading-revealed .skills-section .section-heading { opacity: 1; }
   .skill-card, .skill-card:nth-child(1), .skill-card:nth-child(2), .skill-third { grid-column: auto; min-height: 440px; }
   .skill-third { min-height: 0; }
   .skill-third .skill-card-content { position: relative; inset: auto; padding: 90px 20px 20px; }

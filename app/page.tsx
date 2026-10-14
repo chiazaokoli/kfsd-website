@@ -115,13 +115,12 @@ export default function Home() {
     let lastActiveSection = -1;
     const shell = pageRef.current;
     const sections = sectionColors.map(([selector, color]) => ({ element: shell?.querySelector<HTMLElement>(selector), color }));
-    const matterStatement = shell?.querySelector<HTMLElement>(".matter-section .reveal-statement");
     const skillsIndex = sectionColors.findIndex(([selector]) => selector === ".skills-section");
+    const skillsHeading = shell?.querySelector<HTMLElement>(".skills-section h2");
     const twoDaysIndex = sectionColors.findIndex(([selector]) => selector === ".two-days-section");
     const twoDaysHeading = shell?.querySelector<HTMLElement>(".two-days-section h2");
     const registrationIndex = sectionColors.findIndex(([selector]) => selector === ".registration-section");
     const registrationHeading = shell?.querySelector<HTMLElement>(".registration-copy h2");
-    let skillsHandoffComplete = false;
     const update = () => {
       frame = 0;
       const cta = heroCtaRef.current;
@@ -130,24 +129,16 @@ export default function Home() {
       if (cta && topbar) setShowNavCta(cta.getBoundingClientRect().bottom <= topbar.getBoundingClientRect().bottom);
       if (!shell) return;
       const mobile = window.innerWidth <= 800;
-      if (mobile && matterStatement) {
-        const clearance = Math.max((topbar?.getBoundingClientRect().bottom ?? 58) + 20, window.innerHeight * 0.2);
-        const statementBottom = matterStatement.getBoundingClientRect().bottom;
-        if (skillsHandoffComplete ? statementBottom > clearance + 20 : statementBottom <= clearance) {
-          skillsHandoffComplete = !skillsHandoffComplete;
-        }
-      }
-      shell.classList.toggle("skills-background-active", mobile && skillsHandoffComplete);
       let activeSection = -1;
       sections.forEach(({ element }, index) => {
-        if (mobile && index === skillsIndex && !skillsHandoffComplete) return;
         const entryLine = index === 0 ? window.innerHeight : window.innerHeight * 0.8;
-        const heading = index === twoDaysIndex ? twoDaysHeading : index === registrationIndex ? registrationHeading : undefined;
+        const heading = index === skillsIndex ? skillsHeading : index === twoDaysIndex ? twoDaysHeading : index === registrationIndex ? registrationHeading : undefined;
         const boundary = mobile && heading
           ? heading.getBoundingClientRect().bottom
           : element?.getBoundingClientRect().top;
         if (boundary !== undefined && boundary <= entryLine) activeSection = index;
       });
+      shell.classList.toggle("skills-background-active", activeSection === skillsIndex);
       shell.classList.toggle("matter-background-active", activeSection === 1);
       shell.classList.toggle("schedule-background-active", activeSection === 4);
       shell.classList.toggle("registration-background-active", activeSection === registrationIndex);
@@ -239,9 +230,8 @@ export default function Home() {
   useGSAP(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const revealWords = gsap.utils.toArray<HTMLElement>(".reveal-word");
-    const finalRevealWord = revealWords.at(-1);
     const revealItems = gsap.utils.toArray<HTMLElement>(".chapter-reveal").filter((item) =>
-      window.innerWidth > 800 || !item.matches(".skills-section .section-heading, .schedule-panel")
+      window.innerWidth > 800 || !item.matches(".schedule-panel")
     );
     const motionImages = gsap.utils.toArray<HTMLElement>(".motion-image");
     const gradeStrokes = gsap.utils.toArray<SVGPathElement>(".grade-stroke");
@@ -249,7 +239,6 @@ export default function Home() {
     if (reducedMotion) {
       gsap.set([...revealWords, ...revealItems, ...motionImages], { opacity: 1, scale: 1, y: 0 });
       gsap.set(".organiser-image", { borderRadius: 0 });
-      pageRef.current?.classList.add("skills-heading-revealed");
       gsap.set(gradeStrokes, { strokeDashoffset: 0 });
       gsap.set(".grade-stamp, .grade-splash, .grade-paint, .grade-drip", { opacity: 1, scale: 1, y: 0 });
       return;
@@ -258,7 +247,6 @@ export default function Home() {
     gsap.from(".hero-enter", { opacity: 0, y: 34, duration: 1, stagger: 0.1, ease: "power3.out" });
     gsap.fromTo(revealWords, { opacity: 0.12 }, {
       opacity: 1, stagger: 0.045, ease: "none",
-      onUpdate: () => pageRef.current?.classList.toggle("skills-heading-revealed", !!finalRevealWord && Number(gsap.getProperty(finalRevealWord, "opacity")) >= 0.995),
       scrollTrigger: { trigger: ".reveal-statement", start: "top 78%", end: "bottom 40%", scrub: 0.55 },
     });
     revealItems.forEach((item) => gsap.from(item, { opacity: 0, y: 48, duration: 0.9, ease: "power3.out", scrollTrigger: { trigger: item, start: "top 88%" } }));
@@ -403,7 +391,7 @@ export default function Home() {
         </section>
 
         <section className="skills-section" id="skills">
-          <div className="section-heading chapter-reveal"><h2>5 skills you’ll learn that change how people see you</h2></div>
+          <div className="section-heading"><h2>5 skills you’ll learn that change how people see you</h2></div>
           <div className="skills-grid grid-flow-dense">
             {skills.map(({ title, copy, icon: Icon, className, image }) => (
               <article className={`skill-card ${className}`} key={title}>
