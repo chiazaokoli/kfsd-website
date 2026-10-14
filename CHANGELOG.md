@@ -10,6 +10,8 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-14
 
+- `c828cda` — Removed the hero CTA's inset shadows and replaced its blurry
+  bubbles with tiny, crisp dots that rise and fade. File: `app/globals.css`.
 - `2fc10d8` — Reworked the hero CTA into a predominantly green gradient with
   animated teal/violet color shifts, floating bubbles, a paper-plane icon and
   more rounded 19px iOS-style corners. Files: `app/page.tsx`, `app/globals.css`.
