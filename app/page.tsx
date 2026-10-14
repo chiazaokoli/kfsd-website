@@ -6,7 +6,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
-  ArrowDown, ArrowRight, Brain, CalendarBlank, ChatCircleDots,
+  ArrowDown, ArrowRight, Brain, CalendarBlank, CaretDown, ChatCircleDots,
   Clock, CrownSimple, GlobeHemisphereWest, Lightning,
   ListChecks, MicrophoneStage, Mountains, Question, ShieldCheck,
   Student, UsersThree, Medal,
@@ -487,7 +487,7 @@ export default function Home() {
           <div className="organiser-copy chapter-reveal"><p className="section-kicker">Organised by CKL</p><h2>Four years of helping young people stand out</h2><p>For four years, CKL has been running sessions that teach young people the skills that set them apart in work, business and life. This is another amazing edition, after 300 days of waiting. We’re excited to bring you this opportunity.</p></div>
         </section>
 
-        <section className="two-days-section"><div className="two-days-number" aria-hidden="true">2</div><div><p className="section-kicker">Why just two days?</p><h2>2 hours. 2 days. A lifetime of difference.</h2></div><p>We’ve packed the most valuable lessons into 4 focused hours so you get maximum value without wasting your time. These are 4 hours with information that could change how you show up for the rest of your life.</p></section>
+        <section className="two-days-section"><div className="two-days-number" aria-hidden="true">2</div><div><h2>2 hours. 2 days. A lifetime of difference.</h2></div><p>We’ve packed the most valuable lessons into 4 focused hours so you get maximum value without wasting your time. These are 4 hours with information that could change how you show up for the rest of your life.</p></section>
 
         <section className="registration-section" id="register">
           <div className="registration-copy chapter-reveal">
@@ -512,7 +512,7 @@ export default function Home() {
               <label htmlFor="level-trigger">Current level</label>
               <input type="hidden" name="level" value={selectedLevel} />
               <button id="level-trigger" ref={levelTriggerRef} className={`level-trigger${selectedLevel ? " is-selected" : ""}`} type="button" role="combobox" aria-haspopup="listbox" aria-expanded={levelOpen} aria-controls="level-options" aria-activedescendant={levelOpen ? `level-option-${activeLevel}` : undefined} aria-invalid={Boolean(formErrors.level)} aria-describedby={formErrors.level ? "level-error" : undefined} onClick={() => { setActiveLevel(Math.max(0, siteConfig.levels.findIndex((level) => level === selectedLevel))); setLevelOpen((open) => !open); }} onKeyDown={handleLevelKeyDown}>
-                <span>{selectedLevel || "Select your level"}</span><ArrowDown size={18} weight="bold" aria-hidden="true" />
+                <span>{selectedLevel || "Select your level"}</span><CaretDown size={18} weight="bold" aria-hidden="true" />
               </button>
               {levelOpen && <div id="level-options" className="level-options" role="listbox" aria-label="Current level">
                 {siteConfig.levels.map((level, index) => <div id={`level-option-${index}`} className={`level-option${index === activeLevel ? " is-active" : ""}`} role="option" aria-selected={level === selectedLevel} key={level} onPointerMove={() => setActiveLevel(index)} onClick={() => selectLevel(level)}>{level}</div>)}
@@ -524,7 +524,7 @@ export default function Home() {
           </form>
         </section>
 
-        <section className="faq-section-new"><div><p className="section-kicker">Good to know</p><h2>Questions, answered.</h2></div><div className="faq-list-new">{faqs.map(([question, answer], index) => {
+        <section className="faq-section-new"><div><h2>Questions, answered.</h2></div><div className="faq-list-new">{faqs.map(([question, answer], index) => {
           const open = openFaqs.includes(index);
           return <div className={`faq-item${open ? " is-open" : ""}`} key={question}>
             <h3><button id={`faq-question-${index}`} type="button" aria-expanded={open} aria-controls={`faq-answer-${index}`} onClick={() => setOpenFaqs((current) => current.includes(index) ? current.filter((item) => item !== index) : [...current, index])}>{question}<span aria-hidden="true">+</span></button></h3>
