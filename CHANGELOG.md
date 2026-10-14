@@ -10,6 +10,11 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-14
 
+- `99b6924` — Turned “Completely free” into a pill badge with a sparkle icon.
+  Added a thicker gradient availability track, soft glow, and shimmer with
+  reduced-motion support. Removed the three duration/free reminders and their
+  checkmarks. The decorative track no longer animates its fill percentage.
+  Files: `app/page.tsx`, `app/globals.css`.
 - `114a2bd` — Applied the background color transition pattern between grades
   and five skills on mobile. The cream background waits for the full skills
   heading at the 80% viewport line, with matching reverse-scroll timing and
