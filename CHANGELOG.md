@@ -10,6 +10,12 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-14
 
+- `114a2bd` — Applied the background color transition pattern between grades
+  and five skills on mobile. The cream background waits for the full skills
+  heading at the 80% viewport line, with matching reverse-scroll timing and
+  readable grades text. Removed the skills heading's opacity gate and entrance
+  animation across viewport sizes.
+  Files: `app/page.tsx`, `app/globals.css`.
 - `428e015` — Delayed the mobile lime-to-dark handoff until the full registration
   heading reaches the 80% viewport line. The preceding two-day section switches
   to light text on dark; registration uses dark text before the handoff. Faded the
