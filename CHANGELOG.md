@@ -10,6 +10,9 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-14
 
+- `e1a869a` — Removed the final “Ready to set yourself apart?” CTA card and
+  its styles. The page now ends with Q&A and a compact brand/details footer.
+  Files: `app/page.tsx`, `app/globals.css`.
 - `b1c100f` — Set the final “Ready to set yourself apart?” CTA in a rounded
   green, teal and warm-toned gradient card, with a light registration button
   and a stacked mobile layout. Files: `app/page.tsx`, `app/globals.css`,
