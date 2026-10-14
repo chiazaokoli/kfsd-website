@@ -246,9 +246,7 @@ img { display: block; }
 .organiser-image:hover img { transform: scale(1.045); }
 .organiser-copy { display: flex; flex-direction: column; justify-content: center; padding: clamp(70px, 9vw, 150px); }
 .organiser-copy .section-kicker { color: var(--lime); }
-.organiser-copy > p:not(.section-kicker):not(.organiser-note) { margin: 35px 0 0; color: rgba(255,255,255,.77); font-size: 1rem; line-height: 1.8; }
-.organiser-note { display: flex; align-items: flex-start; gap: 12px; margin: 45px 0 0; padding-top: 24px; color: rgba(255,255,255,.62); border-top: 1px solid rgba(255,255,255,.22); font-size: .71rem; line-height: 1.6; }
-.organiser-note svg { flex: 0 0 auto; color: var(--lime); }
+.organiser-copy > p:not(.section-kicker) { margin: 35px 0 0; color: rgba(255,255,255,.77); font-size: 1rem; line-height: 1.8; }
 .two-days-section { position: relative; display: grid; grid-template-columns: .9fr 1fr; gap: 70px; align-items: end; overflow: hidden; padding: clamp(110px, 12vw, 180px) max(5vw, 28px); background: var(--lime); }
 .two-days-number { position: absolute; top: -25%; left: -3%; color: rgba(11,16,28,.07); font-size: 45vw; font-weight: 700; line-height: 1; pointer-events: none; }
 .two-days-section > div:not(.two-days-number), .two-days-section > p { position: relative; z-index: 2; }
@@ -389,6 +387,7 @@ img { display: block; }
   .organiser-image { min-height: 520px; }
   .organiser-copy { padding: 90px 22px; }
   .two-days-section { grid-template-columns: 1fr; gap: 40px; padding: 110px 22px; }
+  .two-days-number { display: none; }
   .registration-section { grid-template-columns: 1fr; row-gap: 42px; padding-inline: 0; padding-bottom: 0; color: var(--ink); background: none; transition: color 300ms ease-in-out; }
   .registration-section::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 15% 20%, rgba(49,92,255,.36), transparent 35%); mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent); opacity: 0; transition: opacity 300ms ease-in-out; }
   .registration-section > * { position: relative; }

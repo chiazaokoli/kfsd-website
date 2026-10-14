@@ -483,7 +483,7 @@ export default function Home() {
 
         <section className="organiser-section" id="organiser">
           <div className="organiser-image motion-image"><Image src={`${assetPrefix}/images/listening.webp`} alt="Young people taking part in a thoughtful group conversation" fill unoptimized sizes="(max-width: 800px) 100vw, 48vw" /></div>
-          <div className="organiser-copy chapter-reveal"><p className="section-kicker">Organised by CKL</p><h2>Four years of helping young people stand out</h2><p>For four years, CKL has been running sessions that teach young people the skills that set them apart in work, business and life. This is another amazing edition, after 300 days of waiting. We’re excited to bring you this opportunity.</p><p className="organiser-note"><ShieldCheck size={22} weight="duotone" /> Additional organiser links and affiliations will be added after verification.</p></div>
+          <div className="organiser-copy chapter-reveal"><p className="section-kicker">Organised by CKL</p><h2>Four years of helping young people stand out</h2><p>For four years, CKL has been running sessions that teach young people the skills that set them apart in work, business and life. This is another amazing edition, after 300 days of waiting. We’re excited to bring you this opportunity.</p></div>
         </section>
 
         <section className="two-days-section"><div className="two-days-number" aria-hidden="true">2</div><div><p className="section-kicker">Why just two days?</p><h2>2 hours. 2 days. A lifetime of difference.</h2></div><p>We’ve packed the most valuable lessons into 4 focused hours so you get maximum value without wasting your time. These are 4 hours with information that could change how you show up for the rest of your life.</p></section>
