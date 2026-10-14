@@ -10,6 +10,8 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-14
 
+- `4b2f9c0` — Tilted the static FREE lettering 8° anticlockwise while the red
+  scalloped seal continues rotating behind it. File: `app/globals.css`.
 - `76cb627` — Rotated only the red scalloped seal, keeping the white FREE text
   upright. Reduced-motion visitors see the still seal. File: `app/globals.css`.
 - `90f9e29` — Replaced the folded FREE sticker with a flat red scalloped seal
