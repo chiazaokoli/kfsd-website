@@ -29,7 +29,7 @@ img { display: block; }
 
 /* Keep the existing radii as a fallback. Newer engines shape the corner natively. */
 @supports (corner-shape: squircle) {
-  :is(.brand-mark, .topbar-cta, .primary-cta, .event-dock, .event-dock > a, .skill-card, .learning-step, .local-time-card, .schedule-panel, .day-tabs, .day-tabs-highlight, .day-tabs button, .speaker-placeholder-grid article, .registration-form, .registration-form button) {
+  :is(.brand-mark, .topbar-cta, .primary-cta, .event-dock, .event-dock > a, .skill-card, .learning-step, .local-time-card, .schedule-panel, .day-tabs, .day-tabs-highlight, .day-tabs button, .speaker-placeholder-grid article, .registration-form, .registration-form button, .level-options, .level-option) {
     corner-shape: squircle;
   }
 }
@@ -274,7 +274,7 @@ img { display: block; }
 .registration-free-badge svg text { transform-box: view-box; transform-origin: center; transform: rotate(-8deg); }
 .registration-form { align-self: start; display: grid; gap: 18px; padding: clamp(24px, 4vw, 46px); color: var(--ink); border-radius: 24px; background: var(--paper); box-shadow: 0 35px 100px rgba(0,0,0,.26); }
 .registration-form label { display: grid; gap: 8px; font-size: .875rem; font-weight: 500; }
-.registration-form input, .registration-form select { width: 100%; min-height: 53px; padding: 0 15px; color: var(--ink); border: 1px solid rgba(11,16,28,.18); border-radius: 10px; outline: none; background: white; font-size: .875rem; font-weight: 400; }
+.registration-form input, .registration-form select, .registration-form .level-trigger { box-sizing: border-box; width: 100%; min-height: 53px; height: 53px; padding: 0 15px; color: var(--ink); border: 1px solid rgba(11,16,28,.18); border-radius: 10px; outline: none; background: white; font-size: .875rem; font-weight: 400; }
 .registration-form input:focus, .registration-form select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(49,92,255,.12); }
 .registration-form label small { color: #c53e45; font-weight: 500; }
 .level-field { display: grid; min-width: 0; gap: 8px; }
@@ -283,17 +283,16 @@ img { display: block; }
 .registration-form button { display: flex; min-height: 58px; align-items: center; justify-content: center; gap: 10px; margin-top: 7px; color: var(--ink); border-radius: 11px; background: var(--accent-green); cursor: pointer; font-weight: 750; transition: transform 180ms ease, background 180ms ease; }
 .registration-form button[type="submit"] { border-radius: 19px; font-weight: 600; }
 .registration-form button:hover { transform: translateY(-2px); background: #49e999; }
-.registration-form .level-trigger { width: 100%; min-height: 53px; justify-content: space-between; gap: 15px; margin: 0; padding: 0 15px; border: 1px solid rgba(11,16,28,.18); border-radius: 10px; background: white; font-size: .875rem; font-weight: 400; text-align: left; }
+.registration-form .level-trigger { justify-content: space-between; gap: 15px; margin: 0; text-align: left; }
 .registration-form .level-trigger:not(.is-selected) { color: #777c87; }
 .registration-form .level-trigger:hover { transform: none; background: white; }
 .registration-form .level-trigger[aria-expanded="true"], .registration-form .level-trigger:focus-visible { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(49,92,255,.12); }
 .level-trigger span { min-width: 0; }
 .level-trigger svg { flex: none; transition: transform 180ms ease; }
 .level-trigger[aria-expanded="true"] svg { transform: rotate(180deg); }
-.level-options { display: grid; overflow: hidden; border: 1px solid rgba(11,16,28,.14); border-radius: 10px; background: white; box-shadow: 0 12px 28px rgba(11,16,28,.09); }
-.level-option { display: flex; min-height: 48px; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 15px; cursor: pointer; font-size: .875rem; font-weight: 400; }
-.level-option + .level-option { border-top: 1px solid rgba(11,16,28,.06); }
-.level-option.is-active { background: #e9f7ee; }
+.level-options { display: grid; gap: 4px; padding: 8px; border: 1px solid rgba(11,16,28,.14); border-radius: 18px; background: white; box-shadow: 0 12px 28px rgba(11,16,28,.09); }
+.level-option { display: flex; min-height: 48px; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; border-radius: 12px; cursor: pointer; font-size: .875rem; font-weight: 400; transition: background-color 160ms ease; }
+.level-option:is(.is-active, :hover) { background: #e9f7ee; }
 .level-option[aria-selected="true"]::after { color: var(--blue); content: "✓"; font-size: 1rem; font-weight: 800; }
 .form-reassurance { margin: 0; color: #777c87; font-size: .61rem; text-align: center; }
 .form-status { margin: 0; padding: 13px; color: #0d3b22; border-radius: 9px; background: #e7f7ed; font-size: .7rem; line-height: 1.5; }
