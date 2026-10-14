@@ -10,6 +10,10 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-14
 
+- `a703e12` — Changed the site's lime accents and scroll backgrounds to KFSD
+  green (`#09A758`), with coordinated green CTA gradients and contrast tweaks.
+  The pre-change restore tag is `restore-before-kfsd-brand-update-2026-10-14`.
+  Files: `app/globals.css`, `app/page.tsx`, `src/components/SmoothCorners.tsx`.
 - `c828cda` — Removed the hero CTA's inset shadows and replaced its blurry
   bubbles with tiny, crisp dots that rise and fade. File: `app/globals.css`.
 - `2fc10d8` — Reworked the hero CTA into a predominantly green gradient with
