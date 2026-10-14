@@ -15,7 +15,8 @@ the relevant pieces to the current code so later changes are preserved.
   to light text on dark; registration uses dark text before the handoff. Faded the
   registration gradient at the section edges to remove the visible seam.
   Verified in the development preview at five mobile widths, with lint and
-  type-check. No production build or deployment run, per the user's instruction.
+  type-check. Production verification and deployment followed once the user
+  clarified that implementation go-ahead includes building and deploying.
   Files: `app/page.tsx`, `app/globals.css`.
 
 ## 2026-10-13

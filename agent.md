@@ -32,6 +32,8 @@ Build a polished Next.js landing page for the virtual soft skills training waitl
 
 ## Working practices
 
+- “Don't build” means inspect or discuss only: do not edit code or implement changes.
+- Once the user gives the go-ahead to make changes, implement, verify, run the production build, and deploy to GitHub Pages so the changes are visible on the live site.
 - Inspect the repository and preserve unrelated user changes before editing.
 - Follow the project’s existing package manager, lockfile, scripts, conventions, and component patterns.
 - Implement requested work end to end without pausing for routine decisions that can be inferred safely.
