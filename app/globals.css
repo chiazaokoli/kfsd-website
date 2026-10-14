@@ -281,7 +281,7 @@ img { display: block; }
 .level-field > small { color: #c53e45; font-weight: 500; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .registration-form button { display: flex; min-height: 58px; align-items: center; justify-content: center; gap: 10px; margin-top: 7px; color: var(--ink); border-radius: 11px; background: var(--accent-green); cursor: pointer; font-weight: 750; transition: transform 180ms ease, background 180ms ease; }
-.registration-form button[type="submit"] { border-radius: 19px; font-weight: 500; }
+.registration-form button[type="submit"] { border-radius: 19px; font-weight: 600; }
 .registration-form button:hover { transform: translateY(-2px); background: #49e999; }
 .registration-form .level-trigger { width: 100%; min-height: 53px; justify-content: space-between; gap: 15px; margin: 0; padding: 0 15px; border: 1px solid rgba(11,16,28,.18); border-radius: 10px; background: white; font-size: .875rem; font-weight: 400; text-align: left; }
 .registration-form .level-trigger:not(.is-selected) { color: #777c87; }
@@ -347,10 +347,11 @@ img { display: block; }
   .brand b { display: none; }
   .brand-mark { width: 28px; height: 28px; }
   .topbar-cta { right: 18px; min-height: 40px; padding: 0 13px; }
-  .new-hero { min-height: 820px; padding: 130px 22px 230px; }
+  .new-hero { --hero-lift: clamp(35px, calc(68px - 4.3vw), 55px); min-height: 820px; padding: 130px 22px 230px; }
+  .hero-content { transform: translateY(calc(-1 * var(--hero-lift))); }
   .new-hero h1 { font-size: clamp(3.15rem, 12.4vw, 5rem); }
   .hero-photo { object-position: 38% center; }
-  .event-dock { right: 18px; bottom: 18px; left: 18px; grid-template-columns: 1fr; padding: 10px 13px; }
+  .event-dock { right: 18px; bottom: calc(18px + var(--hero-lift)); left: 18px; grid-template-columns: 1fr; padding: 10px 13px; }
   .event-dock > div { min-height: 38px; padding: 0; border-right: 0; border-bottom: 1px solid rgba(255,255,255,.12); }
   .event-dock > div:last-of-type { border-bottom: 0; }
   .event-dock > a { display: none; }
