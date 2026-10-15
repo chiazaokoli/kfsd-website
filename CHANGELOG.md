@@ -10,6 +10,8 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-15
 
+- `68e065c` — Increased the mobile space below the good-grades paragraph
+  from 75px to 90px. File: `app/globals.css`.
 - `89f132e` — Refreshed the hero, pain points, learning, schedule, and speaker
   copy; paired the future-focused caption with a launch icon; and adjusted
   good-grades line height and mobile section spacing. Files: `app/page.tsx`,
