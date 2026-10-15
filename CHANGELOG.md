@@ -10,6 +10,10 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-15
 
+- `89f132e` — Refreshed the hero, pain points, learning, schedule, and speaker
+  copy; paired the future-focused caption with a launch icon; and adjusted
+  good-grades line height and mobile section spacing. Files: `app/page.tsx`,
+  `app/globals.css`.
 - `9719a9b` — Restored “Two hours. Two days. A lifetime of difference.”,
   spelled out both “four hours” references in its paragraph, and used words
   for the numbers in the hero, skills, and organiser headings. File: `app/page.tsx`.
