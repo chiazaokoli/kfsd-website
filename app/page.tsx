@@ -8,7 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ArrowDown, ArrowRight, Brain, CalendarBlank, CaretDown, ChatCircleDots,
   Clock, CrownSimple, GlobeHemisphereWest, Lightning,
-  ListChecks, MicrophoneStage, Mountains, Question, ShieldCheck,
+  ListChecks, RocketLaunch, Mountains, Question, ShieldCheck,
   Student, UsersThree, Medal,
 } from "@phosphor-icons/react";
 import { siteConfig } from "../src/config/site";
@@ -19,7 +19,7 @@ import LearningFlow from "../src/components/LearningFlow";
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 const assetPrefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const heroLeadWords = ["Learn", "the", "soft", "skills", "that", "set", "you", "apart", "in"];
-const heroEnding = "two days.";
+const heroEnding = "2 days.";
 const heroEndingStart = heroLeadWords.join("").length;
 const sectionColors = [
   [".hook-section", [251, 250, 246]],
@@ -42,10 +42,10 @@ function heroLetters(text: string, startIndex: number) {
 
 const questions = [
   "You struggle with rallying your friends around a task.",
-  "You want to be liked more by people.",
+  "You find it hard to say no.",
   "You want to keep to deadlines and manage your time better.",
-  "You want people to listen when you speak.",
-  "You want to speak publicly without feeling nervous.",
+  "You struggle to express yourself clearly.",
+  "Leading feels unnatural to you.",
 ];
 
 const skills = [
@@ -400,7 +400,7 @@ export default function Home() {
           <div className="hero-scrim" aria-hidden="true" />
           <div className="hero-content">
             <p className="edition-badge hero-enter"><span className="edition-badge-icon"><Medal size={15} weight="duotone" aria-hidden="true" /></span><span>{siteConfig.edition}</span></p>
-            <h1 id="hero-title" aria-label="Learn the soft skills that set you apart in two days."><span aria-hidden="true">{heroLeadWords.map((word, index) => <Fragment key={word}>{index > 0 && " "}<span className="hero-word">{heroLetters(word, heroLeadWords.slice(0, index).join("").length)}</span></Fragment>)}{" "}<span className="hero-ending">{heroLetters(heroEnding, heroEndingStart)}</span></span></h1>
+            <h1 id="hero-title" aria-label="Learn the soft skills that set you apart in 2 days."><span aria-hidden="true">{heroLeadWords.map((word, index) => <Fragment key={word}>{index > 0 && " "}<span className="hero-word">{heroLetters(word, heroLeadWords.slice(0, index).join("").length)}</span></Fragment>)}{" "}<span className="hero-ending">{heroLetters(heroEnding, heroEndingStart)}</span></span></h1>
             <p className="hero-subhead hero-enter">Learn from experienced professionals and become more career-ready.</p>
             <a ref={heroCtaRef} className="primary-cta hero-enter" href="#register"><span className="cta-copy">Reserve my spot</span><ArrowRight size={20} weight="bold" /></a>
           </div>
@@ -426,7 +426,7 @@ export default function Home() {
           </div>
           <figure className="hook-visual motion-image">
             <Image src={`${assetPrefix}/images/student-speaker.webp`} alt="A student speaking confidently to a group" fill unoptimized sizes="(max-width: 800px) 100vw, 46vw" />
-            <figcaption><MicrophoneStage size={28} weight="fill" /> Find your voice. Make it count.</figcaption>
+            <figcaption><RocketLaunch size={28} weight="fill" /> Equip yourself for the future</figcaption>
           </figure>
         </section>
 
@@ -452,7 +452,7 @@ export default function Home() {
         </section>
 
         <section ref={learningSectionRef} className="learning-section">
-          <div className="section-heading learning-heading chapter-reveal"><h2>No boring lectures. You’ll actually do things.</h2></div>
+          <div className="section-heading learning-heading chapter-reveal"><h2>Real advice from people who’ve done it. Here’s how to make them stick</h2></div>
           <div className="learning-steps">
             <LearningFlow activeStep={activeStep} />
             {learningSteps.map(({ title, copy, icon: Icon }, index) => {
@@ -468,7 +468,7 @@ export default function Home() {
 
         <section className="schedule-section" id="schedule">
           <div className="schedule-layout">
-            <div className="schedule-intro"><h2>Order of the day</h2><p>Both days run from 10:00AM to 12:00PM West Africa Time.</p><div className="local-time-card"><GlobeHemisphereWest size={25} weight="duotone" /><div><strong>Not in Nigeria?</strong><span>{localTime || "Converting 10:00AM WAT to your local time…"}</span></div></div></div>
+            <div className="schedule-intro"><h2>What happens in each session</h2><p>Both days run from 10:00AM to 12:00PM West Africa Time.</p><div className="local-time-card"><GlobeHemisphereWest size={25} weight="duotone" /><div><strong>Not in Nigeria?</strong><span>{localTime || "Converting 10:00AM WAT to your local time…"}</span></div></div></div>
             <div className="schedule-panel chapter-reveal">
               <div className="day-tabs" data-active-day={activeDay} role="tablist" aria-label="Training days"><span className="day-tabs-highlight" aria-hidden="true" />{siteConfig.schedules.map((day, index) => <button key={day.label} role="tab" aria-selected={activeDay === index} onClick={() => setActiveDay(index)}>{day.label}</button>)}</div>
               <div className="schedule-title"><div><span>{activeSchedule.date}</span><h3>{activeSchedule.title}</h3></div><Clock size={31} weight="duotone" /></div>
@@ -478,7 +478,7 @@ export default function Home() {
         </section>
 
         <section className="proof-section">
-          <div className="proof-header chapter-reveal"><p className="section-kicker">The speakers</p><h2>Five voices. Five skills. A fresh perspective.</h2><p>Meet the faces of each topic. Names and portraits are placeholders until the speaker lineup is confirmed.</p></div>
+          <div className="proof-header chapter-reveal"><p className="section-kicker">The speakers</p><h2>Five voices. Five skills. A fresh perspective.</h2><p>Meet the faces behind each topic, each led by someone who has lived it</p></div>
           <div className="speaker-placeholder-grid">{speakers.map(({ name, topic }, index) => <article key={topic}><div className="speaker-portrait" aria-hidden="true" style={{ backgroundImage: `url(${assetPrefix}/images/speaker-placeholders.webp)`, backgroundPosition: `${index * 25}% top` }} /><div className="speaker-details"><h3>{name}</h3><p>{topic}</p></div></article>)}</div>
         </section>
 
