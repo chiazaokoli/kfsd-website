@@ -10,6 +10,10 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-15
 
+- `96672ed` — Replaced Company with the provided organisation dropdown,
+  updated referral choices to the provided list, kept long menus scrollable on
+  mobile, and halved the mobile gap below the five-skills heading. Files:
+  `app/page.tsx`, `app/globals.css`.
 - `a667f63` — Replaced the registration form fields with email, first and last
   name, phone, profession, optional company, country, state, prior KFSD attendance,
   and referral source. Kept the existing form style and custom mobile dropdowns.
