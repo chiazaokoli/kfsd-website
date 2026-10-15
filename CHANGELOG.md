@@ -10,6 +10,9 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-15
 
+- `9719a9b` — Restored “Two hours. Two days. A lifetime of difference.”,
+  spelled out both “four hours” references in its paragraph, and used words
+  for the numbers in the hero, skills, and organiser headings. File: `app/page.tsx`.
 - `3050006` — Switched form focus rings to green, activated the 12th-edition
   glass blur, rounded the hero event card, lowered the mobile grade sketch
   beside its heading while balancing section spacing, and refreshed the
