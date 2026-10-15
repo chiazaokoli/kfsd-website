@@ -365,7 +365,7 @@ img { display: block; }
   .hook-visual { height: 125vw; max-height: 690px; order: -1; }
   .hook-section { padding-bottom: 90px; }
   .matter-section, .skills-section, .learning-section, .schedule-section, .proof-section, .registration-section, .faq-section-new { padding: 110px 22px; }
-  .matter-section { padding-top: 28px; padding-bottom: 75px; }
+  .matter-section { padding-top: 28px; padding-bottom: 90px; }
   .matter-heading { display: flex; flex-direction: column; align-items: stretch; gap: 18px; margin-bottom: 36px; }
   .grade-sketch { order: -1; align-self: flex-end; width: clamp(145px, 39vw, 190px); margin: 56px 8px -32px 0; }
   .section-heading { display: block; }
