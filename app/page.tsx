@@ -8,7 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ArrowDown, ArrowRight, Brain, CalendarBlank, CaretDown, ChatCircleDots,
   Clock, CrownSimple, GlobeHemisphereWest, Lightning,
-  ListChecks, RocketLaunch, Mountains, Question, ShieldCheck,
+  ListChecks, RocketLaunch, Mountains, Play, Question, ShieldCheck,
   Student, UsersThree, Medal,
 } from "@phosphor-icons/react";
 import { siteConfig } from "../src/config/site";
@@ -101,6 +101,8 @@ export default function Home() {
   const learningSectionRef = useRef<HTMLElement>(null);
   const levelFieldRef = useRef<HTMLDivElement>(null);
   const levelTriggerRef = useRef<HTMLButtonElement>(null);
+  const videoDialogRef = useRef<HTMLDialogElement>(null);
+  const introVideoRef = useRef<HTMLVideoElement>(null);
   const [showNavCta, setShowNavCta] = useState(false);
   const [countdownInView, setCountdownInView] = useState(false);
   const [countdown, setCountdown] = useState<Countdown>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
@@ -113,6 +115,30 @@ export default function Home() {
   const [selectedLevel, setSelectedLevel] = useState("");
   const [levelOpen, setLevelOpen] = useState(false);
   const [activeLevel, setActiveLevel] = useState(0);
+  useEffect(() => {
+    const closeAfterFullscreen = () => {
+      if (!document.fullscreenElement && videoDialogRef.current?.open) videoDialogRef.current.close();
+    };
+    document.addEventListener("fullscreenchange", closeAfterFullscreen);
+    return () => document.removeEventListener("fullscreenchange", closeAfterFullscreen);
+  }, []);
+
+  function playIntroVideo() {
+    const dialog = videoDialogRef.current;
+    const video = introVideoRef.current as (HTMLVideoElement & { webkitEnterFullscreen?: () => void }) | null;
+    if (!dialog || !video) return;
+    dialog.showModal();
+    if (video.requestFullscreen) void video.requestFullscreen().catch(() => {});
+    else video.webkitEnterFullscreen?.();
+    void video.play().catch(() => {});
+  }
+
+  function closeIntroVideo() {
+    introVideoRef.current?.pause();
+    if (document.fullscreenElement) void document.exitFullscreen();
+    videoDialogRef.current?.close();
+  }
+
   useEffect(() => {
     if (!levelOpen) return;
     const closeOnOutsidePress = (event: PointerEvent) => {
@@ -425,7 +451,8 @@ export default function Home() {
             <p className="hook-answer">Then this is for you.</p>
           </div>
           <figure className="hook-visual motion-image">
-            <Image src={`${assetPrefix}/images/student-speaker.webp`} alt="A student speaking confidently to a group" fill unoptimized sizes="(max-width: 800px) 100vw, 46vw" />
+            <Image src={`${assetPrefix}/images/kfsd-intro-poster.webp`} alt="A KFSD participant speaking about soft skills" fill unoptimized sizes="(max-width: 800px) 100vw, 46vw" />
+            <button className="hook-play" type="button" onClick={playIntroVideo} aria-label="Play the KFSD introduction video fullscreen"><Play size={31} weight="fill" aria-hidden="true" /></button>
             <figcaption><RocketLaunch size={28} weight="fill" /> Equip yourself for the future</figcaption>
           </figure>
         </section>
@@ -534,6 +561,10 @@ export default function Home() {
 
         <footer className="new-footer"><a className="footer-identity" href="#top" aria-label="KFSD Soft Skills Training home"><span className="footer-logo"><Image src={`${assetPrefix}/images/kfsd-logo-full.webp`} alt="Kaiser Foundation for Social Development logo" width={155} height={155} unoptimized /></span><strong>KFSD Soft Skills Training</strong></a><div className="footer-bottom"><p>Organised by {siteConfig.organiser}</p><p>{siteConfig.event.dateLabel} · {siteConfig.event.timeLabel}</p><p>© 2026 KFSD</p></div></footer>
       </main>
+      <dialog ref={videoDialogRef} className="intro-video-dialog" onCancel={(event) => { event.preventDefault(); closeIntroVideo(); }} onClose={() => introVideoRef.current?.pause()}>
+        <button className="intro-video-close" type="button" onClick={closeIntroVideo} aria-label="Close video">×</button>
+        <video ref={introVideoRef} controls playsInline preload="none" poster={`${assetPrefix}/images/kfsd-intro-poster.webp`} src={`${assetPrefix}/videos/kfsd-intro.mp4`} aria-label="KFSD introduction video" />
+      </dialog>
     </>
   );
 }
