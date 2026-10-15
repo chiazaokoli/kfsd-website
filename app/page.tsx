@@ -391,7 +391,7 @@ export default function Home() {
         <SmoothCorners />
         <header ref={topbarRef} className={`topbar${showNavCta ? " has-cta" : ""}`}>
           <a className="brand" href="#top" aria-label="KFSD Soft Skills Training home"><span className="brand-mark" aria-hidden="true"><Image src={`${assetPrefix}/images/kfsd-logo-mark.webp`} alt="" width={30} height={30} unoptimized /></span><span>KFSD <b>Soft Skills Training</b></span></a>
-          <nav aria-label="Main navigation"><a href="#skills">Skills</a><a href="#schedule">Schedule</a><a href="#organiser">About CKL</a></nav>
+          <nav aria-label="Main navigation"><a href="#skills">Skills</a><a href="#schedule">Schedule</a><a href="#organiser">About KFSD</a></nav>
           <a className="topbar-cta" href="#register" aria-hidden={!showNavCta} tabIndex={showNavCta ? 0 : -1}><span className="cta-copy">Reserve my spot</span><ArrowRight size={17} weight="bold" /></a>
         </header>
 
@@ -484,10 +484,10 @@ export default function Home() {
 
         <section className="organiser-section" id="organiser">
           <div className="organiser-image motion-image"><Image src={`${assetPrefix}/images/listening.webp`} alt="Young people taking part in a thoughtful group conversation" fill unoptimized sizes="(max-width: 800px) 100vw, 48vw" /></div>
-          <div className="organiser-copy chapter-reveal"><p className="section-kicker">Organised by CKL</p><h2>Four years of helping young people stand out</h2><p>For four years, CKL has been running sessions that teach young people the skills that set them apart in work, business and life. This is another amazing edition, after 300 days of waiting. We’re excited to bring you this opportunity.</p></div>
+          <div className="organiser-copy chapter-reveal"><p className="section-kicker">Organised by KFSD</p><h2>8 years of helping young people stand out</h2><p>For eight years, KFSD has been running sessions that teach young people the skills that set them apart in work, business and life. This is another amazing edition, after a year of waiting. We’re excited to bring you this opportunity.</p></div>
         </section>
 
-        <section className="two-days-section"><div className="two-days-number" aria-hidden="true">2</div><div><h2>2 hours. 2 days. A lifetime of difference.</h2></div><p>We’ve packed the most valuable lessons into 4 focused hours so you get maximum value without wasting your time. These are 4 hours with information that could change how you show up for the rest of your life.</p></section>
+        <section className="two-days-section"><div className="two-days-number" aria-hidden="true">2</div><div><h2>4 hours across 2 days for a lifetime of difference</h2></div><p>We’ve packed the most valuable lessons into 4 focused hours so you get maximum value without wasting your time. These are 4 hours with information that could change how you show up for the rest of your life.</p></section>
 
         <section className="registration-section" id="register">
           <div className="registration-copy chapter-reveal">
@@ -532,7 +532,7 @@ export default function Home() {
           </div>;
         })}</div></section>
 
-        <footer className="new-footer"><a className="footer-identity" href="#top" aria-label="KFSD Soft Skills Training home"><span className="footer-logo"><Image src={`${assetPrefix}/images/kfsd-logo-full.webp`} alt="Kaiser Foundation for Social Development logo" width={155} height={155} unoptimized /></span><strong>KFSD Soft Skills Training</strong></a><div className="footer-bottom"><p>Organised by {siteConfig.organiser}</p><p>{siteConfig.event.dateLabel} · {siteConfig.event.timeLabel}</p><p>Concept imagery shown; verified media coming soon</p><p>© 2026 KFSD</p></div></footer>
+        <footer className="new-footer"><a className="footer-identity" href="#top" aria-label="KFSD Soft Skills Training home"><span className="footer-logo"><Image src={`${assetPrefix}/images/kfsd-logo-full.webp`} alt="Kaiser Foundation for Social Development logo" width={155} height={155} unoptimized /></span><strong>KFSD Soft Skills Training</strong></a><div className="footer-bottom"><p>Organised by {siteConfig.organiser}</p><p>{siteConfig.event.dateLabel} · {siteConfig.event.timeLabel}</p><p>© 2026 KFSD</p></div></footer>
       </main>
     </>
   );

@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: "KFSD Soft Skills Training",
-  organiser: "CKL",
+  organiser: "KFSD",
   edition: "12th Edition",
   contactEmail: "hello@example.com",
   event: {
