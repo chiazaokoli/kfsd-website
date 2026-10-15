@@ -144,7 +144,7 @@ img { display: block; }
 .question-list p { margin: 0; font-size: clamp(.96rem, 1.3vw, 1.14rem); line-height: 1.5; }
 .hook-answer { margin: 32px 0 0; color: var(--blue); font-size: clamp(1.8rem, 3.3vw, 3.5rem); font-weight: 600; letter-spacing: -.055em; }
 .hook-visual { position: relative; height: min(760px, 72vw); margin: 0; overflow: hidden; border-radius: 220px 220px 24px 24px; background: #ccd2e4; }
-.hook-visual img { object-fit: cover; transition: transform 800ms ease; }
+.hook-visual img { object-fit: cover; object-position: 54% center; transition: transform 800ms ease; }
 .hook-visual:hover img { transform: scale(1.045); }
 .hook-visual::after { position: absolute; inset: 0; background: linear-gradient(to top, rgba(6,10,18,.72), transparent 40%); content: ""; }
 .hook-visual figcaption { position: absolute; z-index: 2; right: 24px; bottom: 24px; left: 24px; display: flex; align-items: center; gap: 12px; color: white; font-size: clamp(1rem, 1.3vw, 1.2rem); font-weight: 650; }
