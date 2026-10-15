@@ -10,6 +10,9 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-15
 
+- `d5cf9ae` — Removed the baked-in subtitle from the intro thumbnail only;
+  fullscreen playback still uses the original video. Files: `app/page.tsx`,
+  `public/images/kfsd-intro-thumbnail-clean.webp`.
 - `d4bbe35` — Matched the intro thumbnail to the supplied reference pose and
   subtitle, and gave the replacement image a new URL to refresh cached copies.
   Files: `app/page.tsx`, `public/images/kfsd-intro-thumbnail.webp`.
