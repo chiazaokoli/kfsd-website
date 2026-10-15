@@ -10,6 +10,8 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-15
 
+- `a921f3b` — Shifted the intro thumbnail crop so the speaker’s head is
+  centered in the arch on mobile. File: `app/globals.css`.
 - `d5cf9ae` — Removed the baked-in subtitle from the intro thumbnail only;
   fullscreen playback still uses the original video. Files: `app/page.tsx`,
   `public/images/kfsd-intro-thumbnail-clean.webp`.
