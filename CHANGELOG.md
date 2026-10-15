@@ -10,6 +10,10 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-15
 
+- `a667f63` — Replaced the registration form fields with email, first and last
+  name, phone, profession, optional company, country, state, prior KFSD attendance,
+  and referral source. Kept the existing form style and custom mobile dropdowns.
+  Files: `app/page.tsx`, `app/globals.css`.
 - `a921f3b` — Shifted the intro thumbnail crop so the speaker’s head is
   centered in the arch on mobile. File: `app/globals.css`.
 - `d5cf9ae` — Removed the baked-in subtitle from the intro thumbnail only;
