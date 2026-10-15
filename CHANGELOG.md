@@ -10,6 +10,9 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-15
 
+- `d4bbe35` — Matched the intro thumbnail to the supplied reference pose and
+  subtitle, and gave the replacement image a new URL to refresh cached copies.
+  Files: `app/page.tsx`, `public/images/kfsd-intro-thumbnail.webp`.
 - `fb9d50f` — Added the KFSD introduction video to the existing story arch,
   with a centered video-frame thumbnail, glass play button, and fullscreen
   playback. Files: `app/page.tsx`, `app/globals.css`, `public/images/kfsd-intro-poster.webp`,
