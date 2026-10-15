@@ -8,6 +8,14 @@ To undo a complete change, use `git revert <commit>` and verify the result befor
 deploying. To restore only part of a design, inspect `git show <commit>` and apply
 the relevant pieces to the current code so later changes are preserved.
 
+## 2026-10-15
+
+- `3050006` — Switched form focus rings to green, activated the 12th-edition
+  glass blur, rounded the hero event card, lowered the mobile grade sketch
+  beside its heading while balancing section spacing, and refreshed the
+  organiser, schedule, and footer copy for KFSD. Files: `app/globals.css`,
+  `app/page.tsx`, `src/config/site.ts`.
+
 ## 2026-10-14
 
 - `34d3362` — Shifted the mobile hero image crop right to show the student
