@@ -19,7 +19,7 @@ import LearningFlow from "../src/components/LearningFlow";
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 const assetPrefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const heroLeadWords = ["Learn", "the", "soft", "skills", "that", "set", "you", "apart", "in"];
-const heroEnding = "2 days.";
+const heroEnding = "two days.";
 const heroEndingStart = heroLeadWords.join("").length;
 const sectionColors = [
   [".hook-section", [251, 250, 246]],
@@ -400,7 +400,7 @@ export default function Home() {
           <div className="hero-scrim" aria-hidden="true" />
           <div className="hero-content">
             <p className="edition-badge hero-enter"><span className="edition-badge-icon"><Medal size={15} weight="duotone" aria-hidden="true" /></span><span>{siteConfig.edition}</span></p>
-            <h1 id="hero-title" aria-label="Learn the soft skills that set you apart in 2 days."><span aria-hidden="true">{heroLeadWords.map((word, index) => <Fragment key={word}>{index > 0 && " "}<span className="hero-word">{heroLetters(word, heroLeadWords.slice(0, index).join("").length)}</span></Fragment>)}{" "}<span className="hero-ending">{heroLetters(heroEnding, heroEndingStart)}</span></span></h1>
+            <h1 id="hero-title" aria-label="Learn the soft skills that set you apart in two days."><span aria-hidden="true">{heroLeadWords.map((word, index) => <Fragment key={word}>{index > 0 && " "}<span className="hero-word">{heroLetters(word, heroLeadWords.slice(0, index).join("").length)}</span></Fragment>)}{" "}<span className="hero-ending">{heroLetters(heroEnding, heroEndingStart)}</span></span></h1>
             <p className="hero-subhead hero-enter">Learn from experienced professionals and become more career-ready.</p>
             <a ref={heroCtaRef} className="primary-cta hero-enter" href="#register"><span className="cta-copy">Reserve my spot</span><ArrowRight size={20} weight="bold" /></a>
           </div>
@@ -439,7 +439,7 @@ export default function Home() {
         </section>
 
         <section className="skills-section" id="skills">
-          <div className="section-heading"><h2>5 skills you’ll learn that change how people see you</h2></div>
+          <div className="section-heading"><h2>Five skills you’ll learn that change how people see you</h2></div>
           <div className="skills-grid grid-flow-dense">
             {skills.map(({ title, copy, icon: Icon, className, image }) => (
               <article className={`skill-card ${className}`} key={title}>
@@ -484,10 +484,10 @@ export default function Home() {
 
         <section className="organiser-section" id="organiser">
           <div className="organiser-image motion-image"><Image src={`${assetPrefix}/images/listening.webp`} alt="Young people taking part in a thoughtful group conversation" fill unoptimized sizes="(max-width: 800px) 100vw, 48vw" /></div>
-          <div className="organiser-copy chapter-reveal"><p className="section-kicker">Organised by KFSD</p><h2>8 years of helping young people stand out</h2><p>For eight years, KFSD has been running sessions that teach young people the skills that set them apart in work, business and life. This is another amazing edition, after a year of waiting. We’re excited to bring you this opportunity.</p></div>
+          <div className="organiser-copy chapter-reveal"><p className="section-kicker">Organised by KFSD</p><h2>Eight years of helping young people stand out</h2><p>For eight years, KFSD has been running sessions that teach young people the skills that set them apart in work, business and life. This is another amazing edition, after a year of waiting. We’re excited to bring you this opportunity.</p></div>
         </section>
 
-        <section className="two-days-section"><div className="two-days-number" aria-hidden="true">2</div><div><h2>4 hours across 2 days for a lifetime of difference</h2></div><p>We’ve packed the most valuable lessons into 4 focused hours so you get maximum value without wasting your time. These are 4 hours with information that could change how you show up for the rest of your life.</p></section>
+        <section className="two-days-section"><div className="two-days-number" aria-hidden="true">2</div><div><h2>Two hours. Two days. A lifetime of difference.</h2></div><p>We’ve packed the most valuable lessons into four focused hours so you get maximum value without wasting your time. These are four hours with information that could change how you show up for the rest of your life.</p></section>
 
         <section className="registration-section" id="register">
           <div className="registration-copy chapter-reveal">
