@@ -80,6 +80,8 @@ const faqs = [
   ["Do I need to attend both days?", "We strongly recommend it, as the sessions build on each other."],
   ["Will I get a certificate?", "Details will be shared after registration."],
 ];
+const attendanceOptions = ["Yes", "No", "Not sure"];
+const referralOptions = ["Social media", "Friend or family", "School or university", "KFSD", "Other"];
 
 type Countdown = { days: number; hours: number; minutes: number; seconds: number };
 
@@ -93,14 +95,79 @@ function getCountdown(): Countdown {
   };
 }
 
+type RegistrationSelectProps = {
+  label: string;
+  name: "attended" | "referral";
+  options: readonly string[];
+  placeholder: string;
+  value: string;
+  error?: string;
+  onChange: (name: "attended" | "referral", value: string) => void;
+};
+
+function RegistrationSelect({ label, name, options, placeholder, value, error, onChange }: RegistrationSelectProps) {
+  const fieldRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    if (!open) return;
+    const closeOutside = (event: PointerEvent) => {
+      if (!fieldRef.current?.contains(event.target as Node)) setOpen(false);
+    };
+    document.addEventListener("pointerdown", closeOutside);
+    return () => document.removeEventListener("pointerdown", closeOutside);
+  }, [open]);
+
+  const select = (option: string) => {
+    onChange(name, option);
+    setOpen(false);
+    triggerRef.current?.focus();
+  };
+
+  const onKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
+    const last = options.length - 1;
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      const direction = event.key === "ArrowDown" ? 1 : -1;
+      setActive((current) => open ? (current + direction + options.length) % options.length : Math.max(0, options.indexOf(value)));
+      setOpen(true);
+    } else if (event.key === "Home" || event.key === "End") {
+      event.preventDefault();
+      setActive(event.key === "Home" ? 0 : last);
+      setOpen(true);
+    } else if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      if (open) select(options[active]);
+      else { setActive(Math.max(0, options.indexOf(value))); setOpen(true); }
+    } else if (event.key === "Escape" && open) {
+      event.preventDefault();
+      setOpen(false);
+    } else if (event.key === "Tab") {
+      setOpen(false);
+    }
+  };
+
+  return <div className="form-select-field" ref={fieldRef}>
+    <label id={`${name}-label`} htmlFor={`${name}-trigger`}>{label}</label>
+    <input type="hidden" name={name} value={value} />
+    <button id={`${name}-trigger`} ref={triggerRef} className={`form-select-trigger${value ? " is-selected" : ""}`} type="button" role="combobox" aria-labelledby={`${name}-label`} aria-haspopup="listbox" aria-expanded={open} aria-controls={`${name}-options`} aria-activedescendant={open ? `${name}-option-${active}` : undefined} aria-invalid={Boolean(error)} aria-describedby={error ? `${name}-error` : undefined} onClick={() => { setActive(Math.max(0, options.indexOf(value))); setOpen((current) => !current); }} onKeyDown={onKeyDown}>
+      <span>{value || placeholder}</span><CaretDown size={18} weight="bold" aria-hidden="true" />
+    </button>
+    {open && <div id={`${name}-options`} className="form-select-options" role="listbox" aria-labelledby={`${name}-label`}>
+      {options.map((option, index) => <div id={`${name}-option-${index}`} className={`form-select-option${index === active ? " is-active" : ""}`} role="option" aria-selected={option === value} key={option} onPointerMove={() => setActive(index)} onClick={() => select(option)}>{option}</div>)}
+    </div>}
+    {error && <small id={`${name}-error`}>{error}</small>}
+  </div>;
+}
+
 export default function Home() {
   const pageRef = useRef<HTMLElement>(null);
   const topbarRef = useRef<HTMLElement>(null);
   const heroCtaRef = useRef<HTMLAnchorElement>(null);
   const countdownRef = useRef<HTMLElement>(null);
   const learningSectionRef = useRef<HTMLElement>(null);
-  const levelFieldRef = useRef<HTMLDivElement>(null);
-  const levelTriggerRef = useRef<HTMLButtonElement>(null);
   const videoDialogRef = useRef<HTMLDialogElement>(null);
   const introVideoRef = useRef<HTMLVideoElement>(null);
   const [showNavCta, setShowNavCta] = useState(false);
@@ -112,9 +179,7 @@ export default function Home() {
   const [localTime, setLocalTime] = useState("");
   const [formStatus, setFormStatus] = useState("");
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
-  const [selectedLevel, setSelectedLevel] = useState("");
-  const [levelOpen, setLevelOpen] = useState(false);
-  const [activeLevel, setActiveLevel] = useState(0);
+  const [formSelections, setFormSelections] = useState({ attended: "", referral: "" });
   useEffect(() => {
     const closeAfterFullscreen = () => {
       if (!document.fullscreenElement && videoDialogRef.current?.open) videoDialogRef.current.close();
@@ -139,14 +204,6 @@ export default function Home() {
     videoDialogRef.current?.close();
   }
 
-  useEffect(() => {
-    if (!levelOpen) return;
-    const closeOnOutsidePress = (event: PointerEvent) => {
-      if (!levelFieldRef.current?.contains(event.target as Node)) setLevelOpen(false);
-    };
-    document.addEventListener("pointerdown", closeOnOutsidePress);
-    return () => document.removeEventListener("pointerdown", closeOnOutsidePress);
-  }, [levelOpen]);
   useEffect(() => {
     let frame = 0;
     let readyFrame = 0;
@@ -364,49 +421,23 @@ export default function Home() {
     event.preventDefault();
     const form = event.currentTarget;
     const data = new FormData(form);
-    const required = ["fullName", "email", "whatsapp", "level", "school"];
+    const required = ["email", "firstName", "lastName", "phone", "profession", "country", "state", "attended", "referral"];
     const errors: Record<string, string> = {};
     required.forEach((field) => { if (!String(data.get(field) ?? "").trim()) errors[field] = "Please complete this field."; });
     const email = String(data.get("email") ?? "");
     if (email && !/^\S+@\S+\.\S+$/.test(email)) errors.email = "Enter a valid email address.";
-    const whatsapp = String(data.get("whatsapp") ?? "").replace(/\D/g, "");
-    if (whatsapp && whatsapp.length < 7) errors.whatsapp = "Enter a valid WhatsApp number.";
+    const phone = String(data.get("phone") ?? "").replace(/\D/g, "");
+    if (phone && phone.length < 7) errors.phone = "Enter a valid phone number.";
     setFormErrors(errors);
     if (Object.keys(errors).length) { setFormStatus(""); return; }
     setFormStatus("Your details look good. Live registration confirmation will be enabled before launch.");
     form.reset();
-    setSelectedLevel("");
-    setLevelOpen(false);
+    setFormSelections({ attended: "", referral: "" });
   }
 
-  function selectLevel(level: string) {
-    setSelectedLevel(level);
-    setLevelOpen(false);
-    setFormErrors((current) => ({ ...current, level: "" }));
-    levelTriggerRef.current?.focus();
-  }
-
-  function handleLevelKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
-    const last = siteConfig.levels.length - 1;
-    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
-      event.preventDefault();
-      const selectedIndex = siteConfig.levels.findIndex((level) => level === selectedLevel);
-      setActiveLevel((current) => levelOpen ? (current + (event.key === "ArrowDown" ? 1 : last)) % (last + 1) : selectedIndex >= 0 ? selectedIndex : event.key === "ArrowDown" ? 0 : last);
-      setLevelOpen(true);
-    } else if (event.key === "Home" || event.key === "End") {
-      event.preventDefault();
-      setActiveLevel(event.key === "Home" ? 0 : last);
-      setLevelOpen(true);
-    } else if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      if (levelOpen) selectLevel(siteConfig.levels[activeLevel]);
-      else { setActiveLevel(Math.max(0, siteConfig.levels.findIndex((level) => level === selectedLevel))); setLevelOpen(true); }
-    } else if (event.key === "Escape" && levelOpen) {
-      event.preventDefault();
-      setLevelOpen(false);
-    } else if (event.key === "Tab") {
-      setLevelOpen(false);
-    }
+  function updateFormSelection(name: "attended" | "referral", value: string) {
+    setFormSelections((current) => ({ ...current, [name]: value }));
+    setFormErrors((current) => ({ ...current, [name]: "" }));
   }
 
   const activeSchedule = siteConfig.schedules[activeDay];
@@ -529,24 +560,21 @@ export default function Home() {
               </strong>
             </div>
           </div>
-          <form className="registration-form" onSubmit={handleRegistration} noValidate>
-            <label>Full name<input name="fullName" type="text" autoComplete="name" placeholder="Your full name" aria-describedby={formErrors.fullName ? "fullName-error" : undefined} />{formErrors.fullName && <small id="fullName-error">{formErrors.fullName}</small>}</label>
+          <form className="registration-form" onSubmit={handleRegistration} onInput={(event) => { const name = (event.target as HTMLInputElement).name; if (name && formErrors[name]) setFormErrors((current) => ({ ...current, [name]: "" })); }} noValidate>
+            <label>Email<input name="email" type="email" autoComplete="email" placeholder="you@example.com" aria-invalid={Boolean(formErrors.email)} aria-describedby={formErrors.email ? "email-error" : undefined} />{formErrors.email && <small id="email-error">{formErrors.email}</small>}</label>
             <div className="form-row">
-              <label>Email<input name="email" type="email" autoComplete="email" placeholder="you@example.com" aria-describedby={formErrors.email ? "email-error" : undefined} />{formErrors.email && <small id="email-error">{formErrors.email}</small>}</label>
-              <label>WhatsApp number<input name="whatsapp" type="tel" autoComplete="tel" placeholder="+234 800 000 0000" aria-describedby={formErrors.whatsapp ? "whatsapp-error" : undefined} />{formErrors.whatsapp && <small id="whatsapp-error">{formErrors.whatsapp}</small>}</label>
+              <label>First name<input name="firstName" type="text" autoComplete="given-name" placeholder="Your first name" aria-invalid={Boolean(formErrors.firstName)} aria-describedby={formErrors.firstName ? "firstName-error" : undefined} />{formErrors.firstName && <small id="firstName-error">{formErrors.firstName}</small>}</label>
+              <label>Last name<input name="lastName" type="text" autoComplete="family-name" placeholder="Your last name" aria-invalid={Boolean(formErrors.lastName)} aria-describedby={formErrors.lastName ? "lastName-error" : undefined} />{formErrors.lastName && <small id="lastName-error">{formErrors.lastName}</small>}</label>
             </div>
-            <div className="level-field" ref={levelFieldRef}>
-              <label htmlFor="level-trigger">Current level</label>
-              <input type="hidden" name="level" value={selectedLevel} />
-              <button id="level-trigger" ref={levelTriggerRef} className={`level-trigger${selectedLevel ? " is-selected" : ""}`} type="button" role="combobox" aria-haspopup="listbox" aria-expanded={levelOpen} aria-controls="level-options" aria-activedescendant={levelOpen ? `level-option-${activeLevel}` : undefined} aria-invalid={Boolean(formErrors.level)} aria-describedby={formErrors.level ? "level-error" : undefined} onClick={() => { setActiveLevel(Math.max(0, siteConfig.levels.findIndex((level) => level === selectedLevel))); setLevelOpen((open) => !open); }} onKeyDown={handleLevelKeyDown}>
-                <span>{selectedLevel || "Select your level"}</span><CaretDown size={18} weight="bold" aria-hidden="true" />
-              </button>
-              {levelOpen && <div id="level-options" className="level-options" role="listbox" aria-label="Current level">
-                {siteConfig.levels.map((level, index) => <div id={`level-option-${index}`} className={`level-option${index === activeLevel ? " is-active" : ""}`} role="option" aria-selected={level === selectedLevel} key={level} onPointerMove={() => setActiveLevel(index)} onClick={() => selectLevel(level)}>{level}</div>)}
-              </div>}
-              {formErrors.level && <small id="level-error">{formErrors.level}</small>}
+            <label>Phone<input name="phone" type="tel" autoComplete="tel" placeholder="Your phone number" aria-invalid={Boolean(formErrors.phone)} aria-describedby={formErrors.phone ? "phone-error" : undefined} />{formErrors.phone && <small id="phone-error">{formErrors.phone}</small>}</label>
+            <label>Profession<input name="profession" type="text" autoComplete="organization-title" placeholder="Student, teacher, etc." aria-invalid={Boolean(formErrors.profession)} aria-describedby={formErrors.profession ? "profession-error" : undefined} />{formErrors.profession && <small id="profession-error">{formErrors.profession}</small>}</label>
+            <label>Company<input name="company" type="text" autoComplete="organization" placeholder="If applicable" /></label>
+            <div className="form-row">
+              <label>Country<input name="country" type="text" autoComplete="country-name" placeholder="Your country" aria-invalid={Boolean(formErrors.country)} aria-describedby={formErrors.country ? "country-error" : undefined} />{formErrors.country && <small id="country-error">{formErrors.country}</small>}</label>
+              <label>State<input name="state" type="text" autoComplete="address-level1" placeholder="Your state or region" aria-invalid={Boolean(formErrors.state)} aria-describedby={formErrors.state ? "state-error" : undefined} />{formErrors.state && <small id="state-error">{formErrors.state}</small>}</label>
             </div>
-            <label>School or institution name<input name="school" type="text" autoComplete="organization" placeholder="Your school or institution" aria-describedby={formErrors.school ? "school-error" : undefined} />{formErrors.school && <small id="school-error">{formErrors.school}</small>}</label>
+            <RegistrationSelect label="Have you attended KFSD soft skills training before?" name="attended" options={attendanceOptions} placeholder="Select an answer" value={formSelections.attended} error={formErrors.attended} onChange={updateFormSelection} />
+            <RegistrationSelect label="How did you hear about KFSD soft skills training?" name="referral" options={referralOptions} placeholder="Select an answer" value={formSelections.referral} error={formErrors.referral} onChange={updateFormSelection} />
             <button type="submit">Reserve My Free Spot</button><p className="form-reassurance">Your details will only be used for this training.</p>{formStatus && <p className="form-status" role="status">{formStatus}</p>}
           </form>
         </section>
