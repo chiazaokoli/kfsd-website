@@ -81,7 +81,8 @@ const faqs = [
   ["Will I get a certificate?", "Details will be shared after registration."],
 ];
 const attendanceOptions = ["Yes", "No", "Not sure"];
-const referralOptions = ["Social media", "Friend or family", "School or university", "KFSD", "Other"];
+const companyOptions = ["-", "NIQS", "NICE", "NSE", "NIOB", "APWEN", "NISTRUCTE", "YEFON", "NIQS FOUNDATION", "Other"];
+const referralOptions = ["-", "NIQS, NIOB, NSE, NISTRUCTE, YEFON, APWEN, CORBIN, COREN", "KFSD Alumni", "Social Media (Facebook, LinkedIn, Instagram)", "Impact Leaders Club", "Enactus", "DSN Network", "Whatsapp", "Word of mouth", "AIN", "MEK NextGen Innovators"];
 
 type Countdown = { days: number; hours: number; minutes: number; seconds: number };
 
@@ -95,14 +96,16 @@ function getCountdown(): Countdown {
   };
 }
 
+type RegistrationSelectName = "company" | "attended" | "referral";
+
 type RegistrationSelectProps = {
   label: string;
-  name: "attended" | "referral";
+  name: RegistrationSelectName;
   options: readonly string[];
   placeholder: string;
   value: string;
   error?: string;
-  onChange: (name: "attended" | "referral", value: string) => void;
+  onChange: (name: RegistrationSelectName, value: string) => void;
 };
 
 function RegistrationSelect({ label, name, options, placeholder, value, error, onChange }: RegistrationSelectProps) {
@@ -121,7 +124,7 @@ function RegistrationSelect({ label, name, options, placeholder, value, error, o
   }, [open]);
 
   const select = (option: string) => {
-    onChange(name, option);
+    onChange(name, option === "-" ? "" : option);
     setOpen(false);
     triggerRef.current?.focus();
   };
@@ -156,7 +159,7 @@ function RegistrationSelect({ label, name, options, placeholder, value, error, o
       <span>{value || placeholder}</span><CaretDown size={18} weight="bold" aria-hidden="true" />
     </button>
     {open && <div id={`${name}-options`} className="form-select-options" role="listbox" aria-labelledby={`${name}-label`}>
-      {options.map((option, index) => <div id={`${name}-option-${index}`} className={`form-select-option${index === active ? " is-active" : ""}`} role="option" aria-selected={option === value} key={option} onPointerMove={() => setActive(index)} onClick={() => select(option)}>{option}</div>)}
+      {options.map((option, index) => <div id={`${name}-option-${index}`} className={`form-select-option${index === active ? " is-active" : ""}`} role="option" aria-selected={option === (value || "-")} key={option} onPointerMove={() => setActive(index)} onClick={() => select(option)}>{option}</div>)}
     </div>}
     {error && <small id={`${name}-error`}>{error}</small>}
   </div>;
@@ -179,7 +182,7 @@ export default function Home() {
   const [localTime, setLocalTime] = useState("");
   const [formStatus, setFormStatus] = useState("");
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
-  const [formSelections, setFormSelections] = useState({ attended: "", referral: "" });
+  const [formSelections, setFormSelections] = useState({ company: "", attended: "", referral: "" });
   useEffect(() => {
     const closeAfterFullscreen = () => {
       if (!document.fullscreenElement && videoDialogRef.current?.open) videoDialogRef.current.close();
@@ -432,10 +435,10 @@ export default function Home() {
     if (Object.keys(errors).length) { setFormStatus(""); return; }
     setFormStatus("Your details look good. Live registration confirmation will be enabled before launch.");
     form.reset();
-    setFormSelections({ attended: "", referral: "" });
+    setFormSelections({ company: "", attended: "", referral: "" });
   }
 
-  function updateFormSelection(name: "attended" | "referral", value: string) {
+  function updateFormSelection(name: RegistrationSelectName, value: string) {
     setFormSelections((current) => ({ ...current, [name]: value }));
     setFormErrors((current) => ({ ...current, [name]: "" }));
   }
@@ -568,13 +571,13 @@ export default function Home() {
             </div>
             <label>Phone<input name="phone" type="tel" autoComplete="tel" placeholder="Your phone number" aria-invalid={Boolean(formErrors.phone)} aria-describedby={formErrors.phone ? "phone-error" : undefined} />{formErrors.phone && <small id="phone-error">{formErrors.phone}</small>}</label>
             <label>Profession<input name="profession" type="text" autoComplete="organization-title" placeholder="Student, teacher, etc." aria-invalid={Boolean(formErrors.profession)} aria-describedby={formErrors.profession ? "profession-error" : undefined} />{formErrors.profession && <small id="profession-error">{formErrors.profession}</small>}</label>
-            <label>Company<input name="company" type="text" autoComplete="organization" placeholder="If applicable" /></label>
+            <RegistrationSelect label="Company" name="company" options={companyOptions} placeholder="-" value={formSelections.company} onChange={updateFormSelection} />
             <div className="form-row">
               <label>Country<input name="country" type="text" autoComplete="country-name" placeholder="Your country" aria-invalid={Boolean(formErrors.country)} aria-describedby={formErrors.country ? "country-error" : undefined} />{formErrors.country && <small id="country-error">{formErrors.country}</small>}</label>
               <label>State<input name="state" type="text" autoComplete="address-level1" placeholder="Your state or region" aria-invalid={Boolean(formErrors.state)} aria-describedby={formErrors.state ? "state-error" : undefined} />{formErrors.state && <small id="state-error">{formErrors.state}</small>}</label>
             </div>
             <RegistrationSelect label="Have you attended KFSD soft skills training before?" name="attended" options={attendanceOptions} placeholder="Select an answer" value={formSelections.attended} error={formErrors.attended} onChange={updateFormSelection} />
-            <RegistrationSelect label="How did you hear about KFSD soft skills training?" name="referral" options={referralOptions} placeholder="Select an answer" value={formSelections.referral} error={formErrors.referral} onChange={updateFormSelection} />
+            <RegistrationSelect label="How did you hear about KFSD soft skills training?" name="referral" options={referralOptions} placeholder="-" value={formSelections.referral} error={formErrors.referral} onChange={updateFormSelection} />
             <button type="submit">Reserve My Free Spot</button><p className="form-reassurance">Your details will only be used for this training.</p>{formStatus && <p className="form-status" role="status">{formStatus}</p>}
           </form>
         </section>

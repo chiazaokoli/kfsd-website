@@ -299,7 +299,7 @@ img { display: block; }
 .form-select-trigger span { min-width: 0; }
 .form-select-trigger svg { flex: none; transition: transform 180ms ease; }
 .form-select-trigger[aria-expanded="true"] svg { transform: rotate(180deg); }
-.form-select-options { display: grid; gap: 4px; padding: 4px; border: 1px solid rgba(11,16,28,.14); border-radius: 18px; background: white; box-shadow: 0 12px 28px rgba(11,16,28,.09); }
+.form-select-options { display: grid; max-height: min(320px, 45dvh); gap: 4px; overflow-y: auto; overscroll-behavior: contain; padding: 4px; border: 1px solid rgba(11,16,28,.14); border-radius: 18px; background: white; box-shadow: 0 12px 28px rgba(11,16,28,.09); }
 .form-select-option { display: flex; min-height: 48px; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; border-radius: 12px; cursor: pointer; font-size: .875rem; font-weight: 400; transition: background-color 160ms ease; }
 .form-select-option:is(.is-active, :hover) { background: #e9f7ee; }
 .form-select-option[aria-selected="true"]::after { color: var(--blue); content: "✓"; font-size: 1rem; font-weight: 800; }
@@ -380,7 +380,7 @@ img { display: block; }
   .section-heading { display: block; }
   .section-heading .section-kicker { margin-bottom: 22px; }
   .skills-grid { display: grid; grid-template-columns: 1fr; grid-template-rows: none; perspective: 1000px; }
-  .skills-section .section-heading { color: var(--white); opacity: 1; transition: color 300ms ease-in-out; }
+  .skills-section .section-heading { margin-bottom: 36px; color: var(--white); opacity: 1; transition: color 300ms ease-in-out; }
   .matter-section { transition: color 300ms ease-in-out; }
   .matter-section .reveal-statement { transition: color 300ms ease-in-out; }
   .site-shell.skills-background-active .matter-section .reveal-statement { color: var(--ink); }
