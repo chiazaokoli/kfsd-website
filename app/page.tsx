@@ -66,11 +66,11 @@ const learningSteps = [
 ];
 
 const speakers = [
-  { name: "Adaeze Okafor", topic: "Communication" },
-  { name: "Tunde Adeyemi", topic: "Leadership" },
-  { name: "Zainab Bello", topic: "Critical thinking" },
-  { name: "Chidi Nwosu", topic: "Resilience" },
-  { name: "Amara Eze", topic: "Integrity" },
+  { name: "David Dokun", topic: "Communication" },
+  { name: "Mrs. Mfon Ekpo", topic: "Leadership" },
+  { name: "Engr. Kehinde Ayobade", topic: "Critical thinking" },
+  { name: "Dr. Funmi Adeniyi", topic: "Resilience" },
+  { name: "Soji Apampa", topic: "Integrity" },
 ];
 
 const faqs = [
