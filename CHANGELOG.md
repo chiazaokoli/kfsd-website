@@ -10,6 +10,10 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-16
 
+- `9927a03` — Shortened the loading screen to about three seconds with three
+  key messages, moved the KFSD heading lower, and kept the hero entrance
+  synchronized with the curtain swipe. Files: `app/components/SplashScreen.tsx`,
+  `app/globals.css`.
 - `b60b2c5` — Removed green from the loading text shimmer and blurred the
   curtain and underlay as they swipe up. Extended the curtain beyond the
   viewport so the blur stays on the moving edge. Files:
