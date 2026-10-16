@@ -10,6 +10,10 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-16
 
+- `8c2025f` — Added a quick, staggered mobile hero entrance for the badge,
+  whole headline, supporting text, CTA, and event card. Removed the mobile
+  per-letter colour sweep while keeping the photo still and desktop motion
+  intact. Files: `app/page.tsx`, `app/globals.css`.
 - `7d74f23` — Replaced all five speaker portraits with the supplied 627×810
   exports and refreshed their asset URLs. Files: `app/page.tsx`,
   `public/images/speakers/`.
