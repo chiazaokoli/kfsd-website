@@ -10,6 +10,10 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-16
 
+- `5291754` — Started the hero entrance when the loading curtain begins to
+  swipe up, so the two animations overlap instead of leaving a pause. Kept
+  the reduced-motion path immediate. Files: `app/components/SplashScreen.tsx`,
+  `app/page.tsx`.
 - `37b95e6` — Anchored the hero CTA's animated pseudo-elements to the button
   so their gradients cannot flash across the hero on the first paint. Restored
   the loading screen after isolating the artifact. Files: `app/globals.css`,
