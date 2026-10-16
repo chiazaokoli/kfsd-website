@@ -10,6 +10,8 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-16
 
+- `b393b0c` — Restored the original hero photograph at the user's request.
+  File: `public/images/hero-editorial.webp`.
 - `45b12b2` — Replaced the hero photograph with a cinematic edit of the
   supplied scene, baking the lighting and depth into the image. Removed the
   extra CSS color effects and kept a simple contrast scrim for readable text.
