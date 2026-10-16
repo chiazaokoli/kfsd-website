@@ -19,7 +19,7 @@ import SplashScreen from "./components/SplashScreen";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 const assetPrefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-const showSplashScreen = false;
+const showSplashScreen = true;
 const heroLeadWords = ["Learn", "the", "soft", "skills", "that", "set", "you", "apart", "in"];
 const heroEnding = "2 days.";
 const heroEndingStart = heroLeadWords.join("").length;
