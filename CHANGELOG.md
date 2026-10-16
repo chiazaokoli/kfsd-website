@@ -10,6 +10,10 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-16
 
+- `45b12b2` — Replaced the hero photograph with a cinematic edit of the
+  supplied scene, baking the lighting and depth into the image. Removed the
+  extra CSS color effects and kept a simple contrast scrim for readable text.
+  Files: `public/images/hero-editorial.webp`, `app/globals.css`.
 - `afe0008` — Gave the hero image a cinematic color grade with deeper
   shadows, teal and warm light, and softly blurred edges while preserving
   the mobile speaker crop and text contrast. File: `app/globals.css`.
