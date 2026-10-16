@@ -68,6 +68,7 @@ export default function SplashScreen({ onComplete }: { onComplete: () => void })
         const icon = item.querySelector(".splash-icon");
 
         timeline
+          .call(() => item.classList.add("is-active"), [], start)
           .to(item, { autoAlpha: 1, y: 0, duration: 0.2, ease: "power3.out" }, start)
           .fromTo(icon, { scale: 0.96 }, { scale: 1.06, duration: 0.28, repeat: 1, yoyo: true, ease: "sine.inOut" }, start)
           .to(item, { autoAlpha: 0, y: -14, duration: 0.18, ease: "power2.in" }, start + 0.48);
@@ -99,11 +100,10 @@ export default function SplashScreen({ onComplete }: { onComplete: () => void })
         </div>
 
         <div className="splash-stage">
-          {moments.map(({ verb, icon: SkillIcon }, index) => (
+          {moments.map(({ verb, icon: SkillIcon }) => (
             <div className="splash-moment" key={verb}>
               <SkillIcon className="splash-icon" weight="light" aria-hidden="true" />
               <span>{verb}</span>
-              <small>{String(index + 1).padStart(2, "0")}</small>
             </div>
           ))}
         </div>
