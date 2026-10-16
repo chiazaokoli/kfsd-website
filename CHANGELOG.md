@@ -10,6 +10,9 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-16
 
+- `7d74f23` — Replaced all five speaker portraits with the supplied 627×810
+  exports and refreshed their asset URLs. Files: `app/page.tsx`,
+  `public/images/speakers/`.
 - `519f983`, `02247a6` — Replaced the speaker placeholders with the supplied
   names, topics, and five portraits, preserving the edge-to-edge grid. Files:
   `app/page.tsx`, `app/globals.css`, `src/components/SmoothCorners.tsx`,
