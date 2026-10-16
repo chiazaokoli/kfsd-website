@@ -26,7 +26,7 @@ const moments: Array<{ verb: string; icon: Icon }> = [
 ];
 const assetPrefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
-export default function SplashScreen({ onComplete }: { onComplete: () => void }) {
+export default function SplashScreen({ onRevealStart }: { onRevealStart: () => void }) {
   const shellRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(true);
 
@@ -42,11 +42,10 @@ export default function SplashScreen({ onComplete }: { onComplete: () => void })
         if (main instanceof HTMLElement) main.inert = false;
         document.body.classList.remove("splash-active");
         setVisible(false);
-        onComplete();
       };
 
       if (reduceMotion) {
-        const timer = window.setTimeout(finish, 180);
+        const timer = window.setTimeout(() => { onRevealStart(); finish(); }, 180);
         return () => {
           window.clearTimeout(timer);
           if (main instanceof HTMLElement) main.inert = false;
@@ -76,7 +75,7 @@ export default function SplashScreen({ onComplete }: { onComplete: () => void })
 
       timeline
         .to(".splash-brand, .splash-footer", { opacity: 0, y: -10, duration: 0.3, ease: "power2.in" }, 4.95)
-        .to(".splash-curtain", { yPercent: -100, borderBottomLeftRadius: "46vw", borderBottomRightRadius: "46vw", duration: 0.82, ease: "power4.inOut" }, 5.12)
+        .to(".splash-curtain", { yPercent: -100, borderBottomLeftRadius: "46vw", borderBottomRightRadius: "46vw", duration: 0.82, ease: "power4.inOut", onStart: onRevealStart }, 5.12)
         .to(".splash-underlay", { yPercent: -100, duration: 0.72, ease: "power4.inOut" }, 5.2);
 
       return () => {

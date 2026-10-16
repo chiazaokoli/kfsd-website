@@ -185,7 +185,7 @@ export default function Home() {
   const [formStatus, setFormStatus] = useState("");
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [formSelections, setFormSelections] = useState({ company: "", attended: "", referral: "" });
-  const [splashComplete, setSplashComplete] = useState(!showSplashScreen);
+  const [heroRevealStarted, setHeroRevealStarted] = useState(!showSplashScreen);
   useEffect(() => {
     const closeAfterFullscreen = () => {
       if (!document.fullscreenElement && videoDialogRef.current?.open) videoDialogRef.current.close();
@@ -333,7 +333,7 @@ export default function Home() {
   }, []);
 
   useGSAP(() => {
-    if (!splashComplete || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!heroRevealStarted || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const heroMotion = gsap.matchMedia();
     const title = pageRef.current?.querySelector<HTMLElement>("#hero-title");
@@ -357,7 +357,7 @@ export default function Home() {
         .from(".event-dock", { opacity: 0, y: 24, duration: 0.7 }, 0.73);
     });
     return () => { heroMotion.revert(); title?.classList.remove("hero-letters-ready"); };
-  }, { scope: pageRef, dependencies: [splashComplete] });
+  }, { scope: pageRef, dependencies: [heroRevealStarted] });
 
   useGSAP(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -476,7 +476,7 @@ export default function Home() {
 
   return (
     <>
-      {showSplashScreen && <SplashScreen onComplete={() => setSplashComplete(true)} />}
+      {showSplashScreen && <SplashScreen onRevealStart={() => setHeroRevealStarted(true)} />}
       <main ref={pageRef} className="site-shell" id="top">
         <SmoothCorners />
         <header ref={topbarRef} className={`topbar${showNavCta ? " has-cta" : ""}`}>
