@@ -10,6 +10,10 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-16
 
+- `9dd6942` — Made the hero badge icon white, sent mobile hero and navbar
+  CTAs directly to the form, and removed the SVG corner fallback from
+  interactive buttons and links to prevent Firefox sizing errors. Files:
+  `app/page.tsx`, `app/globals.css`, `src/components/SmoothCorners.tsx`.
 - `b393b0c` — Restored the original hero photograph at the user's request.
   File: `public/images/hero-editorial.webp`.
 - `45b12b2` — Replaced the hero photograph with a cinematic edit of the
