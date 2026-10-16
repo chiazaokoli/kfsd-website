@@ -29,7 +29,7 @@ img { display: block; }
 
 /* Keep the existing radii as a fallback. Newer engines shape the corner natively. */
 @supports (corner-shape: squircle) {
-  :is(.brand-mark, .topbar-cta, .primary-cta, .event-dock, .event-dock > a, .skill-card, .learning-step, .local-time-card, .schedule-panel, .day-tabs, .day-tabs-highlight, .day-tabs button, .speaker-placeholder-grid article, .registration-form, .registration-form input:not([type="hidden"]), .registration-form select, .registration-form button, .form-select-options, .form-select-option) {
+  :is(.brand-mark, .topbar-cta, .primary-cta, .event-dock, .event-dock > a, .skill-card, .learning-step, .local-time-card, .schedule-panel, .day-tabs, .day-tabs-highlight, .day-tabs button, .speaker-grid article, .registration-form, .registration-form input:not([type="hidden"]), .registration-form select, .registration-form button, .form-select-options, .form-select-option) {
     corner-shape: squircle;
   }
 }
@@ -251,12 +251,13 @@ img { display: block; }
 .proof-header .section-kicker { grid-column: 1 / -1; margin-bottom: -35px; }
 .proof-header h2 { max-width: 900px; }
 .proof-header > p:last-child { margin: 0; color: #636874; font-size: .9rem; line-height: 1.7; }
-.speaker-placeholder-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; margin-top: 60px; margin-inline: calc(-1 * max(5vw, 28px)); }
-.speaker-placeholder-grid article { overflow: hidden; border: 0; border-radius: 0; background: var(--paper); }
-.speaker-portrait { aspect-ratio: 4 / 5; background-color: var(--cream); background-size: 500% auto; background-repeat: no-repeat; }
+.speaker-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; margin-top: 60px; margin-inline: calc(-1 * max(5vw, 28px)); }
+.speaker-grid article { overflow: hidden; border: 0; border-radius: 0; background: var(--paper); }
+.speaker-portrait { position: relative; aspect-ratio: 209 / 270; background-color: var(--cream); }
+.speaker-portrait img { object-fit: cover; }
 .speaker-details { padding: 24px; }
-.speaker-placeholder-grid h3 { margin: 0 0 9px; color: var(--ink); font-size: 1.15rem; letter-spacing: -.035em; }
-.speaker-placeholder-grid p { margin: 0; color: #686b72; font-size: .875rem; font-weight: 400; line-height: 1.5; }
+.speaker-grid h3 { margin: 0 0 9px; color: var(--ink); font-size: 1.15rem; letter-spacing: -.035em; }
+.speaker-grid p { margin: 0; color: #686b72; font-size: .875rem; font-weight: 400; line-height: 1.5; }
 
 /* Organiser and action */
 .organiser-section { display: grid; grid-template-columns: minmax(360px, 1fr) minmax(0, 1fr); align-items: stretch; background: var(--blue); color: var(--white); }
@@ -342,7 +343,7 @@ img { display: block; }
   .proof-header { grid-template-columns: 1fr; gap: 30px; }
   .proof-header .section-kicker { grid-column: auto; margin-bottom: -8px; }
   .proof-header > p:last-child { max-width: 650px; }
-  .speaker-placeholder-grid { grid-template-columns: 1fr 1fr; }
+  .speaker-grid { grid-template-columns: 1fr 1fr; }
   .registration-section { grid-template-columns: 1fr; row-gap: 110px; }
   .registration-form { width: min(720px, 100%); }
 }
@@ -407,7 +408,7 @@ img { display: block; }
   .schedule-panel { box-shadow: none; }
   .smooth-corner-fallback.schedule-panel { filter: none; }
   .proof-section { padding-top: 55px; }
-  .speaker-placeholder-grid { grid-template-columns: 1fr 1fr; margin-inline: -22px; }
+  .speaker-grid { grid-template-columns: 1fr 1fr; margin-inline: -22px; }
   .organiser-section { grid-template-columns: 1fr; }
   .organiser-image { min-height: 520px; }
   .organiser-copy { padding: 90px 22px; }
@@ -448,16 +449,16 @@ img { display: block; }
   .reveal-statement { font-size: 1.48rem; }
   .skill-card { min-height: 400px; }
   .skill-third { min-height: 0; }
-  .speaker-placeholder-grid { margin-top: 40px; }
+  .speaker-grid { margin-top: 40px; }
   .speaker-details { padding: 18px 14px; }
-  .speaker-placeholder-grid h3 { font-size: 1rem; line-height: 1.35; }
+  .speaker-grid h3 { font-size: 1rem; line-height: 1.35; }
   .form-row { grid-template-columns: 1fr; }
   .registration-copy h2 { font-size: 2.85rem; }
   .footer-bottom { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 360px) {
-  .speaker-placeholder-grid { grid-template-columns: 1fr; }
+  .speaker-grid { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {

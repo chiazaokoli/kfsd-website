@@ -66,11 +66,11 @@ const learningSteps = [
 ];
 
 const speakers = [
-  { name: "David Dokun", topic: "Communication" },
-  { name: "Mrs. Mfon Ekpo", topic: "Leadership" },
-  { name: "Engr. Kehinde Ayobade", topic: "Critical thinking" },
-  { name: "Dr. Funmi Adeniyi", topic: "Resilience" },
-  { name: "Soji Apampa", topic: "Integrity" },
+  { name: "David Dokun", topic: "Communication", image: "/images/speakers/david-dokun.jpg" },
+  { name: "Mrs. Mfon Ekpo", topic: "Leadership", image: "/images/speakers/mfon-ekpo.jpg" },
+  { name: "Engr. Kehinde Ayobade", topic: "Critical thinking", image: "/images/speakers/kehinde-ayobade.jpg" },
+  { name: "Dr. Funmi Adeniyi", topic: "Resilience", image: "/images/speakers/funmi-adeniyi.jpg" },
+  { name: "Soji Apampa", topic: "Integrity", image: "/images/speakers/soji-apampa.jpg" },
 ];
 
 const faqs = [
@@ -540,7 +540,7 @@ export default function Home() {
 
         <section className="proof-section">
           <div className="proof-header chapter-reveal"><p className="section-kicker">The speakers</p><h2>Five voices. Five skills. A fresh perspective.</h2><p>Meet the faces behind each topic, each led by someone who has lived it</p></div>
-          <div className="speaker-placeholder-grid">{speakers.map(({ name, topic }, index) => <article key={topic}><div className="speaker-portrait" aria-hidden="true" style={{ backgroundImage: `url(${assetPrefix}/images/speaker-placeholders.webp)`, backgroundPosition: `${index * 25}% top` }} /><div className="speaker-details"><h3>{name}</h3><p>{topic}</p></div></article>)}</div>
+          <div className="speaker-grid">{speakers.map(({ name, topic, image }) => <article key={topic}><div className="speaker-portrait"><Image src={`${assetPrefix}${image}`} alt={name} fill unoptimized sizes="(max-width: 360px) 100vw, (max-width: 800px) 50vw, 33vw" /></div><div className="speaker-details"><h3>{name}</h3><p>{topic}</p></div></article>)}</div>
         </section>
 
         <section className="organiser-section" id="organiser">

@@ -15,7 +15,7 @@ const targets = [
   ".day-tabs",
   ".day-tabs-highlight",
   ".day-tabs button",
-  ".speaker-placeholder-grid article",
+  ".speaker-grid article",
   ".registration-form",
   ".registration-form button[type='submit']",
 ].join(", ");
