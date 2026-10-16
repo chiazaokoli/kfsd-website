@@ -10,6 +10,8 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-16
 
+- `2d9bbde` — Substantially darkened the hero overlay for stronger headline
+  and CTA contrast. File: `app/globals.css`.
 - `260b433` — Slightly darkened the hero image overlay to improve contrast
   for the text, badge, and CTA. File: `app/globals.css`.
 - `9dd6942` — Made the hero badge icon white, sent mobile hero and navbar
