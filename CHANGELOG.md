@@ -10,6 +10,10 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-16
 
+- `b60b2c5` — Removed green from the loading text shimmer and blurred the
+  curtain and underlay as they swipe up. Extended the curtain beyond the
+  viewport so the blur stays on the moving edge. Files:
+  `app/components/SplashScreen.tsx`, `app/globals.css`.
 - `5291754` — Started the hero entrance when the loading curtain begins to
   swipe up, so the two animations overlap instead of leaving a pause. Kept
   the reduced-motion path immediate. Files: `app/components/SplashScreen.tsx`,
