@@ -7,9 +7,6 @@ import gsap from "gsap";
 import {
   Brain,
   ChatCircleDots,
-  Ear,
-  HandHeart,
-  Megaphone,
   UsersThree,
   type Icon,
 } from "@phosphor-icons/react";
@@ -18,10 +15,7 @@ gsap.registerPlugin(useGSAP);
 
 const moments: Array<{ verb: string; icon: Icon }> = [
   { verb: "Thinking", icon: Brain },
-  { verb: "Listening", icon: Ear },
-  { verb: "Speaking", icon: Megaphone },
   { verb: "Communicating", icon: ChatCircleDots },
-  { verb: "Empathizing", icon: HandHeart },
   { verb: "Collaborating", icon: UsersThree },
 ];
 const assetPrefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -60,23 +54,23 @@ export default function SplashScreen({ onRevealStart }: { onRevealStart: () => v
 
       timeline
         .fromTo(".splash-brand", { opacity: 0, y: -8 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" }, 0)
-        .fromTo(".splash-progress-fill", { scaleX: 0 }, { scaleX: 1, duration: 4.9, ease: "power1.inOut" }, 0.05);
+        .fromTo(".splash-progress-fill", { scaleX: 0 }, { scaleX: 1, duration: 2.25, ease: "power1.inOut" }, 0.05);
 
       items.forEach((item, index) => {
-        const start = 0.15 + index * 0.76;
+        const start = 0.1 + index * 0.64;
         const icon = item.querySelector(".splash-icon");
 
         timeline
           .call(() => item.classList.add("is-active"), [], start)
-          .to(item, { autoAlpha: 1, y: 0, duration: 0.38, ease: "power2.out" }, start)
-          .fromTo(icon, { scale: 0.98 }, { scale: 1.03, duration: 0.38, repeat: 1, yoyo: true, ease: "sine.inOut" }, start)
-          .to(item, { autoAlpha: 0, y: -8, duration: 0.38, ease: "power2.inOut" }, start + 0.58);
+          .to(item, { autoAlpha: 1, y: 0, duration: 0.32, ease: "power2.out" }, start)
+          .fromTo(icon, { scale: 0.98 }, { scale: 1.03, duration: 0.32, repeat: 1, yoyo: true, ease: "sine.inOut" }, start)
+          .to(item, { autoAlpha: 0, y: -8, duration: 0.32, ease: "power2.inOut" }, start + 0.5);
       });
 
       timeline
-        .to(".splash-brand, .splash-footer", { opacity: 0, y: -10, duration: 0.3, ease: "power2.in" }, 4.95)
-        .to(".splash-curtain", { yPercent: -100, borderBottomLeftRadius: "46vw", borderBottomRightRadius: "46vw", filter: "blur(18px)", duration: 0.82, ease: "power4.inOut", onStart: onRevealStart }, 5.12)
-        .to(".splash-underlay", { yPercent: -100, filter: "blur(12px)", duration: 0.72, ease: "power4.inOut" }, 5.2);
+        .to(".splash-brand, .splash-footer", { opacity: 0, y: -10, duration: 0.25, ease: "power2.in" }, 2.15)
+        .to(".splash-curtain", { yPercent: -100, borderBottomLeftRadius: "46vw", borderBottomRightRadius: "46vw", filter: "blur(18px)", duration: 0.68, ease: "power4.inOut", onStart: onRevealStart }, 2.3)
+        .to(".splash-underlay", { yPercent: -100, filter: "blur(12px)", duration: 0.58, ease: "power4.inOut" }, 2.4);
 
       return () => {
         timeline.kill();
