@@ -10,6 +10,9 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-16
 
+- `afe0008` — Gave the hero image a cinematic color grade with deeper
+  shadows, teal and warm light, and softly blurred edges while preserving
+  the mobile speaker crop and text contrast. File: `app/globals.css`.
 - `9927a03` — Shortened the loading screen to about three seconds with three
   key messages, moved the KFSD heading lower, and kept the hero entrance
   synchronized with the curtain swipe. Files: `app/components/SplashScreen.tsx`,
