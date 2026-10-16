@@ -75,8 +75,8 @@ export default function SplashScreen({ onRevealStart }: { onRevealStart: () => v
 
       timeline
         .to(".splash-brand, .splash-footer", { opacity: 0, y: -10, duration: 0.3, ease: "power2.in" }, 4.95)
-        .to(".splash-curtain", { yPercent: -100, borderBottomLeftRadius: "46vw", borderBottomRightRadius: "46vw", duration: 0.82, ease: "power4.inOut", onStart: onRevealStart }, 5.12)
-        .to(".splash-underlay", { yPercent: -100, duration: 0.72, ease: "power4.inOut" }, 5.2);
+        .to(".splash-curtain", { yPercent: -100, borderBottomLeftRadius: "46vw", borderBottomRightRadius: "46vw", filter: "blur(18px)", duration: 0.82, ease: "power4.inOut", onStart: onRevealStart }, 5.12)
+        .to(".splash-underlay", { yPercent: -100, filter: "blur(12px)", duration: 0.72, ease: "power4.inOut" }, 5.2);
 
       return () => {
         timeline.kill();
