@@ -57,27 +57,27 @@ export default function SplashScreen({ onComplete }: { onComplete: () => void })
       const items = gsap.utils.toArray<HTMLElement>(".splash-moment");
       const timeline = gsap.timeline({ onComplete: finish });
 
-      gsap.set(items, { autoAlpha: 0, y: 22 });
+      gsap.set(items, { autoAlpha: 0, y: 12 });
 
       timeline
         .fromTo(".splash-brand", { opacity: 0, y: -8 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" }, 0)
-        .fromTo(".splash-progress-fill", { scaleX: 0 }, { scaleX: 1, duration: 3.75, ease: "power1.inOut" }, 0.05);
+        .fromTo(".splash-progress-fill", { scaleX: 0 }, { scaleX: 1, duration: 4.9, ease: "power1.inOut" }, 0.05);
 
       items.forEach((item, index) => {
-        const start = 0.12 + index * 0.58;
+        const start = 0.15 + index * 0.76;
         const icon = item.querySelector(".splash-icon");
 
         timeline
           .call(() => item.classList.add("is-active"), [], start)
-          .to(item, { autoAlpha: 1, y: 0, duration: 0.2, ease: "power3.out" }, start)
-          .fromTo(icon, { scale: 0.96 }, { scale: 1.06, duration: 0.28, repeat: 1, yoyo: true, ease: "sine.inOut" }, start)
-          .to(item, { autoAlpha: 0, y: -14, duration: 0.18, ease: "power2.in" }, start + 0.48);
+          .to(item, { autoAlpha: 1, y: 0, duration: 0.38, ease: "power2.out" }, start)
+          .fromTo(icon, { scale: 0.98 }, { scale: 1.03, duration: 0.38, repeat: 1, yoyo: true, ease: "sine.inOut" }, start)
+          .to(item, { autoAlpha: 0, y: -8, duration: 0.38, ease: "power2.inOut" }, start + 0.58);
       });
 
       timeline
-        .to(".splash-brand, .splash-footer", { opacity: 0, y: -10, duration: 0.25, ease: "power2.in" }, 3.68)
-        .to(".splash-curtain", { yPercent: -100, borderBottomLeftRadius: "46vw", borderBottomRightRadius: "46vw", duration: 0.82, ease: "power4.inOut" }, 3.82)
-        .to(".splash-underlay", { yPercent: -100, duration: 0.72, ease: "power4.inOut" }, 3.9);
+        .to(".splash-brand, .splash-footer", { opacity: 0, y: -10, duration: 0.3, ease: "power2.in" }, 4.95)
+        .to(".splash-curtain", { yPercent: -100, borderBottomLeftRadius: "46vw", borderBottomRightRadius: "46vw", duration: 0.82, ease: "power4.inOut" }, 5.12)
+        .to(".splash-underlay", { yPercent: -100, duration: 0.72, ease: "power4.inOut" }, 5.2);
 
       return () => {
         timeline.kill();
