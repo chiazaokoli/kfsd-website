@@ -4,20 +4,15 @@ import { useLayoutEffect } from "react";
 
 const targets = [
   ".brand-mark",
-  ".topbar-cta",
-  ".primary-cta",
   ".event-dock",
-  ".event-dock > a",
   ".skill-card",
   ".learning-step",
   ".local-time-card",
   ".schedule-panel",
   ".day-tabs",
   ".day-tabs-highlight",
-  ".day-tabs button",
   ".speaker-grid article",
   ".registration-form",
-  ".registration-form button[type='submit']",
 ].join(", ");
 
 const svgNamespace = "http://www.w3.org/2000/svg";

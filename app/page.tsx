@@ -1,6 +1,6 @@
 "use client";
 
-import { type CSSProperties, FormEvent, Fragment, type KeyboardEvent, useEffect, useRef, useState } from "react";
+import { type CSSProperties, FormEvent, Fragment, type KeyboardEvent, type MouseEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -186,6 +186,16 @@ export default function Home() {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [formSelections, setFormSelections] = useState({ company: "", attended: "", referral: "" });
   const [heroRevealStarted, setHeroRevealStarted] = useState(!showSplashScreen);
+
+  function handleRegistrationCtaClick(event: MouseEvent<HTMLAnchorElement>) {
+    if (!window.matchMedia("(max-width: 800px)").matches) return;
+    const form = document.getElementById("registration-form");
+    if (!form) return;
+    event.preventDefault();
+    window.history.replaceState(null, "", "#registration-form");
+    form.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+  }
+
   useEffect(() => {
     const closeAfterFullscreen = () => {
       if (!document.fullscreenElement && videoDialogRef.current?.open) videoDialogRef.current.close();
@@ -482,7 +492,7 @@ export default function Home() {
         <header ref={topbarRef} className={`topbar${showNavCta ? " has-cta" : ""}`}>
           <a className="brand" href="#top" aria-label="KFSD Soft Skills Training home"><span className="brand-mark" aria-hidden="true"><Image src={`${assetPrefix}/images/kfsd-logo-mark.webp`} alt="" width={30} height={30} unoptimized /></span><span>KFSD <b>Soft Skills Training</b></span></a>
           <nav aria-label="Main navigation"><a href="#skills">Skills</a><a href="#schedule">Schedule</a><a href="#organiser">About KFSD</a></nav>
-          <a className="topbar-cta" href="#register" aria-hidden={!showNavCta} tabIndex={showNavCta ? 0 : -1}><span className="cta-copy">Reserve my spot</span><ArrowRight size={17} weight="bold" /></a>
+          <a className="topbar-cta" href="#register" onClick={handleRegistrationCtaClick} aria-hidden={!showNavCta} tabIndex={showNavCta ? 0 : -1}><span className="cta-copy">Reserve my spot</span><ArrowRight size={17} weight="bold" /></a>
         </header>
 
         <section className="new-hero" aria-labelledby="hero-title">
@@ -492,7 +502,7 @@ export default function Home() {
             <p className="edition-badge hero-enter"><span className="edition-badge-icon"><Medal size={15} weight="duotone" aria-hidden="true" /></span><span>{siteConfig.edition}</span></p>
             <h1 id="hero-title" aria-label="Learn the soft skills that set you apart in 2 days."><span aria-hidden="true">{heroLeadWords.map((word, index) => <Fragment key={word}>{index > 0 && " "}<span className="hero-word">{heroLetters(word, heroLeadWords.slice(0, index).join("").length)}</span></Fragment>)}{" "}<span className="hero-ending">{heroLetters(heroEnding, heroEndingStart)}</span></span></h1>
             <p className="hero-subhead hero-enter">Learn from experienced professionals and become more career-ready.</p>
-            <a ref={heroCtaRef} className="primary-cta hero-enter" href="#register"><span className="cta-copy">Reserve my spot</span><ArrowRight size={20} weight="bold" /></a>
+            <a ref={heroCtaRef} className="primary-cta hero-enter" href="#register" onClick={handleRegistrationCtaClick}><span className="cta-copy">Reserve my spot</span><ArrowRight size={20} weight="bold" /></a>
           </div>
           <div className="event-dock hero-enter">
             <div><CalendarBlank size={22} weight="duotone" /><span>{siteConfig.event.dateLabel}</span></div>
@@ -593,7 +603,7 @@ export default function Home() {
               </strong>
             </div>
           </div>
-          <form className="registration-form" onSubmit={handleRegistration} onInput={(event) => { const name = (event.target as HTMLInputElement).name; if (name && formErrors[name]) setFormErrors((current) => ({ ...current, [name]: "" })); }} noValidate>
+          <form id="registration-form" className="registration-form" onSubmit={handleRegistration} onInput={(event) => { const name = (event.target as HTMLInputElement).name; if (name && formErrors[name]) setFormErrors((current) => ({ ...current, [name]: "" })); }} noValidate>
             <label>Email<input name="email" type="email" autoComplete="email" placeholder="you@example.com" aria-invalid={Boolean(formErrors.email)} aria-describedby={formErrors.email ? "email-error" : undefined} />{formErrors.email && <small id="email-error">{formErrors.email}</small>}</label>
             <div className="form-row">
               <label>First name<input name="firstName" type="text" autoComplete="given-name" placeholder="Your first name" aria-invalid={Boolean(formErrors.firstName)} aria-describedby={formErrors.firstName ? "firstName-error" : undefined} />{formErrors.firstName && <small id="firstName-error">{formErrors.firstName}</small>}</label>
