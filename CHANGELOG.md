@@ -10,6 +10,10 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-16
 
+- `9243af6` — Added room below the loading-screen words so descenders such as
+  the “g” are not clipped, then temporarily disabled the loading screen with
+  a single switch for hero-artifact testing. Files: `app/page.tsx`,
+  `app/globals.css`.
 - `fae670e` — Slowed and softened the loading-screen word fades with a brief
   crossfade, reduced their movement, and made the text and icons much smaller.
   Extended the shimmer and progress bar to match the new pacing.
