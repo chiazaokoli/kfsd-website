@@ -10,6 +10,10 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-16
 
+- `37b95e6` — Anchored the hero CTA's animated pseudo-elements to the button
+  so their gradients cannot flash across the hero on the first paint. Restored
+  the loading screen after isolating the artifact. Files: `app/globals.css`,
+  `app/page.tsx`.
 - `9243af6` — Added room below the loading-screen words so descenders such as
   the “g” are not clipped, then temporarily disabled the loading screen with
   a single switch for hero-artifact testing. Files: `app/page.tsx`,
