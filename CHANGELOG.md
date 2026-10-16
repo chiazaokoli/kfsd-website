@@ -8,6 +8,13 @@ To undo a complete change, use `git revert <commit>` and verify the result befor
 deploying. To restore only part of a design, inspect `git show <commit>` and apply
 the relevant pieces to the current code so later changes are preserved.
 
+## 2026-10-16
+
+- `519f983`, `02247a6` — Replaced the speaker placeholders with the supplied
+  names, topics, and five portraits, preserving the edge-to-edge grid. Files:
+  `app/page.tsx`, `app/globals.css`, `src/components/SmoothCorners.tsx`,
+  `public/images/speakers/`.
+
 ## 2026-10-15
 
 - `96672ed` — Replaced Company with the provided organisation dropdown,
