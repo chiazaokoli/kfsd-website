@@ -10,6 +10,8 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-16
 
+- `260b433` — Slightly darkened the hero image overlay to improve contrast
+  for the text, badge, and CTA. File: `app/globals.css`.
 - `9dd6942` — Made the hero badge icon white, sent mobile hero and navbar
   CTAs directly to the form, and removed the SVG corner fallback from
   interactive buttons and links to prevent Firefox sizing errors. Files:
