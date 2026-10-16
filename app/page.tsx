@@ -19,6 +19,7 @@ import SplashScreen from "./components/SplashScreen";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 const assetPrefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+const showSplashScreen = false;
 const heroLeadWords = ["Learn", "the", "soft", "skills", "that", "set", "you", "apart", "in"];
 const heroEnding = "2 days.";
 const heroEndingStart = heroLeadWords.join("").length;
@@ -184,7 +185,7 @@ export default function Home() {
   const [formStatus, setFormStatus] = useState("");
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [formSelections, setFormSelections] = useState({ company: "", attended: "", referral: "" });
-  const [splashComplete, setSplashComplete] = useState(false);
+  const [splashComplete, setSplashComplete] = useState(!showSplashScreen);
   useEffect(() => {
     const closeAfterFullscreen = () => {
       if (!document.fullscreenElement && videoDialogRef.current?.open) videoDialogRef.current.close();
@@ -475,7 +476,7 @@ export default function Home() {
 
   return (
     <>
-      <SplashScreen onComplete={() => setSplashComplete(true)} />
+      {showSplashScreen && <SplashScreen onComplete={() => setSplashComplete(true)} />}
       <main ref={pageRef} className="site-shell" id="top">
         <SmoothCorners />
         <header ref={topbarRef} className={`topbar${showNavCta ? " has-cta" : ""}`}>
