@@ -66,11 +66,11 @@ const learningSteps = [
 ];
 
 const speakers = [
-  { name: "David Dokun", topic: "Communication", image: "/images/speakers/david-dokun.jpg" },
-  { name: "Mrs. Mfon Ekpo", topic: "Leadership", image: "/images/speakers/mfon-ekpo.jpg" },
-  { name: "Engr. Kehinde Ayobade", topic: "Critical thinking", image: "/images/speakers/kehinde-ayobade.jpg" },
-  { name: "Dr. Funmi Adeniyi", topic: "Resilience", image: "/images/speakers/funmi-adeniyi.jpg" },
-  { name: "Soji Apampa", topic: "Integrity", image: "/images/speakers/soji-apampa.jpg" },
+  { name: "David Dokun", topic: "Communication", image: "/images/speakers/david-dokun-3x.jpg" },
+  { name: "Mrs. Mfon Ekpo", topic: "Leadership", image: "/images/speakers/mfon-ekpo-3x.jpg" },
+  { name: "Engr. Kehinde Ayobade", topic: "Critical thinking", image: "/images/speakers/kehinde-ayobade-3x.jpg" },
+  { name: "Dr. Funmi Adeniyi", topic: "Resilience", image: "/images/speakers/funmi-adeniyi-3x.jpg" },
+  { name: "Soji Apampa", topic: "Integrity", image: "/images/speakers/soji-apampa-3x.jpg" },
 ];
 
 const faqs = [
