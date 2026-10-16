@@ -348,12 +348,16 @@ export default function Home() {
 
     const heroMotion = gsap.matchMedia();
     heroMotion.add("(max-width: 800px)", () => {
+      const title = document.querySelector<HTMLElement>("#hero-title");
       gsap.timeline({ defaults: { ease: "power3.out" } })
-        .from(".edition-badge", { opacity: 0, y: 12, duration: 0.45 }, 0)
-        .from("#hero-title", { opacity: 0, y: 12, duration: 0.55 }, 0.09)
-        .from(".hero-subhead", { opacity: 0, y: 12, duration: 0.48 }, 0.25)
-        .from(".primary-cta", { opacity: 0, y: 12, duration: 0.48 }, 0.4)
-        .from(".event-dock", { opacity: 0, y: 12, duration: 0.48 }, 0.55);
+        .from(".hero-photo", { scale: 1.045, duration: 1.4 }, 0)
+        .from(".edition-badge", { opacity: 0, y: 16, scale: 0.88, duration: 0.5 }, 0)
+        .from("#hero-title", { opacity: 0, y: 26, scale: 0.975, duration: 0.65 }, 0.12)
+        .call(() => title?.classList.add("hero-letters-ready"), [], 0.5)
+        .from(".hero-subhead", { opacity: 0, y: 18, duration: 0.5 }, 0.45)
+        .from(".primary-cta", { opacity: 0, y: 20, scale: 0.94, duration: 0.55 }, 0.6)
+        .from(".event-dock", { opacity: 0, y: 22, duration: 0.55 }, 0.75);
+      return () => title?.classList.remove("hero-letters-ready");
     });
     heroMotion.add("(min-width: 801px)", () => {
       gsap.from(".hero-enter", { opacity: 0, y: 34, duration: 1, stagger: 0.1, ease: "power3.out" });
