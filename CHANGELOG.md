@@ -10,6 +10,10 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-16
 
+- `7744fac` — Centered the loading-screen KFSD header, removed step numbers
+  and the blue background glow, reduced the icons and words, and added a brief
+  shimmer to each word. Kept icon and text paired closely on mobile.
+  Files: `app/components/SplashScreen.tsx`, `app/globals.css`.
 - `8cf5a4d` — Restored the animated loading screen and started the hero
   entrance only after it clears. Delayed the headline's letter sweep so its
   first letters animate as the subtext appears on mobile and desktop.
