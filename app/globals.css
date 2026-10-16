@@ -359,6 +359,7 @@ img { display: block; }
   .new-hero { --hero-lift: clamp(35px, calc(68px - 4.3vw), 55px); min-height: 820px; padding: 130px 22px 230px; }
   .hero-content { transform: translateY(calc(-1 * var(--hero-lift))); }
   .new-hero h1 { font-size: clamp(3.15rem, 12.4vw, 5rem); }
+  .hero-letter { animation: none; -webkit-text-fill-color: var(--white); }
   .hero-photo { object-position: 84% center; }
   .event-dock { right: 18px; bottom: calc(18px + var(--hero-lift)); left: 18px; grid-template-columns: 1fr; padding: 10px 13px; }
   .event-dock > div { min-height: 38px; padding: 0; border-right: 0; border-bottom: 1px solid rgba(255,255,255,.12); }

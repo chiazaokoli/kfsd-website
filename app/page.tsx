@@ -346,7 +346,18 @@ export default function Home() {
       return;
     }
 
-    gsap.from(".hero-enter", { opacity: 0, y: 34, duration: 1, stagger: 0.1, ease: "power3.out" });
+    const heroMotion = gsap.matchMedia();
+    heroMotion.add("(max-width: 800px)", () => {
+      gsap.timeline({ defaults: { ease: "power3.out" } })
+        .from(".edition-badge", { opacity: 0, y: 12, duration: 0.45 }, 0)
+        .from("#hero-title", { opacity: 0, y: 12, duration: 0.55 }, 0.09)
+        .from(".hero-subhead", { opacity: 0, y: 12, duration: 0.48 }, 0.25)
+        .from(".primary-cta", { opacity: 0, y: 12, duration: 0.48 }, 0.4)
+        .from(".event-dock", { opacity: 0, y: 12, duration: 0.48 }, 0.55);
+    });
+    heroMotion.add("(min-width: 801px)", () => {
+      gsap.from(".hero-enter", { opacity: 0, y: 34, duration: 1, stagger: 0.1, ease: "power3.out" });
+    });
     gsap.fromTo(revealWords, { opacity: 0.12 }, {
       opacity: 1, stagger: 0.045, ease: "none",
       scrollTrigger: { trigger: ".reveal-statement", start: "top 78%", end: "bottom 40%", scrub: 0.55 },
@@ -417,7 +428,7 @@ export default function Home() {
     matchMedia.add("(min-width: 901px)", () => {
       ScrollTrigger.create({ trigger: ".schedule-layout", start: "top 110px", end: "bottom bottom-=80", pin: ".schedule-intro", pinSpacing: false });
     });
-    return () => matchMedia.revert();
+    return () => { matchMedia.revert(); heroMotion.revert(); };
   }, { scope: pageRef });
 
   function handleRegistration(event: FormEvent<HTMLFormElement>) {
