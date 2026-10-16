@@ -10,6 +10,10 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-16
 
+- `8cf5a4d` — Restored the animated loading screen and started the hero
+  entrance only after it clears. Delayed the headline's letter sweep so its
+  first letters animate as the subtext appears on mobile and desktop.
+  Files: `app/page.tsx`, `app/globals.css`.
 - `7d9e1a9` — Restored the hero headline's per-letter colour sweep on mobile,
   timed it after the headline starts appearing, and strengthened the mobile
   entrance with a gentle photo zoom and more expressive badge and CTA motion.
