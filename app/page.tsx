@@ -15,6 +15,7 @@ import { siteConfig } from "../src/config/site";
 import GradeSketch, { paintRuns, paintRunPath } from "../src/components/GradeSketch";
 import SmoothCorners from "../src/components/SmoothCorners";
 import LearningFlow from "../src/components/LearningFlow";
+import SplashScreen from "./components/SplashScreen";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 const assetPrefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -183,6 +184,7 @@ export default function Home() {
   const [formStatus, setFormStatus] = useState("");
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [formSelections, setFormSelections] = useState({ company: "", attended: "", referral: "" });
+  const [splashComplete, setSplashComplete] = useState(false);
   useEffect(() => {
     const closeAfterFullscreen = () => {
       if (!document.fullscreenElement && videoDialogRef.current?.open) videoDialogRef.current.close();
@@ -330,6 +332,33 @@ export default function Home() {
   }, []);
 
   useGSAP(() => {
+    if (!splashComplete || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const heroMotion = gsap.matchMedia();
+    const title = pageRef.current?.querySelector<HTMLElement>("#hero-title");
+    heroMotion.add("(max-width: 800px)", () => {
+      gsap.timeline({ defaults: { ease: "power3.out" } })
+        .from(".hero-photo", { scale: 1.045, duration: 1.4 }, 0)
+        .from(".edition-badge", { opacity: 0, y: 16, scale: 0.88, duration: 0.5 }, 0)
+        .from("#hero-title", { opacity: 0, y: 26, scale: 0.975, duration: 0.65 }, 0.12)
+        .call(() => title?.classList.add("hero-letters-ready"), [], 0.27)
+        .from(".hero-subhead", { opacity: 0, y: 18, duration: 0.5 }, 0.45)
+        .from(".primary-cta", { opacity: 0, y: 20, scale: 0.94, duration: 0.55 }, 0.6)
+        .from(".event-dock", { opacity: 0, y: 22, duration: 0.55 }, 0.75);
+    });
+    heroMotion.add("(min-width: 801px)", () => {
+      gsap.timeline({ defaults: { ease: "power3.out" } })
+        .from(".edition-badge", { opacity: 0, y: 24, duration: 0.7 }, 0)
+        .from("#hero-title", { opacity: 0, y: 24, duration: 0.7 }, 0.08)
+        .call(() => title?.classList.add("hero-letters-ready"), [], 0.25)
+        .from(".hero-subhead", { opacity: 0, y: 24, duration: 0.7 }, 0.43)
+        .from(".primary-cta", { opacity: 0, y: 24, duration: 0.7 }, 0.58)
+        .from(".event-dock", { opacity: 0, y: 24, duration: 0.7 }, 0.73);
+    });
+    return () => { heroMotion.revert(); title?.classList.remove("hero-letters-ready"); };
+  }, { scope: pageRef, dependencies: [splashComplete] });
+
+  useGSAP(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const revealWords = gsap.utils.toArray<HTMLElement>(".reveal-word");
     const revealItems = gsap.utils.toArray<HTMLElement>(".chapter-reveal").filter((item) =>
@@ -346,22 +375,6 @@ export default function Home() {
       return;
     }
 
-    const heroMotion = gsap.matchMedia();
-    heroMotion.add("(max-width: 800px)", () => {
-      const title = document.querySelector<HTMLElement>("#hero-title");
-      gsap.timeline({ defaults: { ease: "power3.out" } })
-        .from(".hero-photo", { scale: 1.045, duration: 1.4 }, 0)
-        .from(".edition-badge", { opacity: 0, y: 16, scale: 0.88, duration: 0.5 }, 0)
-        .from("#hero-title", { opacity: 0, y: 26, scale: 0.975, duration: 0.65 }, 0.12)
-        .call(() => title?.classList.add("hero-letters-ready"), [], 0.5)
-        .from(".hero-subhead", { opacity: 0, y: 18, duration: 0.5 }, 0.45)
-        .from(".primary-cta", { opacity: 0, y: 20, scale: 0.94, duration: 0.55 }, 0.6)
-        .from(".event-dock", { opacity: 0, y: 22, duration: 0.55 }, 0.75);
-      return () => title?.classList.remove("hero-letters-ready");
-    });
-    heroMotion.add("(min-width: 801px)", () => {
-      gsap.from(".hero-enter", { opacity: 0, y: 34, duration: 1, stagger: 0.1, ease: "power3.out" });
-    });
     gsap.fromTo(revealWords, { opacity: 0.12 }, {
       opacity: 1, stagger: 0.045, ease: "none",
       scrollTrigger: { trigger: ".reveal-statement", start: "top 78%", end: "bottom 40%", scrub: 0.55 },
@@ -432,7 +445,7 @@ export default function Home() {
     matchMedia.add("(min-width: 901px)", () => {
       ScrollTrigger.create({ trigger: ".schedule-layout", start: "top 110px", end: "bottom bottom-=80", pin: ".schedule-intro", pinSpacing: false });
     });
-    return () => { matchMedia.revert(); heroMotion.revert(); };
+    return () => matchMedia.revert();
   }, { scope: pageRef });
 
   function handleRegistration(event: FormEvent<HTMLFormElement>) {
@@ -462,6 +475,7 @@ export default function Home() {
 
   return (
     <>
+      <SplashScreen onComplete={() => setSplashComplete(true)} />
       <main ref={pageRef} className="site-shell" id="top">
         <SmoothCorners />
         <header ref={topbarRef} className={`topbar${showNavCta ? " has-cta" : ""}`}>
