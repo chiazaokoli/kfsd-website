@@ -10,6 +10,10 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-16
 
+- `fae670e` — Slowed and softened the loading-screen word fades with a brief
+  crossfade, reduced their movement, and made the text and icons much smaller.
+  Extended the shimmer and progress bar to match the new pacing.
+  Files: `app/components/SplashScreen.tsx`, `app/globals.css`.
 - `7744fac` — Centered the loading-screen KFSD header, removed step numbers
   and the blue background glow, reduced the icons and words, and added a brief
   shimmer to each word. Kept icon and text paired closely on mobile.
