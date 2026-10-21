@@ -67,20 +67,22 @@ export default function LearningFlow({ activeStep }: { activeStep: number }) {
       track.setAttribute("d", route);
     };
 
-    const observer = new ResizeObserver(draw);
+    const scheduleDraw = () => {
+      if (geometryFrame) return;
+      geometryFrame = requestAnimationFrame(() => {
+        geometryFrame = 0;
+        draw();
+      });
+    };
+    const observer = new ResizeObserver(scheduleDraw);
     observer.observe(list);
     list.querySelectorAll<HTMLElement>(".learning-step").forEach((step) => observer.observe(step));
-    const started = performance.now();
-    const followScale = (now: number) => {
-      draw();
-      if (now - started < 480) geometryFrame = requestAnimationFrame(followScale);
-    };
-    geometryFrame = requestAnimationFrame(followScale);
-    window.addEventListener("resize", draw);
+    draw();
+    window.addEventListener("resize", scheduleDraw);
     return () => {
       cancelAnimationFrame(geometryFrame);
       observer.disconnect();
-      window.removeEventListener("resize", draw);
+      window.removeEventListener("resize", scheduleDraw);
     };
   }, [activeStep]);
 

@@ -243,7 +243,14 @@ export default function SmoothCorners() {
       document.querySelectorAll<HTMLElement>(targets).forEach(register);
     };
     scan();
-    const mutations = new MutationObserver(scan);
+    const mutations = new MutationObserver((records) => {
+      const learningStepOnly = records.length > 0 && records.every(({ type, target }) => type === "attributes" && target instanceof HTMLElement && target.matches(".learning-step"));
+      if (learningStepOnly) {
+        records.forEach(({ target }) => register(target as HTMLElement));
+        return;
+      }
+      scan();
+    });
     document.addEventListener("focusin", followShadow);
     document.addEventListener("focusout", followShadow);
     document.addEventListener("transitionrun", followShadow);
