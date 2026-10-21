@@ -10,6 +10,15 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-21
 
+- `0deb2ee` — Added international phone validation and a switchable calling-code
+  selector, editable IP-based country/region defaults, searchable country/state
+  and profession dropdowns, and a success toast with reduced-motion-aware
+  confetti. Country changes clear the state, and missing data allows manual
+  entry. Shared phone validation is bundled into the Cloudflare Worker; deploy
+  the generated Worker to enable its new location endpoint and server rules.
+  Files: `src/components/RegistrationForm.tsx`, `RegistrationSelect.tsx`,
+  `RegistrationSuccess.tsx`, `src/lib/registration-phone.ts`, `app/globals.css`,
+  `cloudflare/src/registration-worker.mjs`, and generated registration data.
 - `d49eadb` — Aligned the desktop speaker image grid with both sides of its
   heading content, while capping portrait height to keep the cards balanced.
   Mobile remains unchanged. File: `app/globals.css`.
