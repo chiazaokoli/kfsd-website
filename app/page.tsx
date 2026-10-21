@@ -123,6 +123,41 @@ export default function Home() {
   }
 
   useEffect(() => {
+    if (!window.matchMedia("(pointer: coarse)").matches) return;
+    let paused = false;
+    let timer: ReturnType<typeof setTimeout>;
+    const editing = () => document.activeElement instanceof HTMLInputElement && Boolean(document.activeElement.closest("#registration-form, .form-select-search"));
+    const restore = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        if (!paused || editing()) return;
+        ScrollTrigger.config({ autoRefreshEvents: "visibilitychange,DOMContentLoaded,load,resize" });
+        paused = false;
+        ScrollTrigger.refresh();
+      }, 300);
+    };
+    const focus = () => {
+      if (!editing()) return;
+      clearTimeout(timer);
+      if (!paused) ScrollTrigger.config({ autoRefreshEvents: "visibilitychange,DOMContentLoaded,load" });
+      paused = true;
+    };
+    const resize = () => { if (paused && !editing()) restore(); };
+    document.addEventListener("focusin", focus);
+    document.addEventListener("focusout", restore);
+    window.visualViewport?.addEventListener("resize", resize);
+    window.addEventListener("resize", resize);
+    return () => {
+      clearTimeout(timer);
+      document.removeEventListener("focusin", focus);
+      document.removeEventListener("focusout", restore);
+      window.visualViewport?.removeEventListener("resize", resize);
+      window.removeEventListener("resize", resize);
+      if (paused) ScrollTrigger.config({ autoRefreshEvents: "visibilitychange,DOMContentLoaded,load,resize" });
+    };
+  }, []);
+
+  useEffect(() => {
     const closeAfterFullscreen = () => {
       if (!document.fullscreenElement && videoDialogRef.current?.open) videoDialogRef.current.close();
     };

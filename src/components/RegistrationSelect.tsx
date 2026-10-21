@@ -30,6 +30,11 @@ export default function RegistrationSelect({ label, name, options, placeholder, 
   useLayoutEffect(() => {
     if (!open) return;
     let frame = 0;
+    let settleTimer: ReturnType<typeof setTimeout>;
+    const stabilizeKeyboard = inlineSearch && window.matchMedia("(pointer: coarse)").matches;
+    let settling = stabilizeKeyboard;
+    let lockedAbove: boolean | undefined;
+    let lastWidth = window.visualViewport?.width || window.innerWidth;
     const update = () => {
       const trigger = inlineSearch ? inputRef.current : triggerRef.current;
       if (!trigger) return;
@@ -40,9 +45,12 @@ export default function RegistrationSelect({ label, name, options, placeholder, 
       const viewportLeft = viewport?.offsetLeft || 0;
       const viewportWidth = viewport?.width || window.innerWidth;
       const viewportHeight = viewport?.height || window.innerHeight;
+      if (Math.abs(viewportWidth - lastWidth) > 2) lockedAbove = undefined;
+      lastWidth = viewportWidth;
       const below = viewportTop + viewportHeight - rect.bottom - 16;
       const aboveSpace = rect.top - viewportTop - 16;
-      const above = below < 160 && aboveSpace > below;
+      const above = stabilizeKeyboard && lockedAbove !== undefined ? lockedAbove : below < 160 && aboveSpace > below;
+      if (stabilizeKeyboard) lockedAbove = above;
       const width = Math.min(rect.width, viewportWidth - 24);
       const maxHeight = Math.max(64, Math.min(310, viewportHeight - 24, above ? aboveSpace : below));
       const top = above
@@ -51,17 +59,25 @@ export default function RegistrationSelect({ label, name, options, placeholder, 
       const next = { left: Math.max(viewportLeft + 12, Math.min(rect.left, viewportLeft + viewportWidth - width - 12)), top, width, maxHeight, above };
       setPosition((current) => current && Object.keys(next).every((key) => current[key as keyof typeof next] === next[key as keyof typeof next]) ? current : next);
     };
+    const settle = () => {
+      settling = true;
+      cancelAnimationFrame(frame);
+      clearTimeout(settleTimer);
+      settleTimer = setTimeout(() => { settling = false; update(); }, 180);
+    };
     const schedule = (event: Event) => {
       if (event.target instanceof Node && panelRef.current?.contains(event.target)) return;
+      if (stabilizeKeyboard && (event.type === "resize" || settling)) { settle(); return; }
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(update);
     };
-    update();
+    if (stabilizeKeyboard) settle();
+    else update();
     window.addEventListener("scroll", schedule, true);
     window.addEventListener("resize", schedule);
     window.visualViewport?.addEventListener("resize", schedule);
     window.visualViewport?.addEventListener("scroll", schedule);
-    return () => { cancelAnimationFrame(frame); window.removeEventListener("scroll", schedule, true); window.removeEventListener("resize", schedule); window.visualViewport?.removeEventListener("resize", schedule); window.visualViewport?.removeEventListener("scroll", schedule); };
+    return () => { cancelAnimationFrame(frame); clearTimeout(settleTimer); window.removeEventListener("scroll", schedule, true); window.removeEventListener("resize", schedule); window.visualViewport?.removeEventListener("resize", schedule); window.visualViewport?.removeEventListener("scroll", schedule); };
   }, [open, compact, inlineSearch]);
 
   useEffect(() => {
@@ -85,9 +101,12 @@ export default function RegistrationSelect({ label, name, options, placeholder, 
     onChange(next);
     setOpen(false);
     setQuery("");
-    (inlineSearch ? inputRef.current : triggerRef.current)?.focus({ preventScroll: true });
+    if (inlineSearch && window.matchMedia("(pointer: coarse)").matches) inputRef.current?.blur();
+    else (inlineSearch ? inputRef.current : triggerRef.current)?.focus({ preventScroll: true });
   }
   function openList() {
+    if (open) return;
+    setPosition(null);
     setQuery("");
     setActive(Math.max(0, items.findIndex((item) => item.value === value)));
     setOpen(true);
@@ -117,7 +136,7 @@ export default function RegistrationSelect({ label, name, options, placeholder, 
     <label className={compact ? "visually-hidden" : undefined} id={`${name}-label`} htmlFor={`${name}-trigger`}>{compact && selected ? `${label}: ${selected.label}` : label}</label>
     <input type="hidden" name={name} value={value} />
     {inlineSearch ? <div className={`form-select-inline${open ? " is-open" : ""}`}>
-      <input id={`${name}-trigger`} ref={inputRef} className={`form-select-trigger${value || query ? " is-selected" : ""}`} type="text" role="combobox" autoComplete="off" spellCheck={false} disabled={disabled} aria-labelledby={`${name}-label`} aria-autocomplete="list" aria-haspopup="listbox" aria-expanded={open} aria-controls={`${name}-options`} aria-activedescendant={open && shown[active] ? `${name}-option-${active}` : undefined} aria-invalid={Boolean(error)} aria-describedby={error ? `${name}-error` : undefined} placeholder={open ? `Search ${name === "country" ? "countries" : "states or regions"}…` : placeholder} value={open ? query : selected?.label || ""} onFocus={openList} onClick={() => { if (!open) openList(); }} onChange={(event) => { setQuery(event.target.value); setActive(0); setOpen(true); }} onKeyDown={onKeyDown} />
+      <input id={`${name}-trigger`} ref={inputRef} className={`form-select-trigger${value || query ? " is-selected" : ""}`} type="text" role="combobox" autoComplete="off" spellCheck={false} disabled={disabled} aria-labelledby={`${name}-label`} aria-autocomplete="list" aria-haspopup="listbox" aria-expanded={open} aria-controls={`${name}-options`} aria-activedescendant={open && shown[active] ? `${name}-option-${active}` : undefined} aria-invalid={Boolean(error)} aria-describedby={error ? `${name}-error` : undefined} placeholder={open ? `Search ${name === "country" ? "countries" : "states or regions"}…` : placeholder} value={open ? query : selected?.label || ""} onFocus={openList} onClick={() => { if (!open) openList(); }} onChange={(event) => { if (!open) setPosition(null); setQuery(event.target.value); setActive(0); setOpen(true); }} onKeyDown={onKeyDown} />
       <CaretDown className="form-select-inline-caret" size={16} weight="bold" aria-hidden="true" />
     </div> : <button id={`${name}-trigger`} ref={triggerRef} className={`form-select-trigger${value ? " is-selected" : ""}`} type="button" role="combobox" title={selected?.label} disabled={disabled} aria-labelledby={`${name}-label`} aria-haspopup="listbox" aria-expanded={open} aria-controls={`${name}-options`} aria-activedescendant={open && !searchable && shown[active] ? `${name}-option-${active}` : undefined} aria-invalid={Boolean(error)} aria-describedby={error ? `${name}-error` : undefined} onPointerDown={() => { keyboardOpen.current = false; }} onClick={() => open ? setOpen(false) : openList()} onKeyDown={onKeyDown}>
       <span>{selected ? (compact ? selected.shortLabel || selected.label : selected.label) : placeholder}</span><CaretDown size={16} weight="bold" aria-hidden="true" />
