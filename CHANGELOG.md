@@ -10,6 +10,10 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-21
 
+- `a6e4af5` — Delayed two desktop background transitions until the outgoing
+  text is nearly offscreen, halved the schedule-to-speakers gap, reduced desktop
+  speaker cards, and made the registration form fit shorter desktop viewports.
+  Files: `app/page.tsx`, `app/globals.css`.
 - `dc794a3` — Aligned the learning path with the card borders in Firefox by
   measuring the SVG viewport and the fallback card border. File:
   `src/components/LearningFlow.tsx`.
