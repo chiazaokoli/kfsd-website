@@ -35,7 +35,8 @@ img { display: block; }
 }
 
 /* The SVG fallback draws border and keyboard focus strokes on the clipped curve. */
-.smooth-corner-fallback { outline: none; border-radius: 0 !important; border-color: transparent !important; }
+.smooth-corner-fallback { outline: none; border-color: transparent !important; }
+.smooth-corner-fallback:not([data-smooth-measuring]) { border-radius: 0 !important; }
 .registration-form input.smooth-corner-fallback, .registration-form select.smooth-corner-fallback, .form-select-search input.smooth-corner-fallback { background-image: var(--smooth-border); background-origin: border-box; background-size: 100% 100%; background-repeat: no-repeat; box-shadow: none; }
 .registration-form input.smooth-corner-fallback:focus, .registration-form select.smooth-corner-fallback:focus, .form-select-search input.smooth-corner-fallback:focus { background-image: var(--smooth-focus-border); }
 .smooth-corner-fallback:is(:focus-visible, [aria-expanded="true"]) > .smooth-corner-overlay > .smooth-corner-border { stroke: var(--accent-green); }

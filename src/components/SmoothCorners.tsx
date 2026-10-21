@@ -86,7 +86,7 @@ export default function SmoothCorners() {
     const elements = new Set<HTMLElement>();
     let nextId = 0;
     const originals = new Map<HTMLElement, { clipPath: string; position: string; borderColor: string }>();
-    const entries = new Map<HTMLElement, { clip: SVGPathElement; border: SVGPathElement; focus: SVGPathElement; halo: SVGPathElement; overlay: SVGSVGElement; borderColor: string; borderWidth: number }>();
+    const entries = new Map<HTMLElement, { clip: SVGPathElement; border: SVGPathElement; focus: SVGPathElement; halo: SVGPathElement; overlay: SVGSVGElement; borderColor: string; borderWidth: number; radii: number[] }>();
 
     const register = (element: HTMLElement) => {
       if (elements.has(element)) {
@@ -99,6 +99,7 @@ export default function SmoothCorners() {
       const style = getComputedStyle(element);
       const borderWidth = cornerRadius(style.borderTopWidth);
       const borderColor = style.borderTopColor;
+      const radii = [style.borderTopLeftRadius, style.borderTopRightRadius, style.borderBottomRightRadius, style.borderBottomLeftRadius].map(cornerRadius);
       const clip = svgElement("clipPath");
       const id = `smooth-corner-${nextId++}`;
       clip.id = id;
@@ -134,7 +135,7 @@ export default function SmoothCorners() {
       if (borderWidth) element.style.borderColor = "transparent";
       element.classList.add("smooth-corner-fallback");
       if (element.tagName !== "INPUT" && element.tagName !== "SELECT") element.append(overlay);
-      entries.set(element, { clip: clipPath, border, focus, halo, overlay, borderColor, borderWidth });
+      entries.set(element, { clip: clipPath, border, focus, halo, overlay, borderColor, borderWidth, radii });
       observer.observe(element);
       update(element);
     };
@@ -145,10 +146,12 @@ export default function SmoothCorners() {
       const width = element.offsetWidth;
       const height = element.offsetHeight;
       if (!width || !height) return;
-      element.classList.remove("smooth-corner-fallback");
+      element.setAttribute("data-smooth-measuring", "");
       const style = getComputedStyle(element);
-      const radii = [style.borderTopLeftRadius, style.borderTopRightRadius, style.borderBottomRightRadius, style.borderBottomLeftRadius].map(cornerRadius);
-      element.classList.add("smooth-corner-fallback");
+      // Firefox's native inputs can report zero after the fallback resets their
+      // corners. Their design radius is fixed; preserve the original measurement.
+      const radii = element.tagName === "INPUT" || element.tagName === "SELECT" ? entry.radii : [style.borderTopLeftRadius, style.borderTopRightRadius, style.borderBottomRightRadius, style.borderBottomLeftRadius].map(cornerRadius);
+      element.removeAttribute("data-smooth-measuring");
       entry.clip.setAttribute("d", smoothPath(width, height, radii));
       if (element.tagName === "INPUT" || element.tagName === "SELECT") {
         const path = smoothPath(width, height, radii, Math.max(0.5, entry.borderWidth / 2));
