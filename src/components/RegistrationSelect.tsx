@@ -30,11 +30,6 @@ export default function RegistrationSelect({ label, name, options, placeholder, 
   useLayoutEffect(() => {
     if (!open) return;
     let frame = 0;
-    let settleTimer: ReturnType<typeof setTimeout>;
-    const stabilizeKeyboard = inlineSearch && window.matchMedia("(pointer: coarse)").matches;
-    let settling = stabilizeKeyboard;
-    let lockedAbove: boolean | undefined;
-    let lastWidth = window.visualViewport?.width || window.innerWidth;
     const update = () => {
       const trigger = inlineSearch ? inputRef.current : triggerRef.current;
       if (!trigger) return;
@@ -45,12 +40,9 @@ export default function RegistrationSelect({ label, name, options, placeholder, 
       const viewportLeft = viewport?.offsetLeft || 0;
       const viewportWidth = viewport?.width || window.innerWidth;
       const viewportHeight = viewport?.height || window.innerHeight;
-      if (Math.abs(viewportWidth - lastWidth) > 2) lockedAbove = undefined;
-      lastWidth = viewportWidth;
       const below = viewportTop + viewportHeight - rect.bottom - 16;
       const aboveSpace = rect.top - viewportTop - 16;
-      const above = stabilizeKeyboard && lockedAbove !== undefined ? lockedAbove : below < 160 && aboveSpace > below;
-      if (stabilizeKeyboard) lockedAbove = above;
+      const above = below < 160 && aboveSpace > below;
       const width = Math.min(rect.width, viewportWidth - 24);
       const maxHeight = Math.max(64, Math.min(310, viewportHeight - 24, above ? aboveSpace : below));
       const top = above
@@ -59,31 +51,17 @@ export default function RegistrationSelect({ label, name, options, placeholder, 
       const next = { left: Math.max(viewportLeft + 12, Math.min(rect.left, viewportLeft + viewportWidth - width - 12)), top, width, maxHeight, above };
       setPosition((current) => current && Object.keys(next).every((key) => current[key as keyof typeof next] === next[key as keyof typeof next]) ? current : next);
     };
-    const settle = () => {
-      settling = true;
-      cancelAnimationFrame(frame);
-      clearTimeout(settleTimer);
-      settleTimer = setTimeout(() => { settling = false; update(); }, 180);
-    };
     const schedule = (event: Event) => {
       if (event.target instanceof Node && panelRef.current?.contains(event.target)) return;
-      if (stabilizeKeyboard && (event.type === "resize" || settling)) { settle(); return; }
-      if (event.type === "scroll" && event.target !== window.visualViewport) {
-        setOpen(false);
-        inputRef.current?.blur();
-        searchRef.current?.blur();
-        return;
-      }
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(update);
     };
-    if (stabilizeKeyboard) settle();
-    else update();
+    update();
     window.addEventListener("scroll", schedule, true);
     window.addEventListener("resize", schedule);
     window.visualViewport?.addEventListener("resize", schedule);
     window.visualViewport?.addEventListener("scroll", schedule);
-    return () => { cancelAnimationFrame(frame); clearTimeout(settleTimer); window.removeEventListener("scroll", schedule, true); window.removeEventListener("resize", schedule); window.visualViewport?.removeEventListener("resize", schedule); window.visualViewport?.removeEventListener("scroll", schedule); };
+    return () => { cancelAnimationFrame(frame); window.removeEventListener("scroll", schedule, true); window.removeEventListener("resize", schedule); window.visualViewport?.removeEventListener("resize", schedule); window.visualViewport?.removeEventListener("scroll", schedule); };
   }, [open, compact, inlineSearch]);
 
   useEffect(() => {
@@ -91,13 +69,30 @@ export default function RegistrationSelect({ label, name, options, placeholder, 
     const close = (event: PointerEvent) => {
       if (!fieldRef.current?.contains(event.target as Node) && !panelRef.current?.contains(event.target as Node)) {
         setOpen(false);
-        inputRef.current?.blur();
-        searchRef.current?.blur();
       }
     };
-    document.addEventListener("pointerdown", close);
-    if (keyboardOpen.current || window.matchMedia("(pointer: fine)").matches) searchRef.current?.focus({ preventScroll: true });
-    return () => document.removeEventListener("pointerdown", close);
+    const closeOnFocusMove = (event: FocusEvent) => {
+      if (!fieldRef.current?.contains(event.target as Node) && !panelRef.current?.contains(event.target as Node)) setOpen(false);
+    };
+    const closeOnUserScroll = (event: Event) => {
+      if (event.target instanceof Node && panelRef.current?.contains(event.target)) return;
+      setOpen(false);
+      inputRef.current?.blur();
+      searchRef.current?.blur();
+    };
+    document.addEventListener("pointerdown", close, true);
+    document.addEventListener("focusin", closeOnFocusMove);
+    window.addEventListener("wheel", closeOnUserScroll, { passive: true, capture: true });
+    window.addEventListener("touchmove", closeOnUserScroll, { passive: true, capture: true });
+    return () => {
+      document.removeEventListener("pointerdown", close, true);
+      document.removeEventListener("focusin", closeOnFocusMove);
+      window.removeEventListener("wheel", closeOnUserScroll, true);
+      window.removeEventListener("touchmove", closeOnUserScroll, true);
+    };
+  }, [open]);
+  useEffect(() => {
+    if (open && panelReady && (keyboardOpen.current || window.matchMedia("(pointer: fine)").matches)) searchRef.current?.focus({ preventScroll: true });
   }, [open, panelReady]);
   useEffect(() => {
     if (!open) return;
@@ -144,7 +139,7 @@ export default function RegistrationSelect({ label, name, options, placeholder, 
     } else if (event.key === "Tab" && event.target !== triggerRef.current) setOpen(false);
   }
 
-  return <div className={`form-select-field${compact ? " phone-country" : ""}`} ref={fieldRef} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node) && !panelRef.current?.contains(event.relatedTarget as Node)) setOpen(false); }}>
+  return <div className={`form-select-field${compact ? " phone-country" : ""}`} ref={fieldRef}>
     <label className={compact ? "visually-hidden" : undefined} id={`${name}-label`} htmlFor={`${name}-trigger`}>{compact && selected ? `${label}: ${selected.label}` : label}</label>
     <input type="hidden" name={name} value={value} />
     {inlineSearch ? <div className={`form-select-inline${open ? " is-open" : ""}`}>
