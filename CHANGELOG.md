@@ -8,6 +8,14 @@ To undo a complete change, use `git revert <commit>` and verify the result befor
 deploying. To restore only part of a design, inspect `git show <commit>` and apply
 the relevant pieces to the current code so later changes are preserved.
 
+## 2026-10-21
+
+- `b10d670` — Re-encoded the five speaker portraits as full-resolution WebP,
+  cutting their combined download from 945 KB to 152 KB without changing their
+  crop. Loaded the small header and splash logos eagerly. Files:
+  `public/images/speakers/`, `app/page.tsx`,
+  `app/components/SplashScreen.tsx`.
+
 ## 2026-10-16
 
 - `2d9bbde` — Substantially darkened the hero overlay for stronger headline
