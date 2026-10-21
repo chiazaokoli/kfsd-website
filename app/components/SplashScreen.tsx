@@ -88,7 +88,7 @@ export default function SplashScreen({ onRevealStart }: { onRevealStart: () => v
       <div className="splash-underlay" />
       <div className="splash-curtain">
         <div className="splash-brand">
-          <Image className="splash-logo" src={`${assetPrefix}/images/kfsd-logo-mark.webp`} alt="" width={25} height={25} unoptimized />
+          <Image className="splash-logo" src={`${assetPrefix}/images/kfsd-logo-mark.webp`} alt="" width={25} height={25} loading="eager" unoptimized />
           KFSD Soft Skills Training
         </div>
 

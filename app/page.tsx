@@ -68,11 +68,11 @@ const learningSteps = [
 ];
 
 const speakers = [
-  { name: "David Dokun", topic: "Communication", image: "/images/speakers/david-dokun-3x.jpg" },
-  { name: "Mrs. Mfon Ekpo", topic: "Leadership", image: "/images/speakers/mfon-ekpo-3x.jpg" },
-  { name: "Engr. Kehinde Ayobade", topic: "Critical thinking", image: "/images/speakers/kehinde-ayobade-3x.jpg" },
-  { name: "Dr. Funmi Adeniyi", topic: "Resilience", image: "/images/speakers/funmi-adeniyi-3x.jpg" },
-  { name: "Soji Apampa", topic: "Integrity", image: "/images/speakers/soji-apampa-3x.jpg" },
+  { name: "David Dokun", topic: "Communication", image: "/images/speakers/david-dokun-3x.webp" },
+  { name: "Mrs. Mfon Ekpo", topic: "Leadership", image: "/images/speakers/mfon-ekpo-3x.webp" },
+  { name: "Engr. Kehinde Ayobade", topic: "Critical thinking", image: "/images/speakers/kehinde-ayobade-3x.webp" },
+  { name: "Dr. Funmi Adeniyi", topic: "Resilience", image: "/images/speakers/funmi-adeniyi-3x.webp" },
+  { name: "Soji Apampa", topic: "Integrity", image: "/images/speakers/soji-apampa-3x.webp" },
 ];
 
 const faqs = [
@@ -490,7 +490,7 @@ export default function Home() {
       <main ref={pageRef} className="site-shell" id="top">
         <SmoothCorners />
         <header ref={topbarRef} className={`topbar${showNavCta ? " has-cta" : ""}`}>
-          <a className="brand" href="#top" aria-label="KFSD Soft Skills Training home"><span className="brand-mark" aria-hidden="true"><Image src={`${assetPrefix}/images/kfsd-logo-mark.webp`} alt="" width={30} height={30} unoptimized /></span><span>KFSD <b>Soft Skills Training</b></span></a>
+          <a className="brand" href="#top" aria-label="KFSD Soft Skills Training home"><span className="brand-mark" aria-hidden="true"><Image src={`${assetPrefix}/images/kfsd-logo-mark.webp`} alt="" width={30} height={30} loading="eager" unoptimized /></span><span>KFSD <b>Soft Skills Training</b></span></a>
           <nav aria-label="Main navigation"><a href="#skills">Skills</a><a href="#schedule">Schedule</a><a href="#organiser">About KFSD</a></nav>
           <a className="topbar-cta" href="#register" onClick={handleRegistrationCtaClick} aria-hidden={!showNavCta} tabIndex={showNavCta ? 0 : -1}><span className="cta-copy">Reserve my spot</span><ArrowRight size={17} weight="bold" /></a>
         </header>
