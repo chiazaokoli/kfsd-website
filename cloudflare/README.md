@@ -66,6 +66,10 @@ Run `node --test cloudflare/registration-worker.test.mjs`, `npm run lint`,
 `npm run typecheck`, and the GitHub Pages production build.
 Tests mock MailerLite; they never create subscribers or send email.
 
+Outbound requests must use `redirect: "manual"`: Cloudflare's runtime rejects
+`"error"`, even though Node.js accepts it. The Worker treats redirects as failures
+so the API token cannot be forwarded to another location.
+
 If a request fails or times out, the form retains its values for retry. A timeout
 can happen after MailerLite has saved the record; its email-based upsert avoids
 creating a second subscriber on retry. Confirmation/reminder scheduling and

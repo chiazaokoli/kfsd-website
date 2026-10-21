@@ -115,7 +115,9 @@ function createRegistrationHandler(fetcher = fetch) {
           ...options,
           headers: { Authorization: `Bearer ${env.MAILERLITE_API_TOKEN}`, Accept: "application/json", "Content-Type": "application/json" },
           signal,
-          redirect: "error",
+          // Cloudflare supports only "manual" and "follow". Reject 3xx below
+          // rather than forwarding the Authorization header to a new host.
+          redirect: "manual",
         });
         if (!response.ok) throw new RegistrationError(response.status === 429 ? 429 : 502, RETRY_MESSAGE);
         return response.json();

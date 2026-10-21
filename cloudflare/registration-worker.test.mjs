@@ -128,6 +128,21 @@ test("network errors and timeouts return a retryable failure", async () => {
   }
 });
 
+test("uses Cloudflare-supported redirect handling and refuses upstream redirects", async () => {
+  let calls = 0;
+  const handler = withFetcher(async (_url, options) => {
+    calls++;
+    // workerd throws before sending a request if redirect is "error".
+    assert.ok(["manual", "follow"].includes(options.redirect));
+    assert.equal(options.redirect, "manual", "never forward the API token through a redirect");
+    return new Response(null, { status: 302, headers: { Location: "https://untrusted.example/" } });
+  });
+  const response = await handler(request(), env);
+  assert.equal(response.status, 502);
+  assert.equal((await response.json()).ok, false);
+  assert.equal(calls, 1);
+});
+
 test("unconfirmed records are distinguished and unsubscribed/bounced records are not reactivated", async () => {
   const pending = await upstream({ status: "unconfirmed" }).handler(request(), env);
   assert.equal((await pending.json()).status, "pending");
