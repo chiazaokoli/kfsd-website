@@ -10,6 +10,13 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-21
 
+- Registration overlay/deferred-loading update — Dropdowns render as anchored
+  overlays outside the form, preserving field positions and card height on
+  mobile and desktop. Menu navigation scrolls only the options; viewport changes
+  keep the panel anchored. Phone rules load on interaction, while location
+  detection waits until the form is near the screen. No Worker update required.
+  Files: `src/components/RegistrationSelect.tsx`, `RegistrationForm.tsx`,
+  `app/globals.css`, `src/lib/registration-phone.ts`, and `phone-countries.json`.
 - `0deb2ee` — Added international phone validation and a switchable calling-code
   selector, editable IP-based country/region defaults, searchable country/state
   and profession dropdowns, and a success toast with reduced-motion-aware

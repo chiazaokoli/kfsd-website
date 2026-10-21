@@ -1,10 +1,12 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { allCountries } from "country-region-data";
+import { getCountries, getCountryCallingCode } from "libphonenumber-js/max";
 
 await mkdir("src/data", { recursive: true });
 await mkdir("public/data/states", { recursive: true });
 const countries = allCountries.map(([name, code]) => ({ code, name })).sort((a, b) => a.name.localeCompare(b.name, "en"));
 await writeFile("src/data/registration-countries.json", JSON.stringify(countries) + "\n");
+await writeFile("src/data/phone-countries.json", JSON.stringify(getCountries().map((code) => ({ code, callingCode: getCountryCallingCode(code) }))) + "\n");
 const groups = {};
 for (const country of countries) {
   const states = allCountries.find((item) => item[1] === country.code)[2].map(([name, code]) => ({ code: code || name, name })).sort((a, b) => a.name.localeCompare(b.name, "en"));

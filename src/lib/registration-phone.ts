@@ -1,5 +1,9 @@
 import { getCountries, getCountryCallingCode, parsePhoneNumberFromString, type CountryCode } from "libphonenumber-js/max";
 
+export function inferPhoneCountry(raw: string) {
+  return parsePhoneNumberFromString(raw, { extract: false })?.country;
+}
+
 export function validateRegistrationPhone(raw: string, country: string) {
   if (!getCountries().includes(country as CountryCode)) return { ok: false as const, error: "Choose a country calling code." };
   if (!raw.trim()) return { ok: false as const, error: "Enter your phone number." };

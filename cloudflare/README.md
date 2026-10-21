@@ -77,6 +77,12 @@ The phone validator is shared with the website in
 patterns and the chosen calling code, then sends MailerLite an international
 E.164 number. Existing international-number submissions remain supported.
 
+The website imports the full phone validator on phone-field interaction or
+submission, not on initial page load. A small generated calling-code table keeps
+the code selector available immediately. Location detection starts only when
+registration approaches the viewport. Dropdowns are anchored overlays rendered
+outside the clipped form card; their option scrolling does not scroll the page.
+
 `GET /location` returns Cloudflare's country and region suggestion to the
 permitted website origin, without exposing the IP address or contacting
 MailerLite. IP location can be approximate or reflect a VPN; all defaults remain
