@@ -537,7 +537,6 @@ export default function Home() {
             <p className="section-kicker">Registration</p>
             <div className="registration-heading">
               <h2>Register for the soft skills training and take on a new mindset that will shape your future.</h2>
-
             </div>
           </div>
           <div className="registration-card">

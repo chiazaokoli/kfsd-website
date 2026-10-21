@@ -31,7 +31,6 @@ function TextField({ name, label, error, ...props }: { name: string; label: stri
 export default function RegistrationForm() {
   const [selections, setSelections] = useState<Selections>({ company: "", attended: "", referral: "", country: "NG", state: "", profession: "", phoneCountry: "NG" });
   const [phoneInput, setPhoneInput] = useState("");
-  const [textValues, setTextValues] = useState<Record<string, string>>({});
   const [stateData, setStateData] = useState<{ country: string; states: StateOption[]; failed: boolean }>({ country: "NG", states: nigeriaStates, failed: false });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<{ message: string; error: boolean } | null>(null);
@@ -46,28 +45,6 @@ export default function RegistrationForm() {
   const statesLoading = stateData.country !== selections.country;
   const states = statesLoading ? [] : stateData.states;
   const countryName = countries.find(({ code }) => code === selections.country)?.name || "";
-
-  const profession = selections.profession === "Other" ? textValues.professionOther : selections.profession;
-  const state = stateData.failed ? textValues.state : selections.state === "Other / not listed" ? textValues.stateOther : selections.state;
-  const complete = [textValues.email, textValues.firstName, textValues.lastName, phoneInput, profession, selections.company, selections.country, state, selections.attended, selections.referral].every((value) => Boolean(value?.trim()))
-    && /^\S+@\S+\.\S+$/.test(textValues.email || "") && !statesLoading && !Object.values(errors).some(Boolean);
-
-  useEffect(() => {
-    const form = formRef.current;
-    const scrollArea = form?.querySelector<HTMLElement>(".registration-scroll");
-    if (!form || !scrollArea) return;
-    const desktop = window.matchMedia("(min-width: 801px)");
-    const handleWheel = (event: WheelEvent) => {
-      if (!desktop.matches || event.ctrlKey || !event.deltaY) return;
-      // Keep wheel gestures anywhere on the card (including its footer) inside
-      // the fields, even when the fields have reached either end.
-      event.preventDefault();
-      const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? scrollArea.clientHeight : 1;
-      scrollArea.scrollTop += event.deltaY * unit;
-    };
-    form.addEventListener("wheel", handleWheel, { passive: false });
-    return () => form.removeEventListener("wheel", handleWheel);
-  }, []);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -115,9 +92,6 @@ export default function RegistrationForm() {
   }, [selections.country]);
 
   function updateSelection(name: keyof Selections, value: string) {
-    if (name === "profession" && value !== selections.profession) setTextValues((current) => ({ ...current, professionOther: "" }));
-    if (name === "state" && value !== selections.state) setTextValues((current) => ({ ...current, stateOther: "" }));
-    if (name === "country" && value !== selections.country) setTextValues((current) => ({ ...current, state: "", stateOther: "" }));
     if (name === "country" || name === "state") touched.current[name] = true;
     if (name === "state") touched.current.country = true;
     if (name === "phoneCountry") { touched.current.phone = true; phoneEdit.current++; }
@@ -147,7 +121,7 @@ export default function RegistrationForm() {
     data.set("countryCode", selections.country);
     if (selections.profession === "Other") data.set("profession", String(data.get("professionOther") || "").trim());
     if (selections.state === "Other / not listed") data.set("state", String(data.get("stateOther") || "").trim());
-    const required = ["email", "firstName", "lastName", "phone", "profession", "company", "country", "state", "attended", "referral"];
+    const required = ["email", "firstName", "lastName", "phone", "profession", "country", "state", "attended", "referral"];
     const nextErrors: Record<string, string> = {};
     for (const field of required) if (!String(data.get(field) || "").trim()) nextErrors[field] = "Please complete this field.";
     const email = String(data.get("email") || "").trim();
@@ -187,7 +161,6 @@ export default function RegistrationForm() {
       setStatus({ message, error: false });
       setToast({ message, celebrate: result.status === "registered", id: Date.now() });
       form.reset();
-      setTextValues({});
       setPhoneInput("");
       setSelections((current) => ({ ...current, company: "", attended: "", referral: "", state: "", profession: "" }));
     } catch (error) {
@@ -198,8 +171,7 @@ export default function RegistrationForm() {
   const select = (name: keyof Selections, label: string, options: React.ComponentProps<typeof RegistrationSelect>["options"], placeholder: string, searchable = false) => <RegistrationSelect name={name} label={label} options={options} placeholder={placeholder} value={selections[name]} error={errors[name]} searchable={searchable} inlineSearch={name === "country" || name === "profession"} onChange={(value) => updateSelection(name, value)} />;
 
   return <>
-    <form ref={formRef} id="registration-form" className="registration-form" onSubmit={handleSubmit} onInput={(event) => { const input = event.target as HTMLInputElement; const name = input.name; if (name) setTextValues((current) => ({ ...current, [name]: input.value })); const field = name === "professionOther" ? "profession" : name === "stateOther" ? "state" : name; if (field && errors[field]) setErrors((current) => ({ ...current, [field]: "" })); }} noValidate>
-      <div className="registration-scroll">
+    <form ref={formRef} id="registration-form" className="registration-form" onSubmit={handleSubmit} onInput={(event) => { const name = (event.target as HTMLInputElement).name; const field = name === "professionOther" ? "profession" : name === "stateOther" ? "state" : name; if (field && errors[field]) setErrors((current) => ({ ...current, [field]: "" })); }} noValidate>
       <fieldset className="registration-fields" disabled={submitting} aria-busy={submitting}>
         <div className="form-honeypot" aria-hidden="true"><label>Leave this field empty<input name="website" type="text" tabIndex={-1} autoComplete="off" /></label></div>
         <TextField name="email" label="Email" error={errors.email} type="email" autoComplete="email" placeholder="you@example.com" maxLength={254} />
@@ -216,18 +188,15 @@ export default function RegistrationForm() {
         {select("company", "Company", companyOptions, "-")}
         <div className="form-row">
           {select("country", "Country", countryOptions, "Select your country", true)}
-          {stateData.failed && !statesLoading ? <TextField key={selections.country} name="state" label="State or region" error={errors.state} placeholder="Your state or region" maxLength={200} /> : <RegistrationSelect name="state" label="State or region" options={[...new Set(states.map((state) => state.name)), ...(!states.length && !statesLoading ? ["Not applicable"] : []), "Other / not listed"]} placeholder={statesLoading ? "Loading states…" : "Select your state"} value={selections.state} error={errors.state} searchable inlineSearch disabled={statesLoading} onChange={(value) => updateSelection("state", value)} />}
+          {stateData.failed && !statesLoading ? <TextField name="state" label="State or region" error={errors.state} placeholder="Your state or region" maxLength={200} /> : <RegistrationSelect name="state" label="State or region" options={[...new Set(states.map((state) => state.name)), ...(!states.length && !statesLoading ? ["Not applicable"] : []), "Other / not listed"]} placeholder={statesLoading ? "Loading states…" : "Select your state"} value={selections.state} error={errors.state} searchable inlineSearch disabled={statesLoading} onChange={(value) => updateSelection("state", value)} />}
         </div>
         {selections.state === "Other / not listed" && <TextField name="stateOther" label="Your state or region" error={errors.state} placeholder="Enter your state or region" maxLength={200} />}
         {select("attended", "Have you attended KFSD soft skills training before?", ["Yes", "No", "Not sure"], "Select an answer")}
         {select("referral", "How did you hear about KFSD soft skills training?", referralOptions, "-")}
+        <button type="submit" disabled={submitting}>{submitting ? "Submitting…" : "Reserve My Free Spot"}</button>
       </fieldset>
-      </div>
-      <div className="registration-actions">
-        <button type="submit" disabled={submitting || !complete} aria-busy={submitting}>{submitting ? "Submitting…" : "Reserve My Free Spot"}</button>
-        <p className="form-reassurance">Your details will only be used for this training.</p>
-        {status?.error && <p className="form-status is-error" role="alert">{status.message}</p>}
-      </div>
+      <p className="form-reassurance">Your details will only be used for this training.</p>
+      {status?.error && <p className="form-status is-error" role="alert">{status.message}</p>}
     </form>
     {toast && <RegistrationSuccess key={toast.id} message={toast.message} celebrate={toast.celebrate} onClose={dismissToast} />}
   </>;
