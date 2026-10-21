@@ -205,8 +205,8 @@ img { display: block; }
 .learning-steps { --learning-track-color: rgba(169,185,174,.25); position: relative; display: grid; gap: 10px; width: 100%; max-width: 690px; }
 .learning-flow { position: absolute; z-index: 3; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
 .learning-flow-track { stroke: var(--learning-track-color); stroke-width: 1; vector-effect: non-scaling-stroke; }
-.learning-step { position: relative; z-index: 4; display: grid; width: 100%; min-height: 112px; grid-template-columns: 40px minmax(0, 1fr) 26px; gap: 16px; align-items: center; padding: 20px 25px; color: rgba(255,255,255,.52); border: 1px solid transparent; --smooth-radius: 22px; border-radius: var(--smooth-radius); background: transparent; cursor: pointer; text-align: left; transform: scale(1); }
-.learning-step.active { z-index: 2; color: var(--ink); border-color: var(--learning-track-color); background: var(--cream); box-shadow: 0 22px 60px rgba(0,0,0,.24); transform: scale(1.025); }
+.learning-step { position: relative; z-index: 4; display: grid; width: 100%; min-height: 112px; grid-template-columns: 40px minmax(0, 1fr) 26px; gap: 16px; align-items: center; padding: 20px 25px; color: rgba(255,255,255,.52); border: 1px solid transparent; --smooth-radius: 22px; border-radius: var(--smooth-radius); background: transparent; cursor: pointer; text-align: left; }
+.learning-step.active { z-index: 2; color: var(--ink); border-color: var(--learning-track-color); background: var(--cream); box-shadow: 0 22px 60px rgba(0,0,0,.24); }
 .learning-step .smooth-corner-border { stroke: transparent; stroke-width: 1px; }
 .learning-step.active .smooth-corner-border { stroke: var(--learning-track-color); }
 .learning-step-icon { display: grid; width: 40px; height: 40px; place-items: center; color: var(--accent-green); border: 1px solid rgba(190,207,233,.34); --smooth-radius: 50%; border-radius: var(--smooth-radius); background: var(--ink); }
@@ -475,7 +475,6 @@ img { display: block; }
   .learning-heading { position: static; margin-bottom: 45px; }
   .learning-steps { gap: 6px; }
   .learning-step { min-height: 114px; grid-template-columns: 34px minmax(0, 1fr) 20px; gap: 11px; padding: 16px 17px; }
-  .learning-step.active { transform: scale(1.025); }
   .learning-step-icon { width: 34px; height: 34px; }
   .learning-step-icon svg { width: 24px; height: 24px; }
   .learning-step-text strong { font-size: 1.03rem; }
