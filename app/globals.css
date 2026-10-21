@@ -283,6 +283,9 @@ img { display: block; }
 .registration-free-badge svg text { transform-box: view-box; transform-origin: center; transform: rotate(-8deg); }
 .registration-form { align-self: start; display: grid; gap: 18px; padding: clamp(24px, 4vw, 46px); color: var(--ink); border-radius: 24px; background: var(--paper); box-shadow: 0 35px 100px rgba(0,0,0,.26); }
 .registration-form label { display: grid; gap: 8px; font-size: .875rem; font-weight: 500; }
+.registration-fields { display: grid; gap: inherit; min-width: 0; margin: 0; padding: 0; border: 0; }
+.form-honeypot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.registration-form button[type="submit"]:disabled { opacity: .7; cursor: wait; transform: none; }
 .registration-form input, .registration-form select, .registration-form .form-select-trigger { box-sizing: border-box; width: 100%; min-height: 53px; height: 53px; padding: 0 15px; color: var(--ink); border: 1px solid rgba(11,16,28,.18); border-radius: 19px; outline: none; background: white; font-size: .875rem; font-weight: 400; }
 .registration-form input:focus, .registration-form select:focus { border-color: var(--accent-green); box-shadow: 0 0 0 3px rgba(34,219,121,.18); }
 .registration-form label small { color: #c53e45; font-weight: 500; }
@@ -305,6 +308,7 @@ img { display: block; }
 .form-select-option[aria-selected="true"]::after { color: var(--blue); content: "✓"; font-size: 1rem; font-weight: 800; }
 .form-reassurance { margin: 0; color: #777c87; font-size: .61rem; text-align: center; }
 .form-status { margin: 0; padding: 13px; color: #0d3b22; border-radius: 9px; background: #e7f7ed; font-size: .7rem; line-height: 1.5; }
+.form-status.is-error { color: #84262c; background: #fff0f0; }
 
 /* FAQ and footer */
 .faq-section-new { display: grid; grid-template-columns: .62fr 1fr; gap: clamp(60px, 10vw, 160px); align-items: start; padding: clamp(120px, 14vw, 200px) max(5vw, 28px); background: var(--paper); }

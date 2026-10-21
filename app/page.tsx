@@ -19,6 +19,7 @@ import SplashScreen from "./components/SplashScreen";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 const assetPrefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+const registrationEndpoint = "https://kfsd-demo-registration.yummydummy419.workers.dev/register";
 const showSplashScreen = true;
 const heroLeadWords = ["Learn", "the", "soft", "skills", "that", "set", "you", "apart", "in"];
 const heroEnding = "2 days.";
@@ -183,6 +184,9 @@ export default function Home() {
   const [openFaqs, setOpenFaqs] = useState<number[]>([]);
   const [localTime, setLocalTime] = useState("");
   const [formStatus, setFormStatus] = useState("");
+  const [formStatusKind, setFormStatusKind] = useState<"success" | "error">("success");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submissionInFlight = useRef(false);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [formSelections, setFormSelections] = useState({ company: "", attended: "", referral: "" });
   const [heroRevealStarted, setHeroRevealStarted] = useState(!showSplashScreen);
@@ -463,22 +467,52 @@ export default function Home() {
     return () => matchMedia.revert();
   }, { scope: pageRef });
 
-  function handleRegistration(event: FormEvent<HTMLFormElement>) {
+  async function handleRegistration(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (submissionInFlight.current) return;
     const form = event.currentTarget;
     const data = new FormData(form);
     const required = ["email", "firstName", "lastName", "phone", "profession", "country", "state", "attended", "referral"];
     const errors: Record<string, string> = {};
     required.forEach((field) => { if (!String(data.get(field) ?? "").trim()) errors[field] = "Please complete this field."; });
-    const email = String(data.get("email") ?? "");
+    const email = String(data.get("email") ?? "").trim();
     if (email && !/^\S+@\S+\.\S+$/.test(email)) errors.email = "Enter a valid email address.";
     const phone = String(data.get("phone") ?? "").replace(/\D/g, "");
     if (phone && phone.length < 7) errors.phone = "Enter a valid phone number.";
     setFormErrors(errors);
     if (Object.keys(errors).length) { setFormStatus(""); return; }
-    setFormStatus("Your details look good. Live registration confirmation will be enabled before launch.");
-    form.reset();
-    setFormSelections({ company: "", attended: "", referral: "" });
+    submissionInFlight.current = true;
+    setIsSubmitting(true);
+    setFormStatus("");
+    try {
+      const response = await fetch(registrationEndpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(Object.fromEntries(data)),
+        signal: AbortSignal.timeout(20000),
+      });
+      const result = await response.json();
+      if (!response.ok || result.ok !== true || !["registered", "pending"].includes(result.status)) {
+        if (result.errors && typeof result.errors === "object") {
+          const serverErrors: Record<string, string> = {};
+          for (const field of [...required, "company"]) {
+            if (typeof result.errors[field] === "string") serverErrors[field] = result.errors[field];
+          }
+          setFormErrors(serverErrors);
+        }
+        throw new Error(typeof result.message === "string" ? result.message : "Registration is temporarily unavailable. Your answers are still here. Please try again shortly.");
+      }
+      setFormStatusKind("success");
+      setFormStatus(result.message);
+      form.reset();
+      setFormSelections({ company: "", attended: "", referral: "" });
+    } catch (error) {
+      setFormStatusKind("error");
+      setFormStatus(error instanceof Error && error.name === "Error" ? error.message : "We couldn't confirm your registration. Your answers are still here. Please try again shortly.");
+    } finally {
+      submissionInFlight.current = false;
+      setIsSubmitting(false);
+    }
   }
 
   function updateFormSelection(name: RegistrationSelectName, value: string) {
@@ -608,6 +642,8 @@ export default function Home() {
             </div>
           </div>
           <form id="registration-form" className="registration-form" onSubmit={handleRegistration} onInput={(event) => { const name = (event.target as HTMLInputElement).name; if (name && formErrors[name]) setFormErrors((current) => ({ ...current, [name]: "" })); }} noValidate>
+            <fieldset className="registration-fields" disabled={isSubmitting} aria-busy={isSubmitting}>
+            <div className="form-honeypot" aria-hidden="true"><label>Leave this field empty<input name="website" type="text" tabIndex={-1} autoComplete="off" /></label></div>
             <label>Email<input name="email" type="email" autoComplete="email" placeholder="you@example.com" aria-invalid={Boolean(formErrors.email)} aria-describedby={formErrors.email ? "email-error" : undefined} />{formErrors.email && <small id="email-error">{formErrors.email}</small>}</label>
             <div className="form-row">
               <label>First name<input name="firstName" type="text" autoComplete="given-name" placeholder="Your first name" aria-invalid={Boolean(formErrors.firstName)} aria-describedby={formErrors.firstName ? "firstName-error" : undefined} />{formErrors.firstName && <small id="firstName-error">{formErrors.firstName}</small>}</label>
@@ -615,14 +651,16 @@ export default function Home() {
             </div>
             <label>Phone<input name="phone" type="tel" autoComplete="tel" placeholder="Your phone number" aria-invalid={Boolean(formErrors.phone)} aria-describedby={formErrors.phone ? "phone-error" : undefined} />{formErrors.phone && <small id="phone-error">{formErrors.phone}</small>}</label>
             <label>Profession<input name="profession" type="text" autoComplete="organization-title" placeholder="Student, teacher, etc." aria-invalid={Boolean(formErrors.profession)} aria-describedby={formErrors.profession ? "profession-error" : undefined} />{formErrors.profession && <small id="profession-error">{formErrors.profession}</small>}</label>
-            <RegistrationSelect label="Company" name="company" options={companyOptions} placeholder="-" value={formSelections.company} onChange={updateFormSelection} />
+            <RegistrationSelect label="Company" name="company" options={companyOptions} placeholder="-" value={formSelections.company} error={formErrors.company} onChange={updateFormSelection} />
             <div className="form-row">
               <label>Country<input name="country" type="text" autoComplete="country-name" placeholder="Your country" aria-invalid={Boolean(formErrors.country)} aria-describedby={formErrors.country ? "country-error" : undefined} />{formErrors.country && <small id="country-error">{formErrors.country}</small>}</label>
               <label>State<input name="state" type="text" autoComplete="address-level1" placeholder="Your state or region" aria-invalid={Boolean(formErrors.state)} aria-describedby={formErrors.state ? "state-error" : undefined} />{formErrors.state && <small id="state-error">{formErrors.state}</small>}</label>
             </div>
             <RegistrationSelect label="Have you attended KFSD soft skills training before?" name="attended" options={attendanceOptions} placeholder="Select an answer" value={formSelections.attended} error={formErrors.attended} onChange={updateFormSelection} />
             <RegistrationSelect label="How did you hear about KFSD soft skills training?" name="referral" options={referralOptions} placeholder="-" value={formSelections.referral} error={formErrors.referral} onChange={updateFormSelection} />
-            <button type="submit">Reserve My Free Spot</button><p className="form-reassurance">Your details will only be used for this training.</p>{formStatus && <p className="form-status" role="status">{formStatus}</p>}
+            <button type="submit" disabled={isSubmitting}>{isSubmitting ? "Submitting…" : "Reserve My Free Spot"}</button>
+            </fieldset>
+            <p className="form-reassurance">Your details will only be used for this training.</p>{formStatus && <p className={`form-status${formStatusKind === "error" ? " is-error" : ""}`} role={formStatusKind === "error" ? "alert" : "status"}>{formStatus}</p>}
           </form>
         </section>
 
