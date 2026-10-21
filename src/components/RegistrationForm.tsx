@@ -193,10 +193,12 @@ export default function RegistrationForm() {
         {selections.state === "Other / not listed" && <TextField name="stateOther" label="Your state or region" error={errors.state} placeholder="Enter your state or region" maxLength={200} />}
         {select("attended", "Have you attended KFSD soft skills training before?", ["Yes", "No", "Not sure"], "Select an answer")}
         {select("referral", "How did you hear about KFSD soft skills training?", referralOptions, "-")}
-        <button type="submit" disabled={submitting}>{submitting ? "Submitting…" : "Reserve My Free Spot"}</button>
       </fieldset>
-      <p className="form-reassurance">Your details will only be used for this training.</p>
-      {status?.error && <p className="form-status is-error" role="alert">{status.message}</p>}
+      <div className="registration-actions">
+        <button type="submit" disabled={submitting}>{submitting ? "Submitting…" : "Reserve My Free Spot"}</button>
+        <p className="form-reassurance">Your details will only be used for this training.</p>
+        {status?.error && <p className="form-status is-error" role="alert">{status.message}</p>}
+      </div>
     </form>
     {toast && <RegistrationSuccess key={toast.id} message={toast.message} celebrate={toast.celebrate} onClose={dismissToast} />}
   </>;
