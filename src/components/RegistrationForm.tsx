@@ -53,6 +53,23 @@ export default function RegistrationForm() {
     && /^\S+@\S+\.\S+$/.test(textValues.email || "") && !statesLoading && !Object.values(errors).some(Boolean);
 
   useEffect(() => {
+    const form = formRef.current;
+    const scrollArea = form?.querySelector<HTMLElement>(".registration-scroll");
+    if (!form || !scrollArea) return;
+    const desktop = window.matchMedia("(min-width: 801px)");
+    const handleWheel = (event: WheelEvent) => {
+      if (!desktop.matches || event.ctrlKey || !event.deltaY) return;
+      // Keep wheel gestures anywhere on the card (including its footer) inside
+      // the fields, even when the fields have reached either end.
+      event.preventDefault();
+      const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? scrollArea.clientHeight : 1;
+      scrollArea.scrollTop += event.deltaY * unit;
+    };
+    form.addEventListener("wheel", handleWheel, { passive: false });
+    return () => form.removeEventListener("wheel", handleWheel);
+  }, []);
+
+  useEffect(() => {
     const controller = new AbortController();
     let timeout: ReturnType<typeof setTimeout> | undefined;
     const detect = () => {

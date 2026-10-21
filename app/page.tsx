@@ -424,14 +424,6 @@ export default function Home() {
     return () => matchMedia.revert();
   }, { scope: pageRef });
 
-  useGSAP(() => {
-    const media = gsap.matchMedia();
-    media.add("(min-width: 801px)", () => {
-      ScrollTrigger.create({ trigger: ".registration-card", start: "top 148px", endTrigger: ".registration-section", end: "bottom bottom-=12", pin: true, pinSpacing: false, invalidateOnRefresh: true });
-    });
-    return () => media.revert();
-  }, { scope: pageRef });
-
   const activeSchedule = siteConfig.schedules[activeDay];
 
   return (
