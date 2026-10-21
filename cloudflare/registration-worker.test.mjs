@@ -161,6 +161,48 @@ test("malformed provider success is not accepted as a saved registration", async
 test("public health check reveals no secrets and makes no subscriber requests", async () => {
   const { handler, calls } = upstream();
   const response = await handler(new Request("https://worker.example/health"), env);
-  assert.deepEqual(await response.json(), { service: "kfsd-registration", version: 1, configured: true });
+  assert.deepEqual(await response.json(), { service: "kfsd-registration", version: 2, configured: true });
+  assert.equal(calls.length, 0);
+});
+
+test("validates international calling codes and saves normalized phone numbers", async () => {
+  for (const [phoneCountry, phone, expected] of [
+    ["NG", "0803 123 4567", "+2348031234567"],
+    ["GB", "07911 123456", "+447911123456"],
+    ["US", "(202) 555-0123", "+12025550123"],
+    ["CA", "416 555 0123", "+14165550123"],
+    ["IN", "98765 43210", "+919876543210"],
+  ]) {
+    const { handler, calls } = upstream();
+    const response = await handler(request({ ...submission, phoneCountry, phone }), env);
+    assert.equal(response.status, 200, `${phoneCountry}: ${await response.text()}`);
+    assert.equal(JSON.parse(calls[1].options.body).fields.phone, expected);
+  }
+  for (const [phoneCountry, phone] of [["NG", "1234567"], ["NG", "0803 CALL ME"], ["NG", "+447911123456"], ["XX", "08031234567"], ["NG", "080312345678901234567890"]]) {
+    const { handler, calls } = upstream();
+    const response = await handler(request({ ...submission, phoneCountry, phone }), env);
+    assert.equal(response.status, 422);
+    assert.ok((await response.json()).errors.phone);
+    assert.equal(calls.length, 0);
+  }
+});
+
+test("country code must match the selected country label", async () => {
+  const { handler, calls } = upstream();
+  const response = await handler(request({ ...submission, countryCode: "CA", country: "Nigeria" }), env);
+  assert.equal(response.status, 422);
+  assert.ok((await response.json()).errors.country);
+  assert.equal(calls.length, 0);
+});
+
+test("suggests country and region using Cloudflare metadata without exposing IP or calling MailerLite", async () => {
+  const { handler, calls } = upstream();
+  const req = new Request("https://worker.example/location", { headers: { origin, "CF-Connecting-IP": "192.0.2.10" } });
+  Object.defineProperty(req, "cf", { value: { country: "CA", regionCode: "ON", region: "Ontario" } });
+  const response = await handler(req);
+  assert.equal(response.headers.get("access-control-allow-origin"), origin);
+  assert.deepEqual(await response.json(), { countryCode: "CA", regionCode: "ON", region: "Ontario" });
+  const unknown = await handler(new Request("https://worker.example/location", { headers: { origin } }));
+  assert.deepEqual(await unknown.json(), { countryCode: null, regionCode: null, region: null });
   assert.equal(calls.length, 0);
 });

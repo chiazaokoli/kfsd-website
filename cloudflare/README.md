@@ -9,8 +9,9 @@ GitHub, the website, or these source files.
 
 1. Open **Workers & Pages → kfsd-demo-registration → Edit code**.
 2. Open `registration-worker.mjs` in this directory and copy its entire contents.
-3. Replace the starter Worker code with those contents. This file is plain
-   JavaScript with no imports or packages to install.
+3. Replace the entire Worker code with those contents. This generated file
+   bundles the international phone validator; no packages need installing in
+   Cloudflare. Copy the entire file, including its long lines.
 4. Click **Deploy**. Keep the existing `MAILERLITE_API_TOKEN` secret in Production.
 5. Visit `https://kfsd-demo-registration.yummydummy419.workers.dev/health`.
    The JSON should include `"service":"kfsd-registration"` and
@@ -62,9 +63,28 @@ without an appropriate separate opt-in.
 
 ## Checks
 
-Run `node --test cloudflare/registration-worker.test.mjs`, `npm run lint`,
+Run `npm run build:worker`, `npm run test:registration`, `npm run lint`,
 `npm run typecheck`, and the GitHub Pages production build.
 Tests mock MailerLite; they never create subscribers or send email.
+
+Editable Worker source now lives in `src/registration-worker.mjs` relative to
+this directory. `npm run build:worker` generates the single-file
+`registration-worker.mjs`; the website production build runs this step too.
+Do not edit the generated bundle directly in the repository.
+
+The phone validator is shared with the website in
+`../src/lib/registration-phone.ts`. It validates actual national numbering
+patterns and the chosen calling code, then sends MailerLite an international
+E.164 number. Existing international-number submissions remain supported.
+
+`GET /location` returns Cloudflare's country and region suggestion to the
+permitted website origin, without exposing the IP address or contacting
+MailerLite. IP location can be approximate or reflect a VPN; all defaults remain
+editable. If it fails or the old Worker is still deployed, the form falls back
+to Nigeria. Country/state data comes from the MIT-licensed `country-region-data`
+package. State lists are loaded in small groups by country initial; run
+`npm run build:registration-data` to regenerate them. A manual entry remains
+available for missing states, missing professions, or a failed state-data load.
 
 Outbound requests must use `redirect: "manual"`: Cloudflare's runtime rejects
 `"error"`, even though Node.js accepts it. The Worker treats redirects as failures

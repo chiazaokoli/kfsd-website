@@ -1,12 +1,12 @@
 "use client";
 
-import { type CSSProperties, FormEvent, Fragment, type KeyboardEvent, type MouseEvent, useEffect, useRef, useState } from "react";
+import { type CSSProperties, Fragment, type MouseEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
-  ArrowDown, ArrowRight, Brain, CalendarBlank, CaretDown, ChatCircleDots,
+  ArrowDown, ArrowRight, Brain, CalendarBlank, ChatCircleDots,
   Clock, CrownSimple, GlobeHemisphereWest, Lightning,
   ListChecks, RocketLaunch, Mountains, Play, Question, ShieldCheck,
   Student, UsersThree, Medal,
@@ -16,10 +16,10 @@ import GradeSketch, { paintRuns, paintRunPath } from "../src/components/GradeSke
 import SmoothCorners from "../src/components/SmoothCorners";
 import LearningFlow from "../src/components/LearningFlow";
 import SplashScreen from "./components/SplashScreen";
+import RegistrationForm from "../src/components/RegistrationForm";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 const assetPrefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-const registrationEndpoint = "https://kfsd-demo-registration.yummydummy419.workers.dev/register";
 const showSplashScreen = true;
 const heroLeadWords = ["Learn", "the", "soft", "skills", "that", "set", "you", "apart", "in"];
 const heroEnding = "2 days.";
@@ -83,9 +83,6 @@ const faqs = [
   ["Do I need to attend both days?", "We strongly recommend it, as the sessions build on each other."],
   ["Will I get a certificate?", "Details will be shared after registration."],
 ];
-const attendanceOptions = ["Yes", "No", "Not sure"];
-const companyOptions = ["-", "NIQS", "NICE", "NSE", "NIOB", "APWEN", "NISTRUCTE", "YEFON", "NIQS FOUNDATION", "Other"];
-const referralOptions = ["-", "NIQS, NIOB, NSE, NISTRUCTE, YEFON, APWEN, CORBIN, COREN", "KFSD Alumni", "Social Media (Facebook, LinkedIn, Instagram)", "Impact Leaders Club", "Enactus", "DSN Network", "Whatsapp", "Word of mouth", "AIN", "MEK NextGen Innovators"];
 
 type Countdown = { days: number; hours: number; minutes: number; seconds: number };
 
@@ -97,75 +94,6 @@ function getCountdown(): Countdown {
     minutes: Math.floor((distance / 60_000) % 60),
     seconds: Math.floor((distance / 1_000) % 60),
   };
-}
-
-type RegistrationSelectName = "company" | "attended" | "referral";
-
-type RegistrationSelectProps = {
-  label: string;
-  name: RegistrationSelectName;
-  options: readonly string[];
-  placeholder: string;
-  value: string;
-  error?: string;
-  onChange: (name: RegistrationSelectName, value: string) => void;
-};
-
-function RegistrationSelect({ label, name, options, placeholder, value, error, onChange }: RegistrationSelectProps) {
-  const fieldRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const [open, setOpen] = useState(false);
-  const [active, setActive] = useState(0);
-
-  useEffect(() => {
-    if (!open) return;
-    const closeOutside = (event: PointerEvent) => {
-      if (!fieldRef.current?.contains(event.target as Node)) setOpen(false);
-    };
-    document.addEventListener("pointerdown", closeOutside);
-    return () => document.removeEventListener("pointerdown", closeOutside);
-  }, [open]);
-
-  const select = (option: string) => {
-    onChange(name, option === "-" ? "" : option);
-    setOpen(false);
-    triggerRef.current?.focus();
-  };
-
-  const onKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
-    const last = options.length - 1;
-    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
-      event.preventDefault();
-      const direction = event.key === "ArrowDown" ? 1 : -1;
-      setActive((current) => open ? (current + direction + options.length) % options.length : Math.max(0, options.indexOf(value)));
-      setOpen(true);
-    } else if (event.key === "Home" || event.key === "End") {
-      event.preventDefault();
-      setActive(event.key === "Home" ? 0 : last);
-      setOpen(true);
-    } else if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      if (open) select(options[active]);
-      else { setActive(Math.max(0, options.indexOf(value))); setOpen(true); }
-    } else if (event.key === "Escape" && open) {
-      event.preventDefault();
-      setOpen(false);
-    } else if (event.key === "Tab") {
-      setOpen(false);
-    }
-  };
-
-  return <div className="form-select-field" ref={fieldRef}>
-    <label id={`${name}-label`} htmlFor={`${name}-trigger`}>{label}</label>
-    <input type="hidden" name={name} value={value} />
-    <button id={`${name}-trigger`} ref={triggerRef} className={`form-select-trigger${value ? " is-selected" : ""}`} type="button" role="combobox" aria-labelledby={`${name}-label`} aria-haspopup="listbox" aria-expanded={open} aria-controls={`${name}-options`} aria-activedescendant={open ? `${name}-option-${active}` : undefined} aria-invalid={Boolean(error)} aria-describedby={error ? `${name}-error` : undefined} onClick={() => { setActive(Math.max(0, options.indexOf(value))); setOpen((current) => !current); }} onKeyDown={onKeyDown}>
-      <span>{value || placeholder}</span><CaretDown size={18} weight="bold" aria-hidden="true" />
-    </button>
-    {open && <div id={`${name}-options`} className="form-select-options" role="listbox" aria-labelledby={`${name}-label`}>
-      {options.map((option, index) => <div id={`${name}-option-${index}`} className={`form-select-option${index === active ? " is-active" : ""}`} role="option" aria-selected={option === (value || "-")} key={option} onPointerMove={() => setActive(index)} onClick={() => select(option)}>{option}</div>)}
-    </div>}
-    {error && <small id={`${name}-error`}>{error}</small>}
-  </div>;
 }
 
 export default function Home() {
@@ -183,12 +111,6 @@ export default function Home() {
   const [activeDay, setActiveDay] = useState(0);
   const [openFaqs, setOpenFaqs] = useState<number[]>([]);
   const [localTime, setLocalTime] = useState("");
-  const [formStatus, setFormStatus] = useState("");
-  const [formStatusKind, setFormStatusKind] = useState<"success" | "error">("success");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const submissionInFlight = useRef(false);
-  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
-  const [formSelections, setFormSelections] = useState({ company: "", attended: "", referral: "" });
   const [heroRevealStarted, setHeroRevealStarted] = useState(!showSplashScreen);
 
   function handleRegistrationCtaClick(event: MouseEvent<HTMLAnchorElement>) {
@@ -467,59 +389,6 @@ export default function Home() {
     return () => matchMedia.revert();
   }, { scope: pageRef });
 
-  async function handleRegistration(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (submissionInFlight.current) return;
-    const form = event.currentTarget;
-    const data = new FormData(form);
-    const required = ["email", "firstName", "lastName", "phone", "profession", "country", "state", "attended", "referral"];
-    const errors: Record<string, string> = {};
-    required.forEach((field) => { if (!String(data.get(field) ?? "").trim()) errors[field] = "Please complete this field."; });
-    const email = String(data.get("email") ?? "").trim();
-    if (email && !/^\S+@\S+\.\S+$/.test(email)) errors.email = "Enter a valid email address.";
-    const phone = String(data.get("phone") ?? "").replace(/\D/g, "");
-    if (phone && phone.length < 7) errors.phone = "Enter a valid phone number.";
-    setFormErrors(errors);
-    if (Object.keys(errors).length) { setFormStatus(""); return; }
-    submissionInFlight.current = true;
-    setIsSubmitting(true);
-    setFormStatus("");
-    try {
-      const response = await fetch(registrationEndpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(Object.fromEntries(data)),
-        signal: AbortSignal.timeout(20000),
-      });
-      const result = await response.json();
-      if (!response.ok || result.ok !== true || !["registered", "pending"].includes(result.status)) {
-        if (result.errors && typeof result.errors === "object") {
-          const serverErrors: Record<string, string> = {};
-          for (const field of [...required, "company"]) {
-            if (typeof result.errors[field] === "string") serverErrors[field] = result.errors[field];
-          }
-          setFormErrors(serverErrors);
-        }
-        throw new Error(typeof result.message === "string" ? result.message : "Registration is temporarily unavailable. Your answers are still here. Please try again shortly.");
-      }
-      setFormStatusKind("success");
-      setFormStatus(result.message);
-      form.reset();
-      setFormSelections({ company: "", attended: "", referral: "" });
-    } catch (error) {
-      setFormStatusKind("error");
-      setFormStatus(error instanceof Error && error.name === "Error" ? error.message : "We couldn't confirm your registration. Your answers are still here. Please try again shortly.");
-    } finally {
-      submissionInFlight.current = false;
-      setIsSubmitting(false);
-    }
-  }
-
-  function updateFormSelection(name: RegistrationSelectName, value: string) {
-    setFormSelections((current) => ({ ...current, [name]: value }));
-    setFormErrors((current) => ({ ...current, [name]: "" }));
-  }
-
   const activeSchedule = siteConfig.schedules[activeDay];
 
   return (
@@ -641,27 +510,7 @@ export default function Home() {
               </strong>
             </div>
           </div>
-          <form id="registration-form" className="registration-form" onSubmit={handleRegistration} onInput={(event) => { const name = (event.target as HTMLInputElement).name; if (name && formErrors[name]) setFormErrors((current) => ({ ...current, [name]: "" })); }} noValidate>
-            <fieldset className="registration-fields" disabled={isSubmitting} aria-busy={isSubmitting}>
-            <div className="form-honeypot" aria-hidden="true"><label>Leave this field empty<input name="website" type="text" tabIndex={-1} autoComplete="off" /></label></div>
-            <label>Email<input name="email" type="email" autoComplete="email" placeholder="you@example.com" aria-invalid={Boolean(formErrors.email)} aria-describedby={formErrors.email ? "email-error" : undefined} />{formErrors.email && <small id="email-error">{formErrors.email}</small>}</label>
-            <div className="form-row">
-              <label>First name<input name="firstName" type="text" autoComplete="given-name" placeholder="Your first name" aria-invalid={Boolean(formErrors.firstName)} aria-describedby={formErrors.firstName ? "firstName-error" : undefined} />{formErrors.firstName && <small id="firstName-error">{formErrors.firstName}</small>}</label>
-              <label>Last name<input name="lastName" type="text" autoComplete="family-name" placeholder="Your last name" aria-invalid={Boolean(formErrors.lastName)} aria-describedby={formErrors.lastName ? "lastName-error" : undefined} />{formErrors.lastName && <small id="lastName-error">{formErrors.lastName}</small>}</label>
-            </div>
-            <label>Phone<input name="phone" type="tel" autoComplete="tel" placeholder="Your phone number" aria-invalid={Boolean(formErrors.phone)} aria-describedby={formErrors.phone ? "phone-error" : undefined} />{formErrors.phone && <small id="phone-error">{formErrors.phone}</small>}</label>
-            <label>Profession<input name="profession" type="text" autoComplete="organization-title" placeholder="Student, teacher, etc." aria-invalid={Boolean(formErrors.profession)} aria-describedby={formErrors.profession ? "profession-error" : undefined} />{formErrors.profession && <small id="profession-error">{formErrors.profession}</small>}</label>
-            <RegistrationSelect label="Company" name="company" options={companyOptions} placeholder="-" value={formSelections.company} error={formErrors.company} onChange={updateFormSelection} />
-            <div className="form-row">
-              <label>Country<input name="country" type="text" autoComplete="country-name" placeholder="Your country" aria-invalid={Boolean(formErrors.country)} aria-describedby={formErrors.country ? "country-error" : undefined} />{formErrors.country && <small id="country-error">{formErrors.country}</small>}</label>
-              <label>State<input name="state" type="text" autoComplete="address-level1" placeholder="Your state or region" aria-invalid={Boolean(formErrors.state)} aria-describedby={formErrors.state ? "state-error" : undefined} />{formErrors.state && <small id="state-error">{formErrors.state}</small>}</label>
-            </div>
-            <RegistrationSelect label="Have you attended KFSD soft skills training before?" name="attended" options={attendanceOptions} placeholder="Select an answer" value={formSelections.attended} error={formErrors.attended} onChange={updateFormSelection} />
-            <RegistrationSelect label="How did you hear about KFSD soft skills training?" name="referral" options={referralOptions} placeholder="-" value={formSelections.referral} error={formErrors.referral} onChange={updateFormSelection} />
-            <button type="submit" disabled={isSubmitting}>{isSubmitting ? "Submitting…" : "Reserve My Free Spot"}</button>
-            </fieldset>
-            <p className="form-reassurance">Your details will only be used for this training.</p>{formStatus && <p className={`form-status${formStatusKind === "error" ? " is-error" : ""}`} role={formStatusKind === "error" ? "alert" : "status"}>{formStatus}</p>}
-          </form>
+          <RegistrationForm />
         </section>
 
         <section className="faq-section-new"><div><h2>Questions, answered.</h2></div><div className="faq-list-new">{faqs.map(([question, answer], index) => {

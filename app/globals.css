@@ -309,6 +309,34 @@ img { display: block; }
 .form-reassurance { margin: 0; color: #777c87; font-size: .61rem; text-align: center; }
 .form-status { margin: 0; padding: 13px; color: #0d3b22; border-radius: 9px; background: #e7f7ed; font-size: .7rem; line-height: 1.5; }
 .form-status.is-error { color: #84262c; background: #fff0f0; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.phone-field { display: grid; min-width: 0; gap: 8px; }
+.phone-field > small { color: #c53e45; font-size: .75rem; font-weight: 500; }
+.phone-input-row { position: relative; display: grid; grid-template-columns: 105px minmax(0, 1fr); gap: 8px; min-width: 0; }
+.phone-input-row > input { min-width: 0; }
+.phone-country { align-self: start; gap: 0; }
+.registration-form .phone-country .form-select-trigger { gap: 6px; padding-inline: 12px; }
+.form-select-trigger > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.form-select-panel { min-width: 0; overflow: hidden; border: 1px solid rgba(11,16,28,.14); border-radius: 18px; background: white; box-shadow: 0 12px 28px rgba(11,16,28,.09); }
+.form-select-panel .form-select-options { max-height: min(250px, 35dvh); border: 0; border-radius: 0; box-shadow: none; }
+.form-select-search { padding: 6px; border-bottom: 1px solid rgba(11,16,28,.08); }
+.registration-form .form-select-search input { min-height: 40px; height: 40px; border-radius: 13px; background: #f7f9f7; }
+.form-select-empty { margin: 0; padding: 14px; color: #777c87; font-size: .875rem; }
+.phone-country .form-select-panel { position: absolute; z-index: 25; top: calc(100% + 6px); left: 0; right: 0; }
+.form-select-trigger:disabled { opacity: .6; cursor: wait; }
+.registration-toast { position: fixed; z-index: 1200; bottom: max(24px, env(safe-area-inset-bottom)); left: 50%; display: flex; align-items: flex-start; gap: 12px; width: min(440px, calc(100vw - 32px)); padding: 18px; color: white; border: 1px solid rgba(255,255,255,.14); border-radius: 22px; background: #0b101c; box-shadow: 0 16px 50px rgba(0,0,0,.25); transform: translateX(-50%); animation: registration-toast-in 350ms ease-out both; }
+.registration-toast > svg { flex: none; color: #22db79; }
+.registration-toast > div { flex: 1; min-width: 0; }
+.registration-toast strong { display: block; font-size: .9375rem; font-weight: 600; }
+.registration-toast p { margin: 5px 0 0; color: #d2d7e0; font-size: .8125rem; line-height: 1.5; }
+.registration-toast button { display: grid; place-items: center; flex: none; width: 28px; height: 28px; padding: 0; border-radius: 8px; color: white; background: rgba(255,255,255,.08); cursor: pointer; }
+.registration-toast button:focus-visible { outline: 2px solid #22db79; outline-offset: 3px; }
+.registration-confetti { position: fixed; inset: 0; z-index: 1199; overflow: hidden; pointer-events: none; }
+.registration-confetti i { position: absolute; top: -20px; opacity: 0; animation-name: registration-confetti-fall; animation-timing-function: cubic-bezier(.22,.6,.54,1); animation-fill-mode: both; }
+@keyframes registration-toast-in { from { opacity: 0; translate: 0 14px; } to { opacity: 1; translate: 0 0; } }
+@keyframes registration-confetti-fall { 0% { opacity: 0; transform: translate3d(0, -20px, 0) rotate(0); } 8% { opacity: 1; } 85% { opacity: 1; } 100% { opacity: 0; transform: translate3d(var(--confetti-drift), 110vh, 0) rotate(var(--confetti-turn)); } }
+@supports (corner-shape: squircle) { .form-select-panel, .registration-toast { corner-shape: squircle; } }
+@media (prefers-reduced-motion: reduce) { .registration-confetti { display: none; } .registration-toast { animation: none; } }
 
 /* FAQ and footer */
 .faq-section-new { display: grid; grid-template-columns: .62fr 1fr; gap: clamp(60px, 10vw, 160px); align-items: start; padding: clamp(120px, 14vw, 200px) max(5vw, 28px); background: var(--paper); }
