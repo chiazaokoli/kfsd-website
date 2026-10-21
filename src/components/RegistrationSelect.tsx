@@ -68,6 +68,12 @@ export default function RegistrationSelect({ label, name, options, placeholder, 
     const schedule = (event: Event) => {
       if (event.target instanceof Node && panelRef.current?.contains(event.target)) return;
       if (stabilizeKeyboard && (event.type === "resize" || settling)) { settle(); return; }
+      if (event.type === "scroll" && event.target !== window.visualViewport) {
+        setOpen(false);
+        inputRef.current?.blur();
+        searchRef.current?.blur();
+        return;
+      }
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(update);
     };
@@ -82,7 +88,13 @@ export default function RegistrationSelect({ label, name, options, placeholder, 
 
   useEffect(() => {
     if (!open) return;
-    const close = (event: PointerEvent) => { if (!fieldRef.current?.contains(event.target as Node) && !panelRef.current?.contains(event.target as Node)) setOpen(false); };
+    const close = (event: PointerEvent) => {
+      if (!fieldRef.current?.contains(event.target as Node) && !panelRef.current?.contains(event.target as Node)) {
+        setOpen(false);
+        inputRef.current?.blur();
+        searchRef.current?.blur();
+      }
+    };
     document.addEventListener("pointerdown", close);
     if (keyboardOpen.current || window.matchMedia("(pointer: fine)").matches) searchRef.current?.focus({ preventScroll: true });
     return () => document.removeEventListener("pointerdown", close);
@@ -136,7 +148,7 @@ export default function RegistrationSelect({ label, name, options, placeholder, 
     <label className={compact ? "visually-hidden" : undefined} id={`${name}-label`} htmlFor={`${name}-trigger`}>{compact && selected ? `${label}: ${selected.label}` : label}</label>
     <input type="hidden" name={name} value={value} />
     {inlineSearch ? <div className={`form-select-inline${open ? " is-open" : ""}`}>
-      <input id={`${name}-trigger`} ref={inputRef} className={`form-select-trigger${value || query ? " is-selected" : ""}`} type="text" role="combobox" autoComplete="off" spellCheck={false} disabled={disabled} aria-labelledby={`${name}-label`} aria-autocomplete="list" aria-haspopup="listbox" aria-expanded={open} aria-controls={`${name}-options`} aria-activedescendant={open && shown[active] ? `${name}-option-${active}` : undefined} aria-invalid={Boolean(error)} aria-describedby={error ? `${name}-error` : undefined} placeholder={open ? `Search ${name === "country" ? "countries" : "states or regions"}…` : placeholder} value={open ? query : selected?.label || ""} onFocus={openList} onClick={() => { if (!open) openList(); }} onChange={(event) => { if (!open) setPosition(null); setQuery(event.target.value); setActive(0); setOpen(true); }} onKeyDown={onKeyDown} />
+      <input id={`${name}-trigger`} ref={inputRef} className={`form-select-trigger${value || query ? " is-selected" : ""}`} type="text" role="combobox" autoComplete="off" spellCheck={false} disabled={disabled} aria-labelledby={`${name}-label`} aria-autocomplete="list" aria-haspopup="listbox" aria-expanded={open} aria-controls={`${name}-options`} aria-activedescendant={open && shown[active] ? `${name}-option-${active}` : undefined} aria-invalid={Boolean(error)} aria-describedby={error ? `${name}-error` : undefined} placeholder={open ? `Search ${name === "country" ? "countries" : name === "profession" ? "professions" : "states or regions"}…` : placeholder} value={open ? query : selected?.label || ""} onFocus={openList} onClick={() => { if (!open) openList(); }} onChange={(event) => { if (!open) setPosition(null); setQuery(event.target.value); setActive(0); setOpen(true); }} onKeyDown={onKeyDown} />
       <CaretDown className="form-select-inline-caret" size={16} weight="bold" aria-hidden="true" />
     </div> : <button id={`${name}-trigger`} ref={triggerRef} className={`form-select-trigger${value ? " is-selected" : ""}`} type="button" role="combobox" title={selected?.label} disabled={disabled} aria-labelledby={`${name}-label`} aria-haspopup="listbox" aria-expanded={open} aria-controls={`${name}-options`} aria-activedescendant={open && !searchable && shown[active] ? `${name}-option-${active}` : undefined} aria-invalid={Boolean(error)} aria-describedby={error ? `${name}-error` : undefined} onPointerDown={() => { keyboardOpen.current = false; }} onClick={() => open ? setOpen(false) : openList()} onKeyDown={onKeyDown}>
       <span>{selected ? (compact ? selected.shortLabel || selected.label : selected.label) : placeholder}</span><CaretDown size={16} weight="bold" aria-hidden="true" />

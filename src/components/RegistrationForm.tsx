@@ -168,7 +168,7 @@ export default function RegistrationForm() {
     } finally { inFlight.current = false; setSubmitting(false); }
   }
 
-  const select = (name: keyof Selections, label: string, options: React.ComponentProps<typeof RegistrationSelect>["options"], placeholder: string, searchable = false) => <RegistrationSelect name={name} label={label} options={options} placeholder={placeholder} value={selections[name]} error={errors[name]} searchable={searchable} inlineSearch={name === "country"} onChange={(value) => updateSelection(name, value)} />;
+  const select = (name: keyof Selections, label: string, options: React.ComponentProps<typeof RegistrationSelect>["options"], placeholder: string, searchable = false) => <RegistrationSelect name={name} label={label} options={options} placeholder={placeholder} value={selections[name]} error={errors[name]} searchable={searchable} inlineSearch={name === "country" || name === "profession"} onChange={(value) => updateSelection(name, value)} />;
 
   return <>
     <form ref={formRef} id="registration-form" className="registration-form" onSubmit={handleSubmit} onInput={(event) => { const name = (event.target as HTMLInputElement).name; const field = name === "professionOther" ? "profession" : name === "stateOther" ? "state" : name; if (field && errors[field]) setErrors((current) => ({ ...current, [field]: "" })); }} noValidate>
