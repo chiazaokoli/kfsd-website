@@ -424,6 +424,14 @@ export default function Home() {
     return () => matchMedia.revert();
   }, { scope: pageRef });
 
+  useGSAP(() => {
+    const media = gsap.matchMedia();
+    media.add("(min-width: 801px)", () => {
+      ScrollTrigger.create({ trigger: ".registration-card", start: "top 148px", endTrigger: ".registration-section", end: "bottom bottom-=12", pin: true, pinSpacing: false, invalidateOnRefresh: true });
+    });
+    return () => media.revert();
+  }, { scope: pageRef });
+
   const activeSchedule = siteConfig.schedules[activeDay];
 
   return (
@@ -537,15 +545,18 @@ export default function Home() {
             <p className="section-kicker">Registration</p>
             <div className="registration-heading">
               <h2>Register for the soft skills training and take on a new mindset that will shape your future.</h2>
+
+            </div>
+          </div>
+          <div className="registration-card">
               <strong className="registration-free-badge" aria-label="Free">
                 <svg viewBox="0 0 144 144" aria-hidden="true">
                   <path d="M 72.00 9.00 L 74.72 9.60 L 77.32 11.23 L 79.70 13.50 L 81.90 15.87 L 84.02 17.78 L 86.24 18.87 L 88.70 19.03 L 91.50 18.44 L 94.58 17.49 L 97.78 16.72 L 100.84 16.59 L 103.50 17.44 L 105.56 19.32 L 106.99 22.03 L 107.92 25.19 L 108.64 28.34 L 109.52 31.05 L 110.89 33.11 L 112.95 34.48 L 115.66 35.36 L 118.81 36.08 L 121.97 37.01 L 124.68 38.44 L 126.56 40.50 L 127.41 43.16 L 127.28 46.22 L 126.51 49.42 L 125.56 52.50 L 124.97 55.30 L 125.13 57.76 L 126.22 59.98 L 128.13 62.10 L 130.50 64.30 L 132.77 66.68 L 134.40 69.28 L 135.00 72.00 L 134.40 74.72 L 132.77 77.32 L 130.50 79.70 L 128.13 81.90 L 126.22 84.02 L 125.13 86.24 L 124.97 88.70 L 125.56 91.50 L 126.51 94.58 L 127.28 97.78 L 127.41 100.84 L 126.56 103.50 L 124.68 105.56 L 121.97 106.99 L 118.81 107.92 L 115.66 108.64 L 112.95 109.52 L 110.89 110.89 L 109.52 112.95 L 108.64 115.66 L 107.92 118.81 L 106.99 121.97 L 105.56 124.68 L 103.50 126.56 L 100.84 127.41 L 97.78 127.28 L 94.58 126.51 L 91.50 125.56 L 88.70 124.97 L 86.24 125.13 L 84.02 126.22 L 81.90 128.13 L 79.70 130.50 L 77.32 132.77 L 74.72 134.40 L 72.00 135.00 L 69.28 134.40 L 66.68 132.77 L 64.30 130.50 L 62.10 128.13 L 59.98 126.22 L 57.76 125.13 L 55.30 124.97 L 52.50 125.56 L 49.42 126.51 L 46.22 127.28 L 43.16 127.41 L 40.50 126.56 L 38.44 124.68 L 37.01 121.97 L 36.08 118.81 L 35.36 115.66 L 34.48 112.95 L 33.11 110.89 L 31.05 109.52 L 28.34 108.64 L 25.19 107.92 L 22.03 106.99 L 19.32 105.56 L 17.44 103.50 L 16.59 100.84 L 16.72 97.78 L 17.49 94.58 L 18.44 91.50 L 19.03 88.70 L 18.87 86.24 L 17.78 84.02 L 15.87 81.90 L 13.50 79.70 L 11.23 77.32 L 9.60 74.72 L 9.00 72.00 L 9.60 69.28 L 11.23 66.68 L 13.50 64.30 L 15.87 62.10 L 17.78 59.98 L 18.87 57.76 L 19.03 55.30 L 18.44 52.50 L 17.49 49.42 L 16.72 46.22 L 16.59 43.16 L 17.44 40.50 L 19.32 38.44 L 22.03 37.01 L 25.19 36.08 L 28.34 35.36 L 31.05 34.48 L 33.11 33.11 L 34.48 31.05 L 35.36 28.34 L 36.08 25.19 L 37.01 22.03 L 38.44 19.32 L 40.50 17.44 L 43.16 16.59 L 46.22 16.72 L 49.42 17.49 L 52.50 18.44 L 55.30 19.03 L 57.76 18.87 L 59.98 17.78 L 62.10 15.87 L 64.30 13.50 L 66.68 11.23 L 69.28 9.60 Z" fill="#d51f30" />
                   <text x="72" y="82" textAnchor="middle" fill="#ffffff" fontFamily="Arial, sans-serif" fontSize="38" fontWeight="900" letterSpacing="-2">FREE</text>
                 </svg>
               </strong>
-            </div>
+            <RegistrationForm />
           </div>
-          <RegistrationForm />
         </section>
 
         <section className="faq-section-new"><div><h2>Questions, answered.</h2></div><div className="faq-list-new">{faqs.map(([question, answer], index) => {

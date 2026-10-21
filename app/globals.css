@@ -279,7 +279,8 @@ img { display: block; }
 .registration-section { position: relative; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(480px, .8fr); gap: clamp(60px, 9vw, 150px); padding: clamp(120px, 14vw, 210px) max(5vw, 28px); color: var(--white); background: radial-gradient(circle at 15% 20%, rgba(49,92,255,.36), transparent 35%), var(--ink); }
 .registration-copy h2 { max-width: 830px; margin: 0; font-size: clamp(3rem, 5.4vw, 5.8rem); font-weight: 530; letter-spacing: -.07em; line-height: .97; text-wrap: balance; }
 .registration-heading { position: relative; }
-.registration-free-badge { position: absolute; z-index: 2; top: calc(100% - 6px); right: 4px; display: block; width: 96px; height: 96px; pointer-events: none; }
+.registration-card { position: relative; align-self: start; min-width: 0; z-index: 3; }
+.registration-free-badge { position: absolute; z-index: 2; top: -48px; right: 26px; display: block; width: 96px; height: 96px; pointer-events: none; }
 @keyframes free-seal-spin { from { transform: rotate(-12deg); } to { transform: rotate(348deg); } }
 .registration-free-badge svg { display: block; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 6px 9px rgba(0,0,0,.24)); }
 .registration-free-badge svg path { transform-box: view-box; transform-origin: center; animation: free-seal-spin 12s linear infinite; }
@@ -288,8 +289,10 @@ img { display: block; }
 .registration-form label { display: grid; gap: 8px; font-size: .875rem; font-weight: 500; }
 .registration-fields { display: grid; gap: inherit; min-width: 0; margin: 0; padding: 0; border: 0; }
 .registration-actions { display: contents; }
+.registration-scroll { display: contents; gap: inherit; }
 .form-honeypot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
-.registration-form button[type="submit"]:disabled { opacity: .7; cursor: wait; transform: none; }
+.registration-form button[type="submit"]:disabled { background: #d9dde0; color: #737b84; opacity: 1; cursor: not-allowed; transform: none; }
+.registration-form button[type="submit"][aria-busy="true"] { cursor: wait; }
 .registration-form input, .registration-form select, .registration-form .form-select-trigger { box-sizing: border-box; width: 100%; min-height: 53px; height: 53px; padding: 0 15px; color: var(--ink); border: 1px solid rgba(11,16,28,.18); --smooth-radius: 19px; border-radius: var(--smooth-radius); outline: none; background: white; font-size: .875rem; font-weight: 400; }
 .registration-form input:focus, .registration-form select:focus { border-color: var(--accent-green); box-shadow: 0 0 0 3px rgba(34,219,121,.18); }
 .registration-form input::placeholder, .form-select-search input::placeholder { color: #757575; opacity: 1; }
@@ -394,8 +397,13 @@ img { display: block; }
   .speaker-portrait img { object-position: center top; }
   .registration-section { padding-bottom: clamp(60px, 7vw, 105px); }
   .faq-section-new { padding-top: clamp(60px, 7vw, 100px); }
-  .registration-form { grid-template-rows: minmax(0, 1fr) auto; gap: 20px; padding: 28px 26px; max-height: calc(100dvh - 160px); overflow: hidden; }
-  .registration-fields { min-height: 0; overflow-y: auto; overscroll-behavior-y: contain; scroll-padding-block: 12px; scrollbar-width: thin; scrollbar-color: rgba(11,16,28,.24) transparent; margin: -4px; padding: 4px; }
+  .registration-card .registration-free-badge { top: -68px; width: 136px; height: 136px; z-index: 30; }
+  .registration-form { grid-template-rows: minmax(0, 1fr) auto; gap: 20px; padding: 56px 26px 28px; max-height: calc(100dvh - 160px); overflow: hidden; }
+  .registration-scroll { display: block; min-height: 0; overflow-y: auto; overscroll-behavior-y: contain; scroll-padding-block: 12px; scrollbar-width: auto; scrollbar-gutter: stable; scrollbar-color: rgba(11,16,28,.46) rgba(11,16,28,.07); margin: -4px; padding: 4px; }
+  .registration-scroll::-webkit-scrollbar { width: 14px; }
+  .registration-scroll::-webkit-scrollbar-thumb { border: 2px solid transparent; border-radius: 999px; background: rgba(11,16,28,.46); background-clip: padding-box; }
+  .registration-scroll::-webkit-scrollbar-track { background: rgba(11,16,28,.07); }
+  @supports selector(::-webkit-scrollbar) { .registration-scroll { scrollbar-color: auto; } }
   .registration-actions { position: relative; z-index: 5; display: grid; gap: 20px; background: var(--paper); }
   .registration-form label, .registration-form .form-select-field { gap: 8px; }
   .registration-form input, .registration-form select, .registration-form .form-select-trigger { min-height: 44px; height: 44px; }
@@ -415,6 +423,7 @@ img { display: block; }
   .speaker-grid { grid-template-columns: 1fr 1fr; }
   .registration-section { grid-template-columns: 1fr; row-gap: 110px; }
   .registration-form { width: min(720px, 100%); }
+  .registration-card { width: min(720px, 100%); }
 }
 
 @media (max-width: 800px) {
@@ -488,6 +497,7 @@ img { display: block; }
   .registration-section::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 15% 20%, rgba(49,92,255,.36), transparent 35%); mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent); opacity: 0; transition: opacity 300ms ease-in-out; }
   .registration-section > * { position: relative; }
   .registration-copy { z-index: 2; margin-inline: 22px; }
+  .registration-card { width: 100%; }
   .registration-form { z-index: 1; width: 100%; padding: 36px 22px 28px; --smooth-radius: 0; border-radius: var(--smooth-radius); box-shadow: none; scroll-margin-top: 40px; }
   .smooth-corner-fallback.registration-form { filter: none; }
   .site-shell.registration-background-active .registration-section { color: var(--white); }
