@@ -13,26 +13,34 @@ export default function LearningFlow({ activeStep }: { activeStep: number }) {
 
     let geometryFrame = 0;
     const draw = () => {
-      const listRect = list.getBoundingClientRect();
+      // Measure against the SVG's own viewport. Firefox can size an absolutely
+      // positioned SVG a fraction differently from its grid parent.
+      const flowRect = svg.getBoundingClientRect();
       const steps = [...list.querySelectorAll<HTMLElement>(".learning-step")];
       const icons = steps.map((step) => step.querySelector<HTMLElement>(".learning-step-icon")?.getBoundingClientRect());
       const firstIcon = icons[0];
-      const activeRect = steps[activeStep]?.getBoundingClientRect();
+      const activeElement = steps[activeStep];
+      const activeRect = activeElement?.getBoundingClientRect();
       if (!firstIcon || !steps.length) return;
 
-      const x = firstIcon.left + firstIcon.width / 2 - listRect.left;
+      const x = firstIcon.left + firstIcon.width / 2 - flowRect.left;
       const iconY = (index: number) => {
         const icon = icons[index];
-        return icon ? icon.top + icon.height / 2 - listRect.top : 0;
+        return icon ? icon.top + icon.height / 2 - flowRect.top : 0;
       };
       let route = `M ${x} ${iconY(0)}`;
       if (activeRect) {
-        const left = activeRect.left - listRect.left;
-        const top = activeRect.top - listRect.top;
-        const bottom = activeRect.bottom - listRect.top;
-        const activeElement = steps[activeStep];
+        // SmoothCorners draws Firefox's visible border inside its overlay SVG,
+        // which starts inside the button's CSS border box. Follow that border
+        // instead of the button's outer bounding box.
+        const overlay = activeElement.querySelector<SVGSVGElement>(".smooth-corner-overlay");
+        const borderRect = overlay?.getBoundingClientRect() ?? activeRect;
         const scale = activeRect.width / activeElement.offsetWidth;
-        const radius = Math.min(Number.parseFloat(getComputedStyle(activeElement).borderTopRightRadius) * scale, activeRect.height / 4);
+        const inset = 0.5 * scale;
+        const left = borderRect.left + inset - flowRect.left;
+        const top = borderRect.top + inset - flowRect.top;
+        const bottom = borderRect.bottom - inset - flowRect.top;
+        const radius = Math.min((Number.parseFloat(getComputedStyle(activeElement).borderTopRightRadius) - 0.5) * scale, (bottom - top) / 4);
         if (activeStep === 0) route = `M ${left + radius} ${top}`;
         const corner = (plot: (sin: number, cos: number) => [number, number]) => {
           for (let point = 1; point <= 12; point++) {
@@ -56,7 +64,7 @@ export default function LearningFlow({ activeStep }: { activeStep: number }) {
         steps.forEach((_, index) => { if (index > 0) route += ` L ${x} ${iconY(index)}`; });
       }
 
-      svg.setAttribute("viewBox", `0 0 ${listRect.width} ${listRect.height}`);
+      svg.setAttribute("viewBox", `0 0 ${flowRect.width} ${flowRect.height}`);
       track.setAttribute("d", route);
     };
 
