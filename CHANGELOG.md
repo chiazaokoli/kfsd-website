@@ -10,6 +10,9 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-21
 
+- `dc794a3` — Aligned the learning path with the card borders in Firefox by
+  measuring the SVG viewport and the fallback card border. File:
+  `src/components/LearningFlow.tsx`.
 - `b10d670` — Re-encoded the five speaker portraits as full-resolution WebP,
   cutting their combined download from 945 KB to 152 KB without changing their
   crop. Loaded the small header and splash logos eagerly. Files:
