@@ -340,15 +340,13 @@ img { display: block; }
   .schedule-layout { min-height: 0; }
   .schedule-section { padding-bottom: clamp(130px, 10.5vw, 150px); }
   .proof-section { padding-top: clamp(130px, 10.5vw, 150px); }
-  .speaker-grid { max-width: 1080px; margin-inline: auto; }
+  .speaker-grid { width: 100%; max-width: none; margin-inline: 0; }
+  .speaker-portrait { height: clamp(400px, 34vw, 500px); aspect-ratio: auto; }
+  .speaker-portrait img { object-position: center top; }
   .registration-form { gap: 9px; padding: 22px 26px; }
   .registration-form label, .registration-form .form-select-field { gap: 5px; }
   .registration-form input, .registration-form select, .registration-form .form-select-trigger { min-height: 44px; height: 44px; }
   .registration-form button[type="submit"] { min-height: 50px; margin-top: 2px; }
-}
-
-@media (min-width: 801px) and (max-width: 1050px) {
-  .speaker-grid { max-width: 760px; }
 }
 
 @media (min-width: 801px) and (max-height: 820px) {
