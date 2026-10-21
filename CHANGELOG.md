@@ -10,6 +10,11 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-21
 
+- Inline country/state search — Clicking either field now edits its search
+  text directly and filters the anchored options. Removed the separate search
+  input for these two menus; selection, Escape, and leaving the field preserve
+  the committed value. Other fields keep their positions.
+  Files: `RegistrationSelect.tsx`, `RegistrationForm.tsx`, `app/globals.css`.
 - Registration overlay/deferred-loading update — Dropdowns render as anchored
   overlays outside the form, preserving field positions and card height on
   mobile and desktop. Menu navigation scrolls only the options; viewport changes

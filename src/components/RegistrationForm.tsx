@@ -168,7 +168,7 @@ export default function RegistrationForm() {
     } finally { inFlight.current = false; setSubmitting(false); }
   }
 
-  const select = (name: keyof Selections, label: string, options: React.ComponentProps<typeof RegistrationSelect>["options"], placeholder: string, searchable = false) => <RegistrationSelect name={name} label={label} options={options} placeholder={placeholder} value={selections[name]} error={errors[name]} searchable={searchable} onChange={(value) => updateSelection(name, value)} />;
+  const select = (name: keyof Selections, label: string, options: React.ComponentProps<typeof RegistrationSelect>["options"], placeholder: string, searchable = false) => <RegistrationSelect name={name} label={label} options={options} placeholder={placeholder} value={selections[name]} error={errors[name]} searchable={searchable} inlineSearch={name === "country"} onChange={(value) => updateSelection(name, value)} />;
 
   return <>
     <form ref={formRef} id="registration-form" className="registration-form" onSubmit={handleSubmit} onInput={(event) => { const name = (event.target as HTMLInputElement).name; const field = name === "professionOther" ? "profession" : name === "stateOther" ? "state" : name; if (field && errors[field]) setErrors((current) => ({ ...current, [field]: "" })); }} noValidate>
@@ -188,7 +188,7 @@ export default function RegistrationForm() {
         {select("company", "Company", companyOptions, "-")}
         <div className="form-row">
           {select("country", "Country", countryOptions, "Select your country", true)}
-          {stateData.failed && !statesLoading ? <TextField name="state" label="State or region" error={errors.state} placeholder="Your state or region" maxLength={200} /> : <RegistrationSelect name="state" label="State or region" options={[...new Set(states.map((state) => state.name)), ...(!states.length && !statesLoading ? ["Not applicable"] : []), "Other / not listed"]} placeholder={statesLoading ? "Loading states…" : "Select your state"} value={selections.state} error={errors.state} searchable disabled={statesLoading} onChange={(value) => updateSelection("state", value)} />}
+          {stateData.failed && !statesLoading ? <TextField name="state" label="State or region" error={errors.state} placeholder="Your state or region" maxLength={200} /> : <RegistrationSelect name="state" label="State or region" options={[...new Set(states.map((state) => state.name)), ...(!states.length && !statesLoading ? ["Not applicable"] : []), "Other / not listed"]} placeholder={statesLoading ? "Loading states…" : "Select your state"} value={selections.state} error={errors.state} searchable inlineSearch disabled={statesLoading} onChange={(value) => updateSelection("state", value)} />}
         </div>
         {selections.state === "Other / not listed" && <TextField name="stateOther" label="Your state or region" error={errors.state} placeholder="Enter your state or region" maxLength={200} />}
         {select("attended", "Have you attended KFSD soft skills training before?", ["Yes", "No", "Not sure"], "Select an answer")}
