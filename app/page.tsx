@@ -229,10 +229,12 @@ export default function Home() {
     const sections = sectionColors.map(([selector, color]) => ({ element: shell?.querySelector<HTMLElement>(selector), color }));
     const skillsIndex = sectionColors.findIndex(([selector]) => selector === ".skills-section");
     const skillsHeading = shell?.querySelector<HTMLElement>(".skills-section h2");
+    const matterStatement = shell?.querySelector<HTMLElement>(".matter-section .reveal-statement");
     const twoDaysIndex = sectionColors.findIndex(([selector]) => selector === ".two-days-section");
     const twoDaysHeading = shell?.querySelector<HTMLElement>(".two-days-section h2");
     const registrationIndex = sectionColors.findIndex(([selector]) => selector === ".registration-section");
     const registrationHeading = shell?.querySelector<HTMLElement>(".registration-copy h2");
+    const twoDaysCopy = shell?.querySelector<HTMLElement>(".two-days-section > p");
     const faqIndex = sectionColors.findIndex(([selector]) => selector === ".faq-section-new");
     const update = () => {
       frame = 0;
@@ -246,10 +248,12 @@ export default function Home() {
       sections.forEach(({ element }, index) => {
         const entryLine = index === 0 ? window.innerHeight : window.innerHeight * 0.8;
         const heading = index === skillsIndex ? skillsHeading : index === twoDaysIndex ? twoDaysHeading : index === registrationIndex ? registrationHeading : undefined;
+        const outgoingCopy = mobile ? undefined : index === skillsIndex ? matterStatement : index === registrationIndex ? twoDaysCopy : undefined;
         const boundary = mobile && heading
           ? heading.getBoundingClientRect().bottom
-          : element?.getBoundingClientRect().top;
-        if (boundary !== undefined && boundary <= entryLine) activeSection = index;
+          : outgoingCopy?.getBoundingClientRect().bottom ?? element?.getBoundingClientRect().top;
+        const threshold = outgoingCopy ? window.innerHeight * 0.1 : entryLine;
+        if (boundary !== undefined && boundary <= threshold) activeSection = index;
       });
       shell.classList.toggle("skills-background-active", activeSection === skillsIndex);
       shell.classList.toggle("matter-background-active", activeSection === 1);
