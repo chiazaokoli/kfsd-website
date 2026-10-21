@@ -101,7 +101,6 @@ export default function Home() {
   const topbarRef = useRef<HTMLElement>(null);
   const heroCtaRef = useRef<HTMLAnchorElement>(null);
   const countdownRef = useRef<HTMLElement>(null);
-  const learningSectionRef = useRef<HTMLElement>(null);
   const videoDialogRef = useRef<HTMLDialogElement>(null);
   const introVideoRef = useRef<HTMLVideoElement>(null);
   const [showNavCta, setShowNavCta] = useState(false);
@@ -275,36 +274,6 @@ export default function Home() {
     }, { threshold: [0, 0.995] });
     observer.observe(section);
     return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    let frame = 0;
-    const updateFocusedStep = () => {
-      frame = 0;
-      const section = learningSectionRef.current;
-      if (!section || window.innerWidth > 800) return;
-      const bounds = section.getBoundingClientRect();
-      if (bounds.bottom < 0 || bounds.top > window.innerHeight) return;
-      const focusLine = window.innerHeight * 0.55;
-      const steps = section.querySelectorAll<HTMLElement>(".learning-step");
-      let closest = 0;
-      let distance = Infinity;
-      steps.forEach((step, index) => {
-        const rect = step.getBoundingClientRect();
-        const nextDistance = Math.abs(rect.top + rect.height / 2 - focusLine);
-        if (nextDistance < distance) { distance = nextDistance; closest = index; }
-      });
-      setActiveStep((current) => current === closest ? current : closest);
-    };
-    const scheduleUpdate = () => { if (!frame) frame = window.requestAnimationFrame(updateFocusedStep); };
-    scheduleUpdate();
-    window.addEventListener("scroll", scheduleUpdate, { passive: true });
-    window.addEventListener("resize", scheduleUpdate);
-    return () => {
-      window.cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", scheduleUpdate);
-      window.removeEventListener("resize", scheduleUpdate);
-    };
   }, []);
 
   useGSAP(() => {
@@ -494,13 +463,13 @@ export default function Home() {
           </div>
         </section>
 
-        <section ref={learningSectionRef} className="learning-section">
+        <section className="learning-section">
           <div className="section-heading learning-heading chapter-reveal"><h2>Real advice from people who’ve done it. Here’s how to make them stick</h2></div>
           <div className="learning-steps">
             <LearningFlow activeStep={activeStep} />
             {learningSteps.map(({ title, copy, icon: Icon }, index) => {
               const active = activeStep === index;
-              return <button className={`learning-step${active ? " active" : ""}`} type="button" key={title} aria-expanded={active} onClick={() => setActiveStep(index)} onMouseEnter={() => { if (window.innerWidth > 800) setActiveStep(index); }} onFocus={() => setActiveStep(index)}>
+              return <button className={`learning-step${active ? " active" : ""}`} type="button" key={title} aria-expanded={active} onClick={() => setActiveStep(index)}>
                 <span className="learning-step-icon"><Icon size={26} weight="duotone" /></span>
                 <span className="learning-step-text"><strong>{title}</strong><small aria-hidden={!active}>{copy}</small></span>
                 <span className="learning-step-index" aria-hidden="true">0{index + 1}</span>
