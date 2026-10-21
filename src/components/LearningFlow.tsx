@@ -30,17 +30,16 @@ export default function LearningFlow({ activeStep }: { activeStep: number }) {
       };
       let route = `M ${x} ${iconY(0)}`;
       if (activeRect) {
-        // SmoothCorners draws Firefox's visible border inside its overlay SVG,
-        // which starts inside the button's CSS border box. Follow that border
-        // instead of the button's outer bounding box.
+        // Follow the fallback border's actual viewport after transforms, using
+        // the same design radius as the card rather than its reset CSS radius.
         const overlay = activeElement.querySelector<SVGSVGElement>(".smooth-corner-overlay");
         const borderRect = overlay?.getBoundingClientRect() ?? activeRect;
-        const scale = activeRect.width / activeElement.offsetWidth;
+        const scale = activeRect.width / (Number.parseFloat(getComputedStyle(activeElement).width) || activeElement.offsetWidth);
         const inset = 0.5 * scale;
         const left = borderRect.left + inset - flowRect.left;
         const top = borderRect.top + inset - flowRect.top;
         const bottom = borderRect.bottom - inset - flowRect.top;
-        const radius = Math.min((Number.parseFloat(getComputedStyle(activeElement).borderTopRightRadius) - 0.5) * scale, (bottom - top) / 4);
+        const radius = Math.min((Number.parseFloat(getComputedStyle(activeElement).getPropertyValue("--smooth-radius")) - 0.5) * scale, (bottom - top) / 4);
         if (activeStep === 0) route = `M ${left + radius} ${top}`;
         const corner = (plot: (sin: number, cos: number) => [number, number]) => {
           for (let point = 1; point <= 12; point++) {
