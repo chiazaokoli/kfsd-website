@@ -4,6 +4,9 @@ import { useLayoutEffect } from "react";
 
 const targets = [
   ".brand-mark",
+  ".topbar-cta",
+  ".primary-cta",
+  ".event-dock > a",
   ".event-dock",
   ".skill-card",
   ".learning-step",
@@ -11,8 +14,17 @@ const targets = [
   ".schedule-panel",
   ".day-tabs",
   ".day-tabs-highlight",
+  ".day-tabs button",
   ".speaker-grid article",
   ".registration-form",
+  ".registration-form input:not([type=hidden])",
+  ".registration-form select",
+  ".registration-form button",
+  ".form-select-panel",
+  ".form-select-options",
+  ".form-select-option",
+  ".form-select-search input",
+  ".registration-toast",
 ].join(", ");
 
 const svgNamespace = "http://www.w3.org/2000/svg";
@@ -71,16 +83,24 @@ export default function SmoothCorners() {
     defsSvg.append(defs);
     document.body.append(defsSvg);
 
-    const elements = Array.from(document.querySelectorAll<HTMLElement>(targets));
+    const elements = new Set<HTMLElement>();
+    let nextId = 0;
     const originals = new Map<HTMLElement, { clipPath: string; position: string; borderColor: string }>();
     const entries = new Map<HTMLElement, { clip: SVGPathElement; border: SVGPathElement; focus: SVGPathElement; halo: SVGPathElement; overlay: SVGSVGElement; borderColor: string; borderWidth: number }>();
 
-    elements.forEach((element, index) => {
+    const register = (element: HTMLElement) => {
+      if (elements.has(element)) {
+        if (!element.classList.contains("smooth-corner-fallback")) element.classList.add("smooth-corner-fallback");
+        const overlay = entries.get(element)?.overlay;
+        if (overlay && element.tagName !== "INPUT" && element.tagName !== "SELECT" && !element.contains(overlay)) element.append(overlay);
+        return;
+      }
+      elements.add(element);
       const style = getComputedStyle(element);
       const borderWidth = cornerRadius(style.borderTopWidth);
       const borderColor = style.borderTopColor;
       const clip = svgElement("clipPath");
-      const id = `smooth-corner-${index}`;
+      const id = `smooth-corner-${nextId++}`;
       clip.id = id;
       clip.setAttribute("clipPathUnits", "userSpaceOnUse");
       const clipPath = svgElement("path");
@@ -113,9 +133,11 @@ export default function SmoothCorners() {
       element.style.clipPath = `url(#${id})`;
       if (borderWidth) element.style.borderColor = "transparent";
       element.classList.add("smooth-corner-fallback");
-      element.append(overlay);
+      if (element.tagName !== "INPUT" && element.tagName !== "SELECT") element.append(overlay);
       entries.set(element, { clip: clipPath, border, focus, halo, overlay, borderColor, borderWidth });
-    });
+      observer.observe(element);
+      update(element);
+    };
 
     const update = (element: HTMLElement) => {
       const entry = entries.get(element);
@@ -123,9 +145,17 @@ export default function SmoothCorners() {
       const width = element.offsetWidth;
       const height = element.offsetHeight;
       if (!width || !height) return;
+      element.classList.remove("smooth-corner-fallback");
       const style = getComputedStyle(element);
       const radii = [style.borderTopLeftRadius, style.borderTopRightRadius, style.borderBottomRightRadius, style.borderBottomLeftRadius].map(cornerRadius);
+      element.classList.add("smooth-corner-fallback");
       entry.clip.setAttribute("d", smoothPath(width, height, radii));
+      if (element.tagName === "INPUT" || element.tagName === "SELECT") {
+        const path = smoothPath(width, height, radii, Math.max(0.5, entry.borderWidth / 2));
+        const borderImage = (color: string) => `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns="${svgNamespace}" width="${width}" height="${height}"><path d="${path}" fill="none" stroke="${color}" stroke-width="${entry.borderWidth}"/></svg>`)}")`;
+        element.style.setProperty("--smooth-border", borderImage(entry.borderColor));
+        element.style.setProperty("--smooth-focus-border", borderImage("#22db79"));
+      }
       entry.overlay.setAttribute("viewBox", `0 0 ${width} ${height}`);
       entry.border.setAttribute("d", smoothPath(width, height, radii, Math.max(0.5, entry.borderWidth / 2)));
       const ring = smoothPath(width, height, radii, 4);
@@ -133,10 +163,25 @@ export default function SmoothCorners() {
       entry.focus.setAttribute("d", ring);
     };
     const observer = new ResizeObserver((resizeEntries) => resizeEntries.forEach(({ target }) => update(target as HTMLElement)));
-    elements.forEach((element) => { observer.observe(element); update(element); });
+    const scan = () => {
+      elements.forEach((element) => {
+        if (element.isConnected) return;
+        observer.unobserve(element);
+        entries.get(element)?.clip.parentElement?.remove();
+        entries.get(element)?.overlay.remove();
+        entries.delete(element);
+        originals.delete(element);
+        elements.delete(element);
+      });
+      document.querySelectorAll<HTMLElement>(targets).forEach(register);
+    };
+    scan();
+    const mutations = new MutationObserver(scan);
+    mutations.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["class"] });
 
     return () => {
       observer.disconnect();
+      mutations.disconnect();
       elements.forEach((element) => {
         const original = originals.get(element);
         if (!original) return;
@@ -144,6 +189,8 @@ export default function SmoothCorners() {
         element.style.position = original.position;
         element.style.borderColor = original.borderColor;
         element.classList.remove("smooth-corner-fallback");
+        element.style.removeProperty("--smooth-border");
+        element.style.removeProperty("--smooth-focus-border");
         entries.get(element)?.overlay.remove();
       });
       defsSvg.remove();
