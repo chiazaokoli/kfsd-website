@@ -382,6 +382,7 @@ img { display: block; }
 .registration-section { background: radial-gradient(circle at 15% 20%, rgba(49,92,255,.36), transparent 35%); }
 
 @media (min-width: 801px) {
+  .splash-moment { gap: clamp(12px, 2.5vw, 38px); }
   .skills-section .section-heading { color: var(--white); transition: color 300ms ease-in-out; }
   .site-shell.skills-background-active .skills-section .section-heading { color: var(--ink); }
   .registration-section { color: var(--ink); transition: color 300ms ease-in-out; }
@@ -395,6 +396,7 @@ img { display: block; }
   .registration-section { padding-bottom: clamp(60px, 7vw, 105px); }
   .faq-section-new { padding-top: clamp(60px, 7vw, 100px); }
   .registration-card .registration-free-badge { top: -68px; width: 136px; height: 136px; z-index: 30; }
+  .registration-card .registration-free-badge text { font-size: 30px; }
   .registration-form { gap: 9px; padding: 22px 26px; }
   .registration-form label, .registration-form .form-select-field { gap: 5px; }
   .registration-form input, .registration-form select, .registration-form .form-select-trigger { min-height: 44px; height: 44px; }
