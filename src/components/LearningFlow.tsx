@@ -40,7 +40,7 @@ export default function LearningFlow({ activeStep }: { activeStep: number }) {
         const top = borderRect.top + inset - flowRect.top;
         const bottom = borderRect.bottom - inset - flowRect.top;
         const radius = Math.min((Number.parseFloat(getComputedStyle(activeElement).getPropertyValue("--smooth-radius")) - 0.5) * scale, (bottom - top) / 4);
-        if (activeStep === 0) route = `M ${left + radius} ${top}`;
+        if (activeStep === 0) route = `M ${x} ${top - 17} Q ${x} ${top} ${left + radius} ${top}`;
         const corner = (plot: (sin: number, cos: number) => [number, number]) => {
           for (let point = 1; point <= 12; point++) {
             const angle = point / 12 * Math.PI / 2;
