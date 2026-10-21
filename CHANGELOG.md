@@ -10,6 +10,9 @@ the relevant pieces to the current code so later changes are preserved.
 
 ## 2026-10-21
 
+- `d49eadb` — Aligned the desktop speaker image grid with both sides of its
+  heading content, while capping portrait height to keep the cards balanced.
+  Mobile remains unchanged. File: `app/globals.css`.
 - `a6e4af5` — Delayed two desktop background transitions until the outgoing
   text is nearly offscreen, halved the schedule-to-speakers gap, reduced desktop
   speaker cards, and made the registration form fit shorter desktop viewports.
