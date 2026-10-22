@@ -21,6 +21,7 @@ const REQUIRED = ["email", "firstName", "lastName", "phone", "profession", "coun
 const COMPANIES = ["NIQS", "NICE", "NSE", "NIOB", "APWEN", "NISTRUCTE", "YEFON", "NIQS FOUNDATION", "Other"];
 const REFERRALS = ["NIQS, NIOB, NSE, NISTRUCTE, YEFON, APWEN, CORBIN, COREN", "KFSD Alumni", "Social Media (Facebook, LinkedIn, Instagram)", "Impact Leaders Club", "Enactus", "DSN Network", "Whatsapp", "Word of mouth", "AIN", "MEK NextGen Innovators"];
 const RETRY_MESSAGE = "Registration is temporarily unavailable. Your answers are still here. Please try again shortly.";
+const RATE_LIMIT_MESSAGE = "Too many registration attempts from this network. Please try again in a minute.";
 
 class RegistrationError extends Error {
   constructor(status, message, errors, reference) {
@@ -106,7 +107,7 @@ function createRegistrationHandler(fetcher = fetch) {
     if (!["/", "/register", "/health", "/location"].includes(path)) return reply(404, { ok: false, message: "Not found." });
     const tagId = String(env.KIT_TAG_ID || "").trim();
     if (request.method === "GET" && ["/", "/health"].includes(path)) {
-      return reply(200, { service: "kfsd-registration", provider: "kit", version: 4, configured: Boolean(env.KIT_API_KEY && /^\d+$/.test(tagId)) });
+      return reply(200, { service: "kfsd-registration", provider: "kit", version: 4, configured: Boolean(env.KIT_API_KEY && /^\d+$/.test(tagId)), rateLimited: Boolean(env.REGISTRATION_RATE_LIMITER) });
     }
     if (!allowed) return reply(403, { ok: false, message: "Please register through the KFSD website." });
     if (request.method === "GET" && path === "/location") {
@@ -121,6 +122,15 @@ function createRegistrationHandler(fetcher = fetch) {
 
     let stage = "config";
     try {
+      // The binding is configured in wrangler.jsonc. Count only registration
+      // attempts, so location lookups, health checks, and CORS do not consume it.
+      // Cloudflare supplies this header; never use a client-submitted IP value.
+      if (env.REGISTRATION_RATE_LIMITER) {
+        const clientIp = request.headers.get("CF-Connecting-IP");
+        if (!clientIp) throw new RegistrationError(503, RETRY_MESSAGE, undefined, "K-R-IP");
+        const { success } = await env.REGISTRATION_RATE_LIMITER.limit({ key: clientIp });
+        if (!success) throw new RegistrationError(429, RATE_LIMIT_MESSAGE, undefined, "K-R-L");
+      }
       const values = await readSubmission(request);
       if (!env.KIT_API_KEY || !/^\d+$/.test(tagId)) throw new RegistrationError(503, RETRY_MESSAGE, undefined, "K-C");
       // One deadline covers subscriber upsert and tagging. Never log tokens or answers.
