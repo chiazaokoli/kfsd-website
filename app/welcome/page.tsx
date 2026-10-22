@@ -20,8 +20,8 @@ export default function WelcomePage() {
       </header>
       <section className="welcome-card" aria-labelledby="welcome-heading">
         <CheckCircle className="welcome-check" size={54} weight="fill" aria-hidden="true" />
-        <p className="welcome-kicker">Registration confirmed</p>
-        <h1 id="welcome-heading">Your spot is reserved.</h1>
+        <h1 id="welcome-heading">Registration confirmed</h1>
+        <p className="welcome-subtitle">Your spot is reserved.</p>
         <div className="welcome-event-details">
           <div><CalendarBlank size={24} aria-hidden="true" /><span><strong>25–26 November 2026</strong><small>Two live sessions</small></span></div>
           <div><Clock size={24} aria-hidden="true" /><span><strong>10:00 AM–12:00 PM WAT</strong><small>Each day</small></span></div>
