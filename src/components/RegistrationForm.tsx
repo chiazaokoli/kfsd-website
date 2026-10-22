@@ -6,7 +6,7 @@ import countries from "../data/registration-countries.json";
 import nigeriaStates from "../data/nigeria-states.json";
 import phoneCountryData from "../data/phone-countries.json";
 import RegistrationSelect from "./RegistrationSelect";
-import RegistrationSuccess from "./RegistrationSuccess";
+import RegistrationToast from "./RegistrationToast";
 
 const endpoint = "https://kfsd-demo-registration.yummydummy419.workers.dev";
 const assetPrefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -36,7 +36,7 @@ export default function RegistrationForm() {
   const [stateData, setStateData] = useState<{ country: string; states: StateOption[]; failed: boolean }>({ country: "NG", states: nigeriaStates, failed: false });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<{ message: string; error: boolean } | null>(null);
-  const [toast, setToast] = useState<{ message: string; celebrate: boolean; id: number } | null>(null);
+  const [toast, setToast] = useState<{ message: string; kind: "success" | "error"; id: number } | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const inFlight = useRef(false);
   const formRef = useRef<HTMLFormElement>(null);
@@ -141,7 +141,13 @@ export default function RegistrationForm() {
     if (!phone.ok) nextErrors.phone = phone.error;
     if (statesLoading) nextErrors.state = "Please wait for the state list to load.";
     setErrors(nextErrors);
-    if (Object.keys(nextErrors).length) { inFlight.current = false; setSubmitting(false); setStatus(null); return; }
+    if (Object.keys(nextErrors).length) {
+      inFlight.current = false;
+      setSubmitting(false);
+      setStatus(null);
+      setToast({ message: "Please correct the highlighted fields and try again.", kind: "error", id: Date.now() });
+      return;
+    }
     data.set("email", email);
     if (phone.ok) data.set("phone", phone.number);
     inFlight.current = true;
@@ -156,6 +162,10 @@ export default function RegistrationForm() {
           const serverErrors: Record<string, string> = {};
           for (const field of [...required, "company", "phoneCountry"]) if (typeof result.errors[field] === "string") serverErrors[field] = result.errors[field];
           setErrors(serverErrors);
+          if (Object.keys(serverErrors).length) {
+            setToast({ message: "Please correct the highlighted fields and try again.", kind: "error", id: Date.now() });
+            return;
+          }
         }
         throw new Error(typeof result.message === "string" ? result.message : failureMessage);
       }
@@ -165,7 +175,7 @@ export default function RegistrationForm() {
         return;
       }
       setStatus({ message, error: false });
-      setToast({ message, celebrate: false, id: Date.now() });
+      setToast({ message, kind: "success", id: Date.now() });
       form.reset();
       setPhoneInput("");
       setSelections((current) => ({ ...current, company: "", attended: "", referral: "", state: "", profession: "" }));
@@ -204,6 +214,6 @@ export default function RegistrationForm() {
       <p className="form-reassurance">Your details will only be used for this training.</p>
       {status?.error && <p className="form-status is-error" role="alert">{status.message}</p>}
     </form>
-    {toast && <RegistrationSuccess key={toast.id} message={toast.message} celebrate={toast.celebrate} onClose={dismissToast} />}
+    {toast && <RegistrationToast key={toast.id} message={toast.message} kind={toast.kind} onClose={dismissToast} />}
   </>;
 }

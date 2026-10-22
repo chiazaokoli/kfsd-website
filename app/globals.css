@@ -366,17 +366,15 @@ img { display: block; }
 }
 .registration-toast { position: fixed; z-index: 1200; bottom: max(24px, env(safe-area-inset-bottom)); left: 50%; display: flex; align-items: flex-start; gap: 12px; width: min(440px, calc(100vw - 32px)); padding: 18px; color: white; border: 1px solid rgba(255,255,255,.14); --smooth-radius: 22px; border-radius: var(--smooth-radius); background: #0b101c; box-shadow: 0 16px 50px rgba(0,0,0,.25); transform: translateX(-50%); animation: registration-toast-in 350ms ease-out both; }
 .registration-toast > svg { flex: none; color: #22db79; }
+.registration-toast.is-error > svg { color: #ffbf69; }
 .registration-toast > div { flex: 1; min-width: 0; }
 .registration-toast strong { display: block; font-size: .9375rem; font-weight: 600; }
 .registration-toast p { margin: 5px 0 0; color: #d2d7e0; font-size: .8125rem; line-height: 1.5; }
 .registration-toast button { display: grid; place-items: center; flex: none; width: 28px; height: 28px; padding: 0; --smooth-radius: 8px; border-radius: var(--smooth-radius); color: white; background: rgba(255,255,255,.08); cursor: pointer; }
 .registration-toast button:focus-visible { outline: 2px solid #22db79; outline-offset: 3px; }
-.registration-confetti { position: fixed; inset: 0; z-index: 1199; overflow: hidden; pointer-events: none; }
-.registration-confetti i { position: absolute; top: -20px; opacity: 0; animation-name: registration-confetti-fall; animation-timing-function: cubic-bezier(.22,.6,.54,1); animation-fill-mode: both; }
 @keyframes registration-toast-in { from { opacity: 0; translate: 0 14px; } to { opacity: 1; translate: 0 0; } }
-@keyframes registration-confetti-fall { 0% { opacity: 0; transform: translate3d(0, -20px, 0) rotate(0); } 8% { opacity: 1; } 85% { opacity: 1; } 100% { opacity: 0; transform: translate3d(var(--confetti-drift), 110vh, 0) rotate(var(--confetti-turn)); } }
 @supports (corner-shape: squircle) { .form-select-panel, .registration-toast { corner-shape: squircle; } }
-@media (prefers-reduced-motion: reduce) { .registration-confetti { display: none; } .registration-toast { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .registration-toast { animation: none; } }
 
 /* FAQ and footer */
 .faq-section-new { display: grid; grid-template-columns: .62fr 1fr; gap: clamp(60px, 10vw, 160px); align-items: start; padding: clamp(120px, 14vw, 200px) max(5vw, 28px); background: var(--paper); }
