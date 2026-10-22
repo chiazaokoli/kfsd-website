@@ -15,7 +15,7 @@ type Piece = {
 };
 
 const colors = ["#22db79", "#315cff", "#e5ae35", "#8f86ff", "#43a9d6", "#f07891"];
-const duration = 5400;
+const duration = 3400;
 
 export default function WelcomeConfetti() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -50,12 +50,16 @@ export default function WelcomeConfetti() {
         return;
       }
 
-      const count = Math.min(260, Math.max(130, Math.round(width * height / 7000)));
+      const card = document.querySelector(".welcome-card")?.getBoundingClientRect();
+      const originX = card ? card.left + card.width / 2 : width / 2;
+      const originY = card ? card.top + 55 : height / 4;
+      const count = width <= 560 ? 130 : 190;
+      const horizontalSpeed = width <= 560 ? 220 : 390;
       pieces = Array.from({ length: count }, () => ({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - .5) * 54,
-        vy: 80 + Math.random() * 100,
+        x: originX + (Math.random() - .5) * 24,
+        y: originY + (Math.random() - .5) * 20,
+        vx: (Math.random() - .5) * horizontalSpeed,
+        vy: -100 - Math.random() * 160,
         width: 4 + Math.random() * 5,
         height: 7 + Math.random() * 7,
         angle: Math.random() * Math.PI * 2,
@@ -78,12 +82,10 @@ export default function WelcomeConfetti() {
 
       for (const piece of pieces) {
         piece.x += piece.vx * step;
+        piece.vy += 480 * step;
         piece.y += piece.vy * step;
         piece.angle += piece.spin * step;
-        if (piece.y > height + 20) {
-          piece.y = -20;
-          piece.x = Math.random() * width;
-        }
+        if (piece.y > height + 20 || piece.x < -20 || piece.x > width + 20) continue;
         context.save();
         context.translate(piece.x, piece.y);
         context.rotate(piece.angle);
