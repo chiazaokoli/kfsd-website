@@ -16,6 +16,11 @@ custom fields, and applies the **KFSD Demo Group** tag.
 6. Submit the website form with an address you control. Confirm that the Kit
    subscriber is active, has the KFSD Demo Group tag, and contains every answer.
 
+If the form reports a `K-...` reference code, it identifies the failed step
+without exposing the API response: `K-C` is configuration, `K-S` is subscriber
+saving, and `K-T` is tag assignment. A number at the end is Kit's HTTP status;
+`N` is a network or response parsing failure and `R` is an unexpected response.
+
 Cloudflare Access must stay off for this public endpoint. The Worker uses Kit
 single opt-in by explicitly saving the subscriber in the active state. A website
 success response means Kit saved and tagged the subscriber; it does not claim

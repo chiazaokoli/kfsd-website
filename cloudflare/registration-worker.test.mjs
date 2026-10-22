@@ -157,7 +157,9 @@ test("malformed provider success is not accepted as a saved registration", async
 test("public health check reveals no secrets and makes no subscriber requests", async () => {
   const { handler, calls } = upstream();
   const response = await handler(new Request("https://worker.example/health"), env);
-  assert.deepEqual(await response.json(), { service: "kfsd-registration", provider: "kit", version: 3, configured: true });
+  assert.deepEqual(await response.json(), { service: "kfsd-registration", provider: "kit", version: 4, configured: true });
+  const invalid = await handler(new Request("https://worker.example/health"), { ...env, KIT_TAG_ID: "'24884438'" });
+  assert.equal((await invalid.json()).configured, false);
   assert.equal(calls.length, 0);
 });
 

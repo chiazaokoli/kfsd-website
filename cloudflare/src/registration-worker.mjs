@@ -23,10 +23,11 @@ const REFERRALS = ["NIQS, NIOB, NSE, NISTRUCTE, YEFON, APWEN, CORBIN, COREN", "K
 const RETRY_MESSAGE = "Registration is temporarily unavailable. Your answers are still here. Please try again shortly.";
 
 class RegistrationError extends Error {
-  constructor(status, message, errors) {
+  constructor(status, message, errors, reference) {
     super(message);
     this.status = status;
     this.errors = errors;
+    this.reference = reference;
   }
 }
 
@@ -103,8 +104,9 @@ function createRegistrationHandler(fetcher = fetch) {
     const reply = (status, body, extra = {}) => new Response(JSON.stringify(body), { status, headers: { ...headers, ...extra } });
     const path = new URL(request.url).pathname;
     if (!["/", "/register", "/health", "/location"].includes(path)) return reply(404, { ok: false, message: "Not found." });
+    const tagId = String(env.KIT_TAG_ID || "").trim();
     if (request.method === "GET" && ["/", "/health"].includes(path)) {
-      return reply(200, { service: "kfsd-registration", provider: "kit", version: 3, configured: Boolean(env.KIT_API_KEY && env.KIT_TAG_ID) });
+      return reply(200, { service: "kfsd-registration", provider: "kit", version: 4, configured: Boolean(env.KIT_API_KEY && /^\d+$/.test(tagId)) });
     }
     if (!allowed) return reply(403, { ok: false, message: "Please register through the KFSD website." });
     if (request.method === "GET" && path === "/location") {
@@ -117,9 +119,10 @@ function createRegistrationHandler(fetcher = fetch) {
     }
     if (request.method !== "POST" || !["/", "/register"].includes(path)) return reply(405, { ok: false, message: "Method not allowed." }, { Allow: "POST, OPTIONS" });
 
+    let stage = "config";
     try {
       const values = await readSubmission(request);
-      if (!env.KIT_API_KEY || !/^\d+$/.test(env.KIT_TAG_ID || "")) throw new RegistrationError(503, RETRY_MESSAGE);
+      if (!env.KIT_API_KEY || !/^\d+$/.test(tagId)) throw new RegistrationError(503, RETRY_MESSAGE, undefined, "K-C");
       // One deadline covers subscriber upsert and tagging. Never log tokens or answers.
       const signal = AbortSignal.timeout(12000);
       const api = async (url, options = {}) => {
@@ -131,7 +134,7 @@ function createRegistrationHandler(fetcher = fetch) {
           // rather than forwarding the API credential to a new host.
           redirect: "manual",
         });
-        if (!response.ok) throw new RegistrationError(response.status === 429 ? 429 : 502, RETRY_MESSAGE);
+        if (!response.ok) throw new RegistrationError(response.status === 429 ? 429 : 502, RETRY_MESSAGE, undefined, `K-${stage}-${response.status}`);
         return response.json();
       };
       const fields = {};
@@ -140,17 +143,19 @@ function createRegistrationHandler(fetcher = fetch) {
       }
       // Kit upserts by email. Explicit active state implements the single-opt-in
       // registration the event uses; the form submission is the subscriber's action.
+      stage = "S";
       const result = await api(`${API}/subscribers`, {
         method: "POST",
         body: JSON.stringify({ email_address: values.email, first_name: values.firstName, state: "active", fields }),
       });
       const subscriber = result.subscriber;
-      if (!subscriber?.id || subscriber.email_address?.toLowerCase() !== values.email.toLowerCase()) throw new RegistrationError(502, RETRY_MESSAGE);
+      if (!subscriber?.id || subscriber.email_address?.toLowerCase() !== values.email.toLowerCase()) throw new RegistrationError(502, RETRY_MESSAGE, undefined, "K-S-R");
       if (subscriber.state !== "active") {
-        throw new RegistrationError(409, "We couldn't complete registration with this email address. Please contact KFSD for help.");
+        throw new RegistrationError(409, "We couldn't complete registration with this email address. Please contact KFSD for help.", undefined, "K-S-I");
       }
-      const tagged = await api(`${API}/tags/${env.KIT_TAG_ID}/subscribers/${subscriber.id}`, { method: "POST" });
-      if (!tagged.subscriber?.id || String(tagged.subscriber.id) !== String(subscriber.id)) throw new RegistrationError(502, RETRY_MESSAGE);
+      stage = "T";
+      const tagged = await api(`${API}/tags/${tagId}/subscribers/${subscriber.id}`, { method: "POST" });
+      if (!tagged.subscriber?.id || String(tagged.subscriber.id) !== String(subscriber.id)) throw new RegistrationError(502, RETRY_MESSAGE, undefined, "K-T-R");
       return reply(200, {
         ok: true,
         status: "registered",
@@ -158,9 +163,9 @@ function createRegistrationHandler(fetcher = fetch) {
       });
     } catch (error) {
       if (error instanceof RegistrationError) {
-        return reply(error.status, { ok: false, message: error.message, ...(error.errors ? { errors: error.errors } : {}) }, error.status === 429 ? { "Retry-After": "60" } : {});
+        return reply(error.status, { ok: false, message: error.reference ? `${error.message} (Ref: ${error.reference})` : error.message, ...(error.errors ? { errors: error.errors } : {}) }, error.status === 429 ? { "Retry-After": "60" } : {});
       }
-      return reply(503, { ok: false, message: RETRY_MESSAGE });
+      return reply(503, { ok: false, message: `${RETRY_MESSAGE} (Ref: K-${stage}-N)` });
     }
   };
 }
