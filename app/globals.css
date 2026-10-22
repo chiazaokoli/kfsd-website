@@ -122,12 +122,11 @@ img { display: block; }
 .welcome-page { position: relative; display: grid; min-height: 100dvh; place-items: center; overflow: hidden; padding: 70px 20px 20px; color: var(--ink); background: radial-gradient(circle at 50% 0, rgba(34,219,121,.18), transparent 34%), var(--cream); }
 .welcome-brand { position: absolute; top: 24px; left: 50%; display: flex; align-items: center; gap: 10px; transform: translateX(-50%); font-size: .83rem; font-weight: 650; white-space: nowrap; }
 .welcome-brand img { border-radius: 7px; }
-.welcome-card { position: relative; z-index: 1; width: min(100%, 680px); padding: clamp(28px, 4vw, 40px); text-align: center; --smooth-radius: 34px; border: 1px solid rgba(11,16,28,.1); border-radius: var(--smooth-radius); background: rgba(255,255,255,.86); box-shadow: 0 28px 90px rgba(11,16,28,.12); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+.welcome-card { position: relative; z-index: 1; width: min(100%, 560px); padding: clamp(28px, 4vw, 40px); text-align: center; --smooth-radius: 34px; border: 1px solid rgba(11,16,28,.1); border-radius: var(--smooth-radius); background: rgba(255,255,255,.86); box-shadow: 0 28px 90px rgba(11,16,28,.12); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
 .welcome-check { width: 44px; height: 44px; color: var(--accent-green); }
 .welcome-kicker { margin: 10px 0 8px; color: #168c50; font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
-.welcome-card h1 { margin: 0; font-size: clamp(2.25rem, 5vw, 4rem); font-weight: 560; letter-spacing: -.065em; line-height: 1; }
-.welcome-lead { max-width: 510px; margin: 14px auto 18px; color: rgba(11,16,28,.72); font-size: clamp(.94rem, 1.5vw, 1.06rem); line-height: 1.5; }
-.welcome-event-details { display: grid; gap: 1px; overflow: hidden; text-align: left; border: 1px solid rgba(11,16,28,.1); border-radius: 22px; background: rgba(11,16,28,.1); }
+.welcome-card h1 { margin: 0; font-size: clamp(2rem, 4vw, 3rem); font-weight: 560; letter-spacing: -.065em; line-height: 1.05; }
+.welcome-event-details { display: grid; gap: 1px; overflow: hidden; margin-top: 20px; text-align: left; border: 1px solid rgba(11,16,28,.1); border-radius: 22px; background: rgba(11,16,28,.1); }
 .welcome-event-details > div { display: grid; grid-template-columns: 24px 1fr; align-items: center; gap: 12px; padding: 11px 16px; background: white; }
 .welcome-event-details svg { color: #168c50; }
 .welcome-event-details span { display: grid; gap: 3px; }
@@ -136,7 +135,7 @@ img { display: block; }
 .welcome-note { margin: 16px auto 0; color: rgba(11,16,28,.62); font-size: .78rem; line-height: 1.5; }
 .welcome-home { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; margin-top: 16px; padding: 0 24px; border-radius: 17px; color: var(--ink); background: var(--accent-green); font-size: .86rem; font-weight: 600; }
 .welcome-confetti { position: fixed; inset: 0; z-index: 0; width: 100vw; height: 100dvh; pointer-events: none; }
-@media (max-width: 560px) { .welcome-page { align-items: start; padding: 66px 16px 16px; } .welcome-brand { top: 16px; } .welcome-card { padding: 24px 20px; --smooth-radius: 26px; } .welcome-check { width: 40px; height: 40px; } .welcome-kicker { margin: 8px 0 6px; } .welcome-card h1 { font-size: clamp(2rem, 9vw, 2.45rem); } .welcome-lead { margin: 12px auto 16px; font-size: .94rem; line-height: 1.45; } .welcome-event-details > div { gap: 10px; padding: 10px 12px; } .welcome-note { margin-top: 14px; } .welcome-home { margin-top: 14px; } }
+@media (max-width: 560px) { .welcome-page { align-items: start; padding: 66px 16px 16px; } .welcome-brand { top: 16px; } .welcome-card { padding: 24px 20px; --smooth-radius: 26px; } .welcome-check { width: 40px; height: 40px; } .welcome-kicker { margin: 8px 0 6px; } .welcome-card h1 { font-size: clamp(1.75rem, 7.5vw, 1.95rem); } .welcome-event-details { margin-top: 18px; } .welcome-event-details > div { gap: 10px; padding: 15px 14px; } .welcome-note { margin-top: 14px; } .welcome-home { margin-top: 14px; } }
 @media (prefers-reduced-motion: reduce) { .welcome-confetti { display: none; } }
 .event-dock { position: absolute; right: 4vw; bottom: 24px; left: 4vw; display: grid; min-height: 82px; grid-template-columns: repeat(3, 1fr) 68px; align-items: center; border: 1px solid rgba(255,255,255,.18); --smooth-radius: 24px; border-radius: var(--smooth-radius); background: rgba(8,13,22,.72); backdrop-filter: blur(18px); }
 .event-dock > div { display: flex; min-height: 45px; align-items: center; gap: 11px; padding: 0 24px; border-right: 1px solid rgba(255,255,255,.16); font-size: 13px; font-weight: 400; }

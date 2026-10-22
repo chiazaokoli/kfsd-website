@@ -22,7 +22,6 @@ export default function WelcomePage() {
         <CheckCircle className="welcome-check" size={54} weight="fill" aria-hidden="true" />
         <p className="welcome-kicker">Registration confirmed</p>
         <h1 id="welcome-heading">Your spot is reserved.</h1>
-        <p className="welcome-lead">You’re on the list for the KFSD Soft Skills Training. No extra confirmation step is required.</p>
         <div className="welcome-event-details">
           <div><CalendarBlank size={24} aria-hidden="true" /><span><strong>25–26 November 2026</strong><small>Two live sessions</small></span></div>
           <div><Clock size={24} aria-hidden="true" /><span><strong>10:00 AM–12:00 PM WAT</strong><small>Each day</small></span></div>
