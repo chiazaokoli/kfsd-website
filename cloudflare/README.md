@@ -6,19 +6,35 @@ custom fields, and applies the **KFSD Demo Group** tag.
 
 ## Deploy in Cloudflare
 
-1. Open **Workers & Pages → kfsd-demo-registration → Edit code**.
-2. Copy the entire generated `registration-worker.mjs` file from this directory.
-3. Replace the entire contents of Cloudflare's `worker.js` and click **Deploy**.
+The rate-limit binding must be deployed with Wrangler; Cloudflare does not show
+these bindings in the dashboard editor. From the repository root:
+
+1. Run `npm run build:worker`.
+2. Run `npx wrangler@latest login` and authorize the Cloudflare account that owns
+   **kfsd-demo-registration**.
+3. Run `npx wrangler@latest deploy --config cloudflare/wrangler.jsonc`.
+   This updates the **existing** Worker and adds the `REGISTRATION_RATE_LIMITER`
+   binding: 20 attempts per 60 seconds per Cloudflare location and client IP.
+   `keep_vars` preserves dashboard-set variables such as `KIT_TAG_ID`; Wrangler
+   also preserves existing secrets.
 4. Keep `KIT_API_KEY` as a Production secret and `KIT_TAG_ID` as a Production
-   variable. The event tag ID is `24884438`.
+   variable. The event tag ID is `24884438`. No new secret is required.
 5. Visit `https://kfsd-demo-registration.yummydummy419.workers.dev/health`.
-   It should return `"provider":"kit"` and `"configured":true`.
+   It should return `"provider":"kit"`, `"configured":true`, and
+   `"rateLimited":true`. If `rateLimited` is false, the binding was not attached.
 6. Submit the website form with an address you control. Confirm that the Kit
    subscriber is active, has the KFSD Demo Group tag, and contains every answer.
 
+Only registration POST requests consume the allowance; location suggestions,
+health checks, and CORS preflights do not. Exceeding the limit returns HTTP 429
+and asks the visitor to retry in a minute. Cloudflare's rate-limit binding is
+approximate and per location, so this is abuse reduction rather than a strict
+global quota.
+
 If the form reports a `K-...` reference code, it identifies the failed step
-without exposing the API response: `K-C` is configuration, `K-S` is subscriber
-saving, and `K-T` is tag assignment. A number at the end is Kit's HTTP status;
+without exposing the API response: `K-C` is configuration, `K-R` is rate
+limiting, `K-S` is subscriber saving, and `K-T` is tag assignment. A number at
+the end is Kit's HTTP status;
 `N` is a network or response parsing failure and `R` is an unexpected response.
 
 Cloudflare Access must stay off for this public endpoint. The Worker uses Kit
@@ -56,9 +72,9 @@ trial, so rollback requires no code reconstruction.
 ## Security and failure behavior
 
 The default permitted browser origin is `https://chiazaokoli.github.io`. The
-hidden honeypot, JSON-only endpoint, body limit, origin restriction, and server
-validation provide basic filtering. They do not stop determined bots; add
-Turnstile and rate limiting if spam becomes a concern. No answers, subscriber
+hidden honeypot, JSON-only endpoint, body limit, origin restriction, rate limit,
+and server validation provide basic filtering. They do not stop determined bots;
+add Turnstile if spam becomes a concern. No answers, subscriber
 IDs, provider errors, or credentials are logged or returned to the browser.
 
 Subscriber creation and tag assignment are separate Kit API operations. Both

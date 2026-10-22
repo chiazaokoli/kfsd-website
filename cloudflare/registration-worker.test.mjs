@@ -157,10 +157,30 @@ test("malformed provider success is not accepted as a saved registration", async
 test("public health check reveals no secrets and makes no subscriber requests", async () => {
   const { handler, calls } = upstream();
   const response = await handler(new Request("https://worker.example/health"), env);
-  assert.deepEqual(await response.json(), { service: "kfsd-registration", provider: "kit", version: 4, configured: true });
+  assert.deepEqual(await response.json(), { service: "kfsd-registration", provider: "kit", version: 4, configured: true, rateLimited: false });
   const invalid = await handler(new Request("https://worker.example/health"), { ...env, KIT_TAG_ID: "'24884438'" });
   assert.equal((await invalid.json()).configured, false);
   assert.equal(calls.length, 0);
+});
+
+test("rate limits registration POSTs by Cloudflare client IP without calling Kit", async () => {
+  const keys = [];
+  const limiter = { limit: async ({ key }) => { keys.push(key); return { success: keys.length === 1 }; } };
+  const limitedEnv = { ...env, REGISTRATION_RATE_LIMITER: limiter };
+  const { handler, calls } = upstream();
+  const headers = { "CF-Connecting-IP": "192.0.2.10" };
+  assert.equal((await handler(request(submission, headers), limitedEnv)).status, 200);
+  const blocked = await handler(request(submission, headers), limitedEnv);
+  assert.equal(blocked.status, 429);
+  assert.equal(blocked.headers.get("retry-after"), "60");
+  assert.match((await blocked.json()).message, /try again in a minute/i);
+  assert.deepEqual(keys, ["192.0.2.10", "192.0.2.10"]);
+  assert.equal(calls.length, 2, "blocked attempt never reaches Kit");
+  const health = await handler(new Request("https://worker.example/health"), limitedEnv);
+  assert.equal((await health.json()).rateLimited, true);
+  assert.equal(keys.length, 2, "health checks do not consume the limit");
+  const noIp = await handler(request(), limitedEnv);
+  assert.equal(noIp.status, 503, "missing Cloudflare IP does not bypass the limit");
 });
 
 test("validates international calling codes and saves normalized phone numbers", async () => {
