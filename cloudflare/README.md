@@ -10,8 +10,9 @@ The rate-limit binding must be deployed with Wrangler; Cloudflare does not show
 these bindings in the dashboard editor. From the repository root:
 
 1. Run `npm run build:worker`.
-2. Run `npx wrangler@latest login` and authorize the Cloudflare account that owns
-   **kfsd-demo-registration**.
+2. Run `npx wrangler@latest login --device --browser=false` and open the
+   verification URL printed in the terminal. Authorize the Cloudflare account
+   that owns **kfsd-demo-registration**. Device login works in GitHub Codespaces.
 3. Run `npx wrangler@latest deploy --config cloudflare/wrangler.jsonc`.
    This updates the **existing** Worker and adds the `REGISTRATION_RATE_LIMITER`
    binding: 20 attempts per 60 seconds per Cloudflare location and client IP.
