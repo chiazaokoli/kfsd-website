@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { CalendarBlank, CheckCircle, Clock, GlobeHemisphereWest } from "@phosphor-icons/react/dist/ssr";
+import WelcomeConfetti from "../../src/components/WelcomeConfetti";
 
 const assetPrefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -12,17 +13,7 @@ export const metadata: Metadata = {
 export default function WelcomePage() {
   return (
     <main className="welcome-page">
-      <div className="welcome-confetti" aria-hidden="true">
-        {Array.from({ length: 30 }, (_, index) => <i key={index} style={{
-          left: `${(index * 37) % 100}%`,
-          width: `${5 + index % 4}px`,
-          height: `${9 + index % 5}px`,
-          background: ["#22db79", "#315cff", "#f5d76e", "#8f86ff", "#75c9f1"][index % 5],
-          animationDelay: `${index % 9 * 0.08}s`,
-          animationDuration: `${2.8 + index % 7 * 0.16}s`,
-          "--confetti-drift": `${(index % 2 ? 1 : -1) * (25 + index % 5 * 12)}px`,
-        } as React.CSSProperties} />)}
-      </div>
+      <WelcomeConfetti />
       <header className="welcome-brand">
         <Image src={`${assetPrefix}/images/kfsd-icon.png`} width={34} height={34} alt="KFSD" priority />
         <span>KFSD Soft Skills Training</span>
