@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import countries from "../data/registration-countries.json";
 import nigeriaStates from "../data/nigeria-states.json";
 import phoneCountryData from "../data/phone-countries.json";
@@ -29,6 +30,7 @@ function TextField({ name, label, error, ...props }: { name: string; label: stri
 }
 
 export default function RegistrationForm() {
+  const router = useRouter();
   const [selections, setSelections] = useState<Selections>({ company: "", attended: "", referral: "", country: "NG", state: "", profession: "", phoneCountry: "NG" });
   const [phoneInput, setPhoneInput] = useState("");
   const [stateData, setStateData] = useState<{ country: string; states: StateOption[]; failed: boolean }>({ country: "NG", states: nigeriaStates, failed: false });
@@ -158,8 +160,12 @@ export default function RegistrationForm() {
         throw new Error(typeof result.message === "string" ? result.message : failureMessage);
       }
       const message = typeof result.message === "string" ? result.message : "Your registration details have been saved.";
+      if (result.status === "registered") {
+        router.push("/welcome");
+        return;
+      }
       setStatus({ message, error: false });
-      setToast({ message, celebrate: result.status === "registered", id: Date.now() });
+      setToast({ message, celebrate: false, id: Date.now() });
       form.reset();
       setPhoneInput("");
       setSelections((current) => ({ ...current, company: "", attended: "", referral: "", state: "", profession: "" }));

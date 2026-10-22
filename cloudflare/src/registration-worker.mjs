@@ -1,23 +1,22 @@
 // Editable source: run npm run build:worker, then deploy the GENERATED
 // cloudflare/registration-worker.mjs file in Cloudflare's editor.
-// Keep MAILERLITE_API_TOKEN in Cloudflare Secrets, never in this file.
+// Keep KIT_API_KEY in Cloudflare Secrets, never in this file.
 import { parsePhoneNumberFromString } from "libphonenumber-js/max";
 import { validateRegistrationPhone } from "../../src/lib/registration-phone";
 import countries from "../../src/data/registration-countries.json";
-const API = "https://connect.mailerlite.com/api";
-const GROUP_NAME = "KFSD Demo Group";
+const API = "https://api.kit.com/v4";
 const MAX_BODY_BYTES = 8192;
 const FIELD_MAP = {
-  firstName: "first_name",
   lastName: "last_name",
   phone: "phone",
   profession: "profession",
   company: "company",
   country: "country",
   state: "state",
-  attended: "have_you_attended_kfsd_soft_skills_training_before",
+  attended: "attended_kfsd_training_before",
   referral: "how_did_you_hear_about_kfsd_soft_skills_training",
 };
+const FORM_FIELDS = ["firstName", ...Object.keys(FIELD_MAP)];
 const REQUIRED = ["email", "firstName", "lastName", "phone", "profession", "country", "state", "attended", "referral"];
 const COMPANIES = ["NIQS", "NICE", "NSE", "NIOB", "APWEN", "NISTRUCTE", "YEFON", "NIQS FOUNDATION", "Other"];
 const REFERRALS = ["NIQS, NIOB, NSE, NISTRUCTE, YEFON, APWEN, CORBIN, COREN", "KFSD Alumni", "Social Media (Facebook, LinkedIn, Instagram)", "Impact Leaders Club", "Enactus", "DSN Network", "Whatsapp", "Word of mouth", "AIN", "MEK NextGen Innovators"];
@@ -67,7 +66,7 @@ async function readSubmission(request) {
   }
   const values = {};
   const errors = {};
-  for (const key of ["email", ...Object.keys(FIELD_MAP)]) {
+  for (const key of ["email", ...FORM_FIELDS]) {
     const value = input[key];
     values[key] = typeof value === "string" ? value.trim() : "";
     if (value !== undefined && typeof value !== "string") errors[key] = "Enter a valid answer.";
@@ -105,7 +104,7 @@ function createRegistrationHandler(fetcher = fetch) {
     const path = new URL(request.url).pathname;
     if (!["/", "/register", "/health", "/location"].includes(path)) return reply(404, { ok: false, message: "Not found." });
     if (request.method === "GET" && ["/", "/health"].includes(path)) {
-      return reply(200, { service: "kfsd-registration", version: 2, configured: Boolean(env.MAILERLITE_API_TOKEN) });
+      return reply(200, { service: "kfsd-registration", provider: "kit", version: 3, configured: Boolean(env.KIT_API_KEY && env.KIT_TAG_ID) });
     }
     if (!allowed) return reply(403, { ok: false, message: "Please register through the KFSD website." });
     if (request.method === "GET" && path === "/location") {
@@ -120,49 +119,42 @@ function createRegistrationHandler(fetcher = fetch) {
 
     try {
       const values = await readSubmission(request);
-      if (!env.MAILERLITE_API_TOKEN) throw new RegistrationError(503, RETRY_MESSAGE);
-      // One deadline covers group lookup and saving. Never log tokens or answers.
+      if (!env.KIT_API_KEY || !/^\d+$/.test(env.KIT_TAG_ID || "")) throw new RegistrationError(503, RETRY_MESSAGE);
+      // One deadline covers subscriber upsert and tagging. Never log tokens or answers.
       const signal = AbortSignal.timeout(12000);
       const api = async (url, options = {}) => {
         const response = await fetcher(url, {
           ...options,
-          headers: { Authorization: `Bearer ${env.MAILERLITE_API_TOKEN}`, Accept: "application/json", "Content-Type": "application/json" },
+          headers: { "X-Kit-Api-Key": env.KIT_API_KEY, Accept: "application/json", "Content-Type": "application/json" },
           signal,
           // Cloudflare supports only "manual" and "follow". Reject 3xx below
-          // rather than forwarding the Authorization header to a new host.
+          // rather than forwarding the API credential to a new host.
           redirect: "manual",
         });
         if (!response.ok) throw new RegistrationError(response.status === 429 ? 429 : 502, RETRY_MESSAGE);
         return response.json();
       };
-      let groupId = env.MAILERLITE_GROUP_ID;
-      if (!groupId) {
-        const groups = await api(`${API}/groups?${new URLSearchParams({ "filter[name]": env.MAILERLITE_GROUP_NAME || GROUP_NAME, limit: "100" })}`);
-        const matches = groups.data?.filter((group) => group.name === (env.MAILERLITE_GROUP_NAME || GROUP_NAME));
-        // Never guess a group or create one silently if the name is wrong.
-        if (matches?.length !== 1 || !matches[0].id) throw new RegistrationError(503, RETRY_MESSAGE);
-        groupId = matches[0].id;
+      const fields = {};
+      for (const [formKey, kitKey] of Object.entries(FIELD_MAP)) {
+        if (values[formKey]) fields[kitKey] = values[formKey];
       }
-      const fields = { name: values.firstName };
-      for (const [formKey, mailerKey] of Object.entries(FIELD_MAP)) {
-        if (values[formKey]) fields[mailerKey] = values[formKey];
-      }
-      // MailerLite upserts by email; group memberships are additive. Do not set
-      // status or overwrite an unsubscribe, and do not claim email delivery.
+      // Kit upserts by email. Explicit active state implements the single-opt-in
+      // registration the event uses; the form submission is the subscriber's action.
       const result = await api(`${API}/subscribers`, {
         method: "POST",
-        body: JSON.stringify({ email: values.email, fields, groups: [String(groupId)] }),
+        body: JSON.stringify({ email_address: values.email, first_name: values.firstName, state: "active", fields }),
       });
-      const subscriber = result.data;
-      if (!subscriber?.id || subscriber.email?.toLowerCase() !== values.email.toLowerCase()) throw new RegistrationError(502, RETRY_MESSAGE);
-      if (!["active", "unconfirmed"].includes(subscriber.status)) {
+      const subscriber = result.subscriber;
+      if (!subscriber?.id || subscriber.email_address?.toLowerCase() !== values.email.toLowerCase()) throw new RegistrationError(502, RETRY_MESSAGE);
+      if (subscriber.state !== "active") {
         throw new RegistrationError(409, "We couldn't complete registration with this email address. Please contact KFSD for help.");
       }
-      const pending = subscriber.status === "unconfirmed";
+      const tagged = await api(`${API}/tags/${env.KIT_TAG_ID}/subscribers/${subscriber.id}`, { method: "POST" });
+      if (!tagged.subscriber?.id || String(tagged.subscriber.id) !== String(subscriber.id)) throw new RegistrationError(502, RETRY_MESSAGE);
       return reply(200, {
         ok: true,
-        status: pending ? "pending" : "registered",
-        message: pending ? "Your details have been saved. Email confirmation is still pending; please check your inbox and spam folder." : "You're registered! Your details have been saved for the KFSD soft skills training.",
+        status: "registered",
+        message: "You're registered! Your details have been saved for the KFSD soft skills training.",
       });
     } catch (error) {
       if (error instanceof RegistrationError) {

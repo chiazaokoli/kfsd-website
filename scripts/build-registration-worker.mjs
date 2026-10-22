@@ -12,5 +12,5 @@ await build({
   target: "es2022",
   minify: true,
   legalComments: "eof",
-  banner: { js: `// Generated Worker: copy this ENTIRE file into Cloudflare's worker.js editor.\n// Keep MAILERLITE_API_TOKEN in Cloudflare Secrets. Source: cloudflare/src/registration-worker.mjs\n// Rebuild with npm run build:worker. No external imports are needed.\n/* libphonenumber-js license:\n${phoneLicense}\n*/` },
+  banner: { js: `// Generated Worker: copy this ENTIRE file into Cloudflare's worker.js editor.\n// Keep KIT_API_KEY in Cloudflare Secrets and KIT_TAG_ID in Worker variables. Source: cloudflare/src/registration-worker.mjs\n// Rebuild with npm run build:worker. No external imports are needed.\n/* libphonenumber-js license:\n${phoneLicense}\n*/` },
 });

@@ -14,7 +14,7 @@ function withFetcher(fetcher) {
 }
 
 const origin = "https://chiazaokoli.github.io";
-const env = { MAILERLITE_API_TOKEN: "test-secret-not-a-real-token" };
+const env = { KIT_API_KEY: "test-secret-not-a-real-token", KIT_TAG_ID: "24884438" };
 const submission = {
   email: "test@example.com", firstName: "Ada", lastName: "Okafor",
   phone: "+2348012345678", profession: "Student", company: "NIQS",
@@ -24,18 +24,18 @@ const request = (body = submission, headers = {}) => new Request("https://worker
   method: "POST", headers: { origin, "content-type": "application/json", ...headers }, body: JSON.stringify(body),
 });
 const json = (body, status = 200) => Response.json(body, { status });
-function upstream({ groups = [{ id: "123", name: "KFSD Demo Group" }], status = "active", failAt, failureStatus = 500 } = {}) {
+function upstream({ state = "active", failAt, failureStatus = 500 } = {}) {
   const calls = [];
   const fetcher = async (url, options) => {
     calls.push({ url, options });
     if (calls.length === failAt) return json({ message: "Private upstream error" }, failureStatus);
-    if (url.includes("/groups?")) return json({ data: groups });
-    return json({ data: { id: "456", email: "test@example.com", status } }, 201);
+    if (url.endsWith("/subscribers")) return json({ subscriber: { id: 456, email_address: "test@example.com", state } }, 201);
+    return json({ subscriber: { id: 456, email_address: "test@example.com", state } }, 200);
   };
   return { handler: withFetcher(fetcher), calls };
 }
 
-test("saves every answer in the exact event group using the supplied tags", async () => {
+test("saves every answer as an active subscriber and applies the exact event tag", async () => {
   const { handler, calls } = upstream();
   const response = await handler(request({ ...submission, firstName: " Ada " }), env);
   assert.equal(response.status, 200);
@@ -44,32 +44,33 @@ test("saves every answer in the exact event group using the supplied tags", asyn
   const body = await response.json();
   assert.equal(body.ok, true);
   assert.equal(body.status, "registered");
-  assert.equal(new URL(calls[0].url).searchParams.get("filter[name]"), "KFSD Demo Group");
-  const payload = JSON.parse(calls[1].options.body);
+  assert.equal(calls[0].url, "https://api.kit.com/v4/subscribers");
+  const payload = JSON.parse(calls[0].options.body);
   assert.deepEqual(payload, {
-    email: "test@example.com", groups: ["123"], fields: {
-      name: "Ada", first_name: "Ada", last_name: "Okafor", phone: "+2348012345678", profession: "Student",
+    email_address: "test@example.com", first_name: "Ada", state: "active", fields: {
+      last_name: "Okafor", phone: "+2348012345678", profession: "Student",
       company: "NIQS", country: "Nigeria", state: "Lagos",
-      have_you_attended_kfsd_soft_skills_training_before: "No",
+      attended_kfsd_training_before: "No",
       how_did_you_hear_about_kfsd_soft_skills_training: "Word of mouth",
     },
   });
-  assert.equal(calls[1].options.headers.Authorization, `Bearer ${env.MAILERLITE_API_TOKEN}`);
-  assert.ok(calls[1].options.signal instanceof AbortSignal);
-  assert.ok(!JSON.stringify(body).includes(env.MAILERLITE_API_TOKEN));
+  assert.equal(calls[0].options.headers["X-Kit-Api-Key"], env.KIT_API_KEY);
+  assert.ok(calls[0].options.signal instanceof AbortSignal);
+  assert.equal(calls[1].url, "https://api.kit.com/v4/tags/24884438/subscribers/456");
+  assert.equal(calls[1].options.method, "POST");
+  assert.ok(!JSON.stringify(body).includes(env.KIT_API_KEY));
 });
 
-test("a supplied group ID skips lookup; blank optional company is not overwritten", async () => {
+test("blank optional company is not overwritten", async () => {
   const { handler, calls } = upstream();
-  assert.equal((await handler(request({ ...submission, company: "" }), { ...env, MAILERLITE_GROUP_ID: "789" })).status, 200);
-  assert.equal(calls.length, 1);
+  assert.equal((await handler(request({ ...submission, company: "" }), env)).status, 200);
+  assert.equal(calls.length, 2);
   const payload = JSON.parse(calls[0].options.body);
-  assert.deepEqual(payload.groups, ["789"]);
   assert.equal(payload.fields.company, undefined);
-  assert.equal(payload.status, undefined);
+  assert.equal(payload.state, "active");
 });
 
-test("invalid required answers return field errors without contacting MailerLite", async () => {
+test("invalid required answers return field errors without contacting Kit", async () => {
   const { handler, calls } = upstream();
   const response = await handler(request({ ...submission, email: "invalid", phone: "12", firstName: "", attended: "maybe", referral: "fake", company: "invalid" }), env);
   assert.equal(response.status, 422);
@@ -100,19 +101,16 @@ test("CORS permits the website, rejects other origins, and handles preflight", a
   assert.equal(calls.length, 0);
 });
 
-test("missing token, missing/ambiguous group, and upstream failures never report success", async () => {
+test("missing configuration and upstream failures never report success", async () => {
   assert.equal((await upstream().handler(request(), {})).status, 503);
-  for (const groups of [[], [{ id: "1", name: "Other group" }], [{ id: "1", name: "KFSD Demo Group" }, { id: "2", name: "KFSD Demo Group" }]]) {
-    const { handler, calls } = upstream({ groups });
-    assert.equal((await handler(request(), env)).status, 503);
-    assert.equal(calls.length, 1);
-  }
+  assert.equal((await upstream().handler(request(), { KIT_API_KEY: env.KIT_API_KEY })).status, 503);
+  assert.equal((await upstream().handler(request(), { ...env, KIT_TAG_ID: "not-an-id" })).status, 503);
   for (const failAt of [1, 2]) {
     const response = await upstream({ failAt }).handler(request(), env);
     assert.equal(response.status, 502);
     const text = await response.text();
     assert.ok(!text.includes("Private upstream error"));
-    assert.ok(!text.includes(env.MAILERLITE_API_TOKEN));
+    assert.ok(!text.includes(env.KIT_API_KEY));
   }
   const limited = await upstream({ failAt: 2, failureStatus: 429 }).handler(request(), env);
   assert.equal(limited.status, 429);
@@ -143,25 +141,23 @@ test("uses Cloudflare-supported redirect handling and refuses upstream redirects
   assert.equal(calls, 1);
 });
 
-test("unconfirmed records are distinguished and unsubscribed/bounced records are not reactivated", async () => {
-  const pending = await upstream({ status: "unconfirmed" }).handler(request(), env);
-  assert.equal((await pending.json()).status, "pending");
-  for (const status of ["unsubscribed", "bounced", "junk"]) {
-    const response = await upstream({ status }).handler(request(), env);
+test("only an active single-opt-in subscriber is reported as registered", async () => {
+  for (const state of ["inactive", "cancelled", "bounced"]) {
+    const response = await upstream({ state }).handler(request(), env);
     assert.equal(response.status, 409);
     assert.equal((await response.json()).ok, false);
   }
 });
 
 test("malformed provider success is not accepted as a saved registration", async () => {
-  const handler = withFetcher(async (url) => url.includes("/groups?") ? json({ data: [{ id: "123", name: "KFSD Demo Group" }] }) : json({ data: {} }));
+  const handler = withFetcher(async () => json({ subscriber: {} }));
   assert.equal((await handler(request(), env)).status, 502);
 });
 
 test("public health check reveals no secrets and makes no subscriber requests", async () => {
   const { handler, calls } = upstream();
   const response = await handler(new Request("https://worker.example/health"), env);
-  assert.deepEqual(await response.json(), { service: "kfsd-registration", version: 2, configured: true });
+  assert.deepEqual(await response.json(), { service: "kfsd-registration", provider: "kit", version: 3, configured: true });
   assert.equal(calls.length, 0);
 });
 
@@ -176,7 +172,7 @@ test("validates international calling codes and saves normalized phone numbers",
     const { handler, calls } = upstream();
     const response = await handler(request({ ...submission, phoneCountry, phone }), env);
     assert.equal(response.status, 200, `${phoneCountry}: ${await response.text()}`);
-    assert.equal(JSON.parse(calls[1].options.body).fields.phone, expected);
+    assert.equal(JSON.parse(calls[0].options.body).fields.phone, expected);
   }
   for (const [phoneCountry, phone] of [["NG", "1234567"], ["NG", "0803 CALL ME"], ["NG", "+447911123456"], ["XX", "08031234567"], ["NG", "080312345678901234567890"]]) {
     const { handler, calls } = upstream();
@@ -195,7 +191,7 @@ test("country code must match the selected country label", async () => {
   assert.equal(calls.length, 0);
 });
 
-test("suggests country and region using Cloudflare metadata without exposing IP or calling MailerLite", async () => {
+test("suggests country and region using Cloudflare metadata without exposing IP or calling Kit", async () => {
   const { handler, calls } = upstream();
   const req = new Request("https://worker.example/location", { headers: { origin, "CF-Connecting-IP": "192.0.2.10" } });
   Object.defineProperty(req, "cf", { value: { country: "CA", regionCode: "ON", region: "Ontario" } });

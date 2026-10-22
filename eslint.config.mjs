@@ -5,5 +5,5 @@ import nextTs from "eslint-config-next/typescript";
 export default defineConfig([
   ...nextVitals,
   ...nextTs,
-  globalIgnores([".next/**", "node_modules/**", "cloudflare/registration-worker.mjs"]),
+  globalIgnores([".next/**", "node_modules/**", "cloudflare/registration-worker.mjs", "cloudflare/backups/mailerlite-registration-worker.mjs"]),
 ]);
