@@ -401,6 +401,8 @@ img { display: block; }
 
 @media (min-width: 801px) {
   .splash-moment { gap: clamp(12px, 2.5vw, 38px); }
+  .skill-meta svg { width: clamp(48px, 4.5vw, 68px); height: clamp(48px, 4.5vw, 68px); }
+  .skill-card p { font-size: clamp(1rem, 1.25vw, 1.18rem); line-height: 1.5; opacity: .88; }
   .skills-section .section-heading { color: var(--white); transition: color 300ms ease-in-out; }
   .site-shell.skills-background-active .skills-section .section-heading { color: var(--ink); }
   .registration-section { color: var(--ink); transition: color 300ms ease-in-out; }
