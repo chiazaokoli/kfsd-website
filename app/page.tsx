@@ -104,6 +104,7 @@ export default function Home() {
   const videoDialogRef = useRef<HTMLDialogElement>(null);
   const introVideoRef = useRef<HTMLVideoElement>(null);
   const [showNavCta, setShowNavCta] = useState(false);
+  const [navVisible, setNavVisible] = useState(false);
   const [countdownInView, setCountdownInView] = useState(false);
   const [countdown, setCountdown] = useState<Countdown>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [activeStep, setActiveStep] = useState(0);
@@ -185,6 +186,8 @@ export default function Home() {
     let readyFrame = 0;
     let lastColor = "";
     let lastActiveSection = -1;
+    let lastScrollY = window.scrollY;
+    let scrollingUp = true;
     const shell = pageRef.current;
     const sections = sectionColors.map(([selector, color]) => ({ element: shell?.querySelector<HTMLElement>(selector), color }));
     const skillsIndex = sectionColors.findIndex(([selector]) => selector === ".skills-section");
@@ -200,10 +203,14 @@ export default function Home() {
       frame = 0;
       const cta = heroCtaRef.current;
       const topbar = topbarRef.current;
-      topbar?.classList.toggle("is-scrolled", window.scrollY > 0);
-      if (cta && topbar) setShowNavCta(cta.getBoundingClientRect().bottom <= topbar.getBoundingClientRect().bottom);
-      if (!shell) return;
       const mobile = window.innerWidth <= 800;
+      const scrollY = window.scrollY;
+      if (Math.abs(scrollY - lastScrollY) >= 2) scrollingUp = scrollY < lastScrollY;
+      lastScrollY = scrollY;
+      setNavVisible(mobile || (scrollY > 4 && !scrollingUp));
+      topbar?.classList.toggle("is-scrolled", window.scrollY > 0);
+      if (cta && topbar) setShowNavCta(cta.getBoundingClientRect().bottom <= (mobile ? topbar.getBoundingClientRect().bottom : 64));
+      if (!shell) return;
       let activeSection = -1;
       sections.forEach(({ element }, index) => {
         const entryLine = index === 0 ? window.innerHeight : window.innerHeight * 0.8;
@@ -400,7 +407,7 @@ export default function Home() {
       {showSplashScreen && <SplashScreen onRevealStart={() => setHeroRevealStarted(true)} />}
       <main ref={pageRef} className="site-shell" id="top">
         <SmoothCorners />
-        <header ref={topbarRef} className={`topbar${showNavCta ? " has-cta" : ""}`}>
+        <header ref={topbarRef} className={`topbar${navVisible ? "" : " is-hidden"}${showNavCta ? " has-cta" : ""}`}>
           <a className="brand" href="#top" aria-label="KFSD Soft Skills Training home"><span className="brand-mark" aria-hidden="true"><Image src={`${assetPrefix}/images/kfsd-logo-mark.webp`} alt="" width={30} height={30} loading="eager" unoptimized /></span><span>KFSD <b>Soft Skills Training</b></span></a>
           <nav aria-label="Main navigation"><a href="#skills">Skills</a><a href="#schedule">Schedule</a><a href="#organiser">About KFSD</a></nav>
           <a className="topbar-cta" href="#register" onClick={handleRegistrationCtaClick} aria-hidden={!showNavCta} tabIndex={showNavCta ? 0 : -1}><span className="cta-copy">Reserve my spot</span><ArrowRight size={17} weight="bold" /></a>
@@ -499,7 +506,7 @@ export default function Home() {
           <div className="organiser-copy chapter-reveal"><p className="section-kicker">Organised by KFSD</p><h2>Eight years of helping young people stand out</h2><p>For eight years, KFSD has been running sessions that teach young people the skills that set them apart in work, business and life. This is another amazing edition, after a year of waiting. We’re excited to bring you this opportunity.</p></div>
         </section>
 
-        <section className="two-days-section"><div className="two-days-number" aria-hidden="true">2</div><div><h2>Two hours. Two days. A lifetime of difference.</h2></div><p>We’ve packed the most valuable lessons into four focused hours so you get maximum value without wasting your time. These are four hours with information that could change how you show up for the rest of your life.</p></section>
+        <section className="two-days-section"><div><h2>Two hours. Two days. A lifetime of difference.</h2></div><p>We’ve packed the most valuable lessons into four focused hours so you get maximum value without wasting your time. These are four hours with information that could change how you show up for the rest of your life.</p></section>
 
         <section className="registration-section" id="register">
           <div className="registration-copy chapter-reveal">
