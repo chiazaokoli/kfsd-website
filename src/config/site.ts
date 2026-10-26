@@ -30,7 +30,7 @@ export const siteConfig = {
       date: "Wednesday, 25 November",
       items: [
         ["10:00", "Moderator introduces the soft skills training"],
-        ["10:05", "Moderator speaks about IG and why the training honours his birthday"],
+        ["10:05", "Brief intro on the CEO"],
         ["10:15", "Critical Thinking"],
         ["10:45", "Leadership"],
         ["11:15", "Integrity"],
