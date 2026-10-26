@@ -432,8 +432,9 @@ img { display: block; }
   .site-shell.skills-background-active .skills-section .section-heading { color: var(--ink); }
   .schedule-intro > p:not(.section-kicker) { transition: color 300ms ease-in-out; }
   .site-shell.organiser-background-active .schedule-intro > p:not(.section-kicker) { color: var(--white); }
-  .registration-section { color: var(--ink); transition: color 300ms ease-in-out; }
-  .site-shell.registration-background-active .registration-section { color: var(--white); }
+  .two-days-section { color: var(--ink); background: #f5f5f5; transition: none; }
+  .registration-section, .site-shell.registration-background-active .registration-section { color: var(--white); background: var(--ink); transition: none; }
+  .faq-section-new { color: var(--ink); background: var(--paper); }
   .schedule-layout { min-height: 0; }
   .schedule-section { padding-bottom: clamp(130px, 10.5vw, 150px); }
   .proof-section { padding-top: clamp(130px, 10.5vw, 150px); }

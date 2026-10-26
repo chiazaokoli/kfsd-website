@@ -231,6 +231,7 @@ export default function Home() {
         const threshold = outgoingCopy ? window.innerHeight * 0.1 : entryLine;
         if (boundary !== undefined && boundary <= threshold) activeSection = index;
       });
+      if (!mobile && activeSection > twoDaysIndex) activeSection = twoDaysIndex;
       shell.classList.toggle("skills-background-active", activeSection === skillsIndex);
       shell.classList.toggle("matter-background-active", activeSection === 1);
       shell.classList.toggle("schedule-background-active", activeSection === 4);
