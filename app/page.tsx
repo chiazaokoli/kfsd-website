@@ -203,6 +203,7 @@ export default function Home() {
     const registrationHeading = shell?.querySelector<HTMLElement>(".registration-copy h2");
     const twoDaysCopy = shell?.querySelector<HTMLElement>(".two-days-section > p");
     const faqIndex = sectionColors.findIndex(([selector]) => selector === ".faq-section-new");
+    const organiserIndex = sectionColors.findIndex(([selector]) => selector === ".organiser-section");
     const update = () => {
       frame = 0;
       const cta = heroCtaRef.current;
@@ -229,6 +230,7 @@ export default function Home() {
       shell.classList.toggle("skills-background-active", activeSection === skillsIndex);
       shell.classList.toggle("matter-background-active", activeSection === 1);
       shell.classList.toggle("schedule-background-active", activeSection === 4);
+      shell.classList.toggle("organiser-background-active", activeSection === organiserIndex);
       shell.classList.toggle("two-days-background-active", activeSection === twoDaysIndex);
       shell.classList.toggle("registration-background-active", activeSection === registrationIndex);
       const color = activeSection < 0 ? (mobile ? [5, 7, 12] : [34, 219, 121]) : sections[activeSection].color;
