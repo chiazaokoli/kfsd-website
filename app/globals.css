@@ -16,6 +16,7 @@
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 110px; }
 body { margin: 0; background: var(--ink); color: var(--ink); font-family: "Be Vietnam Pro", sans-serif; text-rendering: optimizeLegibility; }
+h1, h2, h3, .learning-step-text strong { font-family: var(--font-sf-ui-display), "Be Vietnam Pro", sans-serif; }
 body.splash-active { overflow: hidden; }
 body::selection { color: var(--ink); background: var(--accent-green); }
 a { color: inherit; text-decoration: none; }
