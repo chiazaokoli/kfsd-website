@@ -58,6 +58,7 @@ const skills = [
   { title: "Communicate Clearly", copy: "Express your ideas clearly, listen well and speak with confidence to any audience.", icon: ChatCircleDots, className: "skill-third skill-lime" },
   { title: "Build Resilience", copy: "Handle setbacks, challenges and pressure while keeping a positive, solution-focused mindset.", icon: Mountains, className: "skill-third skill-cream" },
   { title: "Act with Integrity", copy: "Understand why honesty, accountability and doing the right thing matter in your personal and professional life.", icon: ShieldCheck, className: "skill-third skill-dark" },
+  { title: "Teamwork", copy: "Combine different strengths, share responsibility and support one another to reach a common goal.", icon: UsersThree, className: "skill-third skill-teamwork" },
 ];
 
 const learningSteps = [
@@ -463,7 +464,7 @@ export default function Home() {
         </section>
 
         <section className="skills-section" id="skills">
-          <div className="section-heading"><h2>Five skills you’ll learn that change how people see you</h2></div>
+          <div className="section-heading"><h2>Six skills you’ll learn that change how people see you</h2></div>
           <div className="skills-grid grid-flow-dense">
             {skills.map(({ title, copy, icon: Icon, className, image }) => (
               <article className={`skill-card ${className}`} key={title}>
@@ -502,7 +503,7 @@ export default function Home() {
         </section>
 
         {showSpeakersSection && <section className="proof-section">
-          <div className="proof-header chapter-reveal"><p className="section-kicker">The speakers</p><h2>Five voices. Five skills. A fresh perspective.</h2><p>Meet the faces behind each topic, each led by someone who has lived it</p></div>
+          <div className="proof-header chapter-reveal"><p className="section-kicker">The speakers</p><h2>Voices behind the skills. A fresh perspective.</h2><p>Meet the faces behind each topic, each led by someone who has lived it</p></div>
           <div className="speaker-grid">{speakers.map(({ name, topic, image }) => <article key={topic}><div className="speaker-portrait"><Image src={`${assetPrefix}${image}`} alt={name} fill unoptimized sizes="(max-width: 360px) 100vw, (max-width: 800px) 50vw, 33vw" /></div><div className="speaker-details"><h3>{name}</h3><p>{topic}</p></div></article>)}</div>
         </section>}
 
