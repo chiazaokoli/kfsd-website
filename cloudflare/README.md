@@ -1,6 +1,6 @@
 # KFSD registration → Kit
 
-The website stays on GitHub Pages. The single-file Cloudflare Worker validates
+The website runs on Cloudflare Pages. The single-file Cloudflare Worker validates
 the registration, upserts an active Kit subscriber, saves the form answers as
 custom fields, and applies the **KFSD Demo Group** tag.
 
@@ -12,7 +12,7 @@ these bindings in the dashboard editor. From the repository root:
 1. Run `npm run build:worker`.
 2. Run `npx wrangler@latest login --device --browser=false` and open the
    verification URL printed in the terminal. Authorize the Cloudflare account
-   that owns **kfsd-demo-registration**. Device login works in GitHub Codespaces.
+   that owns **kfsdsoftskills**. Device login works in GitHub Codespaces.
 3. Run `npx wrangler@latest deploy --config cloudflare/wrangler.jsonc`.
    This updates the **existing** Worker and adds the `REGISTRATION_RATE_LIMITER`
    binding: 20 attempts per 60 seconds per Cloudflare location and client IP.
@@ -20,7 +20,7 @@ these bindings in the dashboard editor. From the repository root:
    also preserves existing secrets.
 4. Keep `KIT_API_KEY` as a Production secret and `KIT_TAG_ID` as a Production
    variable. The event tag ID is `24884438`. No new secret is required.
-5. Visit `https://kfsd-demo-registration.yummydummy419.workers.dev/health`.
+5. Visit `https://kfsdsoftskills.smart-okolichiaza.workers.dev/health`.
    It should return `"provider":"kit"`, `"configured":true`, and
    `"rateLimited":true`. If `rateLimited` is false, the binding was not attached.
 6. Submit the website form with an address you control. Confirm that the Kit
