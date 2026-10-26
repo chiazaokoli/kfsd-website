@@ -443,9 +443,11 @@ export default function Home() {
             <p className="hook-answer">Then this is for you.</p>
           </div>
           <figure className="hook-visual motion-image">
-            <Image src={`${assetPrefix}/images/kfsd-intro-thumbnail-clean.webp`} alt="A KFSD participant speaking about soft skills" fill unoptimized sizes="(max-width: 800px) 100vw, 46vw" />
-            <button className="hook-play" type="button" onClick={playIntroVideo} aria-label="Play the KFSD introduction video fullscreen"><Play size={31} weight="fill" aria-hidden="true" /></button>
-            <figcaption><RocketLaunch size={28} weight="fill" /> Equip yourself for the future</figcaption>
+            <div className="hook-visual-frame">
+              <Image src={`${assetPrefix}/images/kfsd-intro-thumbnail-clean.webp`} alt="A KFSD participant speaking about soft skills" fill unoptimized sizes="(max-width: 800px) 100vw, 46vw" />
+              <button className="hook-play" type="button" onClick={playIntroVideo} aria-label="Play the KFSD introduction video fullscreen"><Play size={31} weight="fill" aria-hidden="true" /></button>
+              <figcaption><RocketLaunch size={28} weight="fill" /> Equip yourself for the future</figcaption>
+            </div>
           </figure>
         </section>
 
