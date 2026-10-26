@@ -21,6 +21,7 @@ import RegistrationForm from "../src/components/RegistrationForm";
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 const assetPrefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const showSplashScreen = true;
+const showSpeakersSection = false;
 const heroLeadWords = ["Learn", "the", "soft", "skills", "that", "set", "you", "apart", "in"];
 const heroEnding = "2 days.";
 const heroEndingStart = heroLeadWords.join("").length;
@@ -170,8 +171,10 @@ export default function Home() {
     const video = introVideoRef.current as (HTMLVideoElement & { webkitEnterFullscreen?: () => void }) | null;
     if (!dialog || !video) return;
     dialog.showModal();
-    if (video.requestFullscreen) void video.requestFullscreen().catch(() => {});
-    else video.webkitEnterFullscreen?.();
+    if (window.innerWidth > 800) {
+      if (video.requestFullscreen) void video.requestFullscreen().catch(() => {});
+      else video.webkitEnterFullscreen?.();
+    }
     void video.play().catch(() => {});
   }
 
@@ -498,10 +501,10 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="proof-section">
+        {showSpeakersSection && <section className="proof-section">
           <div className="proof-header chapter-reveal"><p className="section-kicker">The speakers</p><h2>Five voices. Five skills. A fresh perspective.</h2><p>Meet the faces behind each topic, each led by someone who has lived it</p></div>
           <div className="speaker-grid">{speakers.map(({ name, topic, image }) => <article key={topic}><div className="speaker-portrait"><Image src={`${assetPrefix}${image}`} alt={name} fill unoptimized sizes="(max-width: 360px) 100vw, (max-width: 800px) 50vw, 33vw" /></div><div className="speaker-details"><h3>{name}</h3><p>{topic}</p></div></article>)}</div>
-        </section>
+        </section>}
 
         <section className="organiser-section" id="organiser">
           <div className="organiser-image motion-image"><Image src={`${assetPrefix}/images/listening.webp`} alt="Young people taking part in a thoughtful group conversation" fill unoptimized sizes="(max-width: 800px) 100vw, 48vw" /></div>
