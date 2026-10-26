@@ -17,7 +17,7 @@ type Piece = {
   color: string;
 };
 
-const colors = ["#22db79", "#315cff", "#e5ae35", "#8f86ff", "#43a9d6", "#f07891"];
+const colors = ["#22db79", "#176836", "#e5ae35", "#8f86ff", "#43a9d6", "#f07891"];
 const duration = 9500;
 const burstDrag = 4;
 
