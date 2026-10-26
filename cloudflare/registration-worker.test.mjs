@@ -96,6 +96,28 @@ test("does not report success when Kit still ignores custom fields", async () =>
   assert.equal((await response.json()).ok, false);
 });
 
+test("finds missing Kit fields beyond the first custom-fields page", async () => {
+  let writes = 0;
+  const calls = [];
+  const handler = withFetcher(async (url, options) => {
+    calls.push(url);
+    if (url.includes("/custom_fields?") && !url.includes("&after=")) return json({ custom_fields: [{ label: "Phone", key: "phone" }], pagination: { has_next_page: true, end_cursor: "next page" } });
+    if (url.includes("&after=next%20page")) return json({ custom_fields: [
+      { label: "Last name", key: "subscriber_surname" },
+      { label: "How did you hear about KFSD soft skills training?", key: "heard_about_training" },
+    ], pagination: { has_next_page: false } });
+    if (url.endsWith("/subscribers")) {
+      writes++;
+      const fields = JSON.parse(options.body).fields;
+      if (writes === 2) assert.equal(fields.heard_about_training, "Word of mouth");
+      return json({ subscriber: { id: 456, email_address: submission.email, state: "active" }, ...(writes === 1 ? { warnings: ["Unknown custom field key"] } : {}) }, 201);
+    }
+    return json({ subscriber: { id: 456 } });
+  });
+  assert.equal((await handler(request(), env)).status, 200);
+  assert.ok(calls.some((url) => url.includes("&after=next%20page")));
+});
+
 test("blank optional company is not overwritten", async () => {
   const { handler, calls } = upstream();
   assert.equal((await handler(request({ ...submission, company: "" }), env)).status, 200);
