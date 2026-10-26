@@ -33,7 +33,7 @@ const sectionColors = [
   [".schedule-section", [251, 250, 246]],
   [".proof-section", [242, 240, 232]],
   [".organiser-section", [23, 104, 54]],
-  [".two-days-section", [34, 219, 121]],
+  [".two-days-section", [245, 245, 245]],
   [".registration-section", [11, 16, 28]],
   [".faq-section-new", [251, 250, 246]],
 ] as const;
@@ -418,7 +418,7 @@ export default function Home() {
       <main ref={pageRef} className="site-shell" id="top">
         <SmoothCorners />
         <header ref={topbarRef} className={`topbar${navVisible ? "" : " is-hidden"}${navOverHero ? " is-over-hero" : ""}${showNavCta ? " has-cta" : ""}`}>
-          <a className="brand" href="#top" aria-label="KFSD Soft Skills Training home"><span className="brand-mark" aria-hidden="true"><Image src={`${assetPrefix}/images/kfsd-logo-mark.webp`} alt="" width={30} height={30} loading="eager" unoptimized /></span><span>KFSD <b>Soft Skills Training</b></span></a>
+          <a className="brand" href="#top" aria-label="Kaiser Foundation for Social Development home"><span className="brand-mark" aria-hidden="true"><Image src={`${assetPrefix}/images/kfsd-logo-mark.webp`} alt="" width={38} height={38} loading="eager" unoptimized /></span><span className="brand-long-name">Kaiser Foundation for Social Development (KFSD)</span><span className="brand-short-name">KFSD</span></a>
           <nav aria-label="Main navigation"><a href="#skills">Skills</a><a href="#schedule">Schedule</a><a href="#organiser">About KFSD</a></nav>
           <a className="topbar-cta" href="#register" onClick={handleRegistrationCtaClick} aria-hidden={!showNavCta} tabIndex={showNavCta ? 0 : -1}><span className="cta-copy">Reserve my spot</span><ArrowRight size={17} weight="bold" /></a>
         </header>
