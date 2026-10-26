@@ -436,6 +436,7 @@ export default function Home() {
             <div><CalendarBlank size={22} weight="duotone" /><span>{siteConfig.event.dateLabel}</span></div>
             <div><Clock size={22} weight="duotone" /><span>{siteConfig.event.timeLabel}</span></div>
             <div><GlobeHemisphereWest size={22} weight="duotone" /><span>{siteConfig.event.venue}</span></div>
+            <div className="event-qr"><Image src={`${assetPrefix}/images/event-qr.jpg`} alt="Event QR code" width={58} height={58} unoptimized /></div>
             <a href="#story" aria-label="Continue to the program story"><ArrowDown size={21} /></a>
           </div>
         </section>
@@ -546,7 +547,7 @@ export default function Home() {
           </div>;
         })}</div></section>
 
-        <footer className="new-footer"><div className="footer-top"><a className="footer-identity" href="#top" aria-label="KFSD Soft Skills Training home"><span className="footer-logo"><Image src={`${assetPrefix}/images/kfsd-logo-full.webp`} alt="Kaiser Foundation for Social Development logo" width={155} height={155} unoptimized /></span><strong>KFSD Soft Skills Training</strong></a><p className="footer-event-time">{siteConfig.event.dateLabel}<br />{siteConfig.event.timeLabel}</p></div><div className="footer-bottom"><p>Organised by {siteConfig.organiser}</p><p>© 2026 KFSD</p></div></footer>
+        <footer className="new-footer"><div className="footer-top"><a className="footer-identity" href="#top" aria-label="KFSD Soft Skills Training home"><span className="footer-logo"><Image src={`${assetPrefix}/images/kfsd-logo-full.webp`} alt="Kaiser Foundation for Social Development logo" width={155} height={155} unoptimized /></span><strong>KFSD Soft Skills Training</strong></a><div className="footer-event"><Image className="footer-qr" src={`${assetPrefix}/images/event-qr.jpg`} alt="Event QR code" width={110} height={110} unoptimized /><p className="footer-event-time">{siteConfig.event.dateLabel}<br />{siteConfig.event.timeLabel}</p></div></div><div className="footer-bottom"><p>Organised by {siteConfig.organiser}</p><p>© 2026 KFSD</p></div></footer>
       </main>
       <dialog ref={videoDialogRef} className="intro-video-dialog" onCancel={(event) => { event.preventDefault(); closeIntroVideo(); }} onClose={() => introVideoRef.current?.pause()}>
         <button className="intro-video-close" type="button" onClick={closeIntroVideo} aria-label="Close video">×</button>
