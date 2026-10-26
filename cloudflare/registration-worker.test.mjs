@@ -61,6 +61,41 @@ test("saves every answer as an active subscriber and applies the exact event tag
   assert.ok(!JSON.stringify(body).includes(env.KIT_API_KEY));
 });
 
+test("resolves account-specific field keys when Kit warns that answers were ignored", async () => {
+  const calls = [];
+  let subscriberWrites = 0;
+  const handler = withFetcher(async (url, options) => {
+    calls.push({ url, options });
+    if (url.includes("/custom_fields")) return json({ custom_fields: [
+      { label: "Last name", key: "subscriber_surname" },
+      { label: "How did you hear about KFSD soft skills training?", key: "heard_about_training" },
+    ] });
+    if (url.endsWith("/subscribers")) {
+      subscriberWrites++;
+      return json({ subscriber: { id: 456, email_address: submission.email, state: "active" }, ...(subscriberWrites === 1 ? { warnings: ["Unknown custom field key"] } : {}) }, 201);
+    }
+    return json({ subscriber: { id: 456 } });
+  });
+  const response = await handler(request(), env);
+  assert.equal(response.status, 200);
+  assert.equal(calls[1].url, "https://api.kit.com/v4/custom_fields?per_page=100");
+  const retryFields = JSON.parse(calls[2].options.body).fields;
+  assert.equal(retryFields.subscriber_surname, "Okafor");
+  assert.equal(retryFields.heard_about_training, "Word of mouth");
+  assert.equal(retryFields.last_name, undefined);
+  assert.equal(retryFields.how_did_you_hear_about_kfsd_soft_skills_training, undefined);
+  assert.match(calls[3].url, /\/tags\/24884438\/subscribers\/456$/);
+});
+
+test("does not report success when Kit still ignores custom fields", async () => {
+  const handler = withFetcher(async (url) => url.includes("/custom_fields")
+    ? json({ custom_fields: [{ label: "Last name", key: "subscriber_surname" }, { label: "How did you hear about KFSD soft skills training?", key: "heard_about_training" }] })
+    : json({ subscriber: { id: 456, email_address: submission.email, state: "active" }, warnings: ["Unknown custom field key"] }, 201));
+  const response = await handler(request(), env);
+  assert.equal(response.status, 503);
+  assert.equal((await response.json()).ok, false);
+});
+
 test("blank optional company is not overwritten", async () => {
   const { handler, calls } = upstream();
   assert.equal((await handler(request({ ...submission, company: "" }), env)).status, 200);
