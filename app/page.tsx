@@ -211,7 +211,7 @@ export default function Home() {
       const scrollY = window.scrollY;
       if (Math.abs(scrollY - lastScrollY) >= 2) scrollingUp = scrollY < lastScrollY;
       lastScrollY = scrollY;
-      setNavVisible(mobile || (scrollY > 4 && !scrollingUp));
+      setNavVisible(mobile || (scrollY > 4 && scrollingUp));
       topbar?.classList.toggle("is-scrolled", window.scrollY > 0);
       if (cta && topbar) setShowNavCta(cta.getBoundingClientRect().bottom <= (mobile ? topbar.getBoundingClientRect().bottom : 64));
       if (!shell) return;
@@ -508,7 +508,7 @@ export default function Home() {
         </section>}
 
         <section className="organiser-section" id="organiser">
-          <div className="organiser-image motion-image"><Image src={`${assetPrefix}/images/kfsd-workshop.webp`} alt="Young woman presenting an idea to an attentive workshop group" fill unoptimized sizes="(max-width: 800px) 100vw, 48vw" /></div>
+          <div className="organiser-image motion-image"><Image src={`${assetPrefix}/images/kfsd-workshop.webp`} alt="Young man presenting ideas to an attentive workshop group" fill unoptimized sizes="(max-width: 800px) 100vw, 48vw" /></div>
           <div className="organiser-copy chapter-reveal"><p className="section-kicker">Organised by KFSD</p><h2>Eight years of helping young people stand out</h2><p>For eight years, KFSD has been running sessions that teach young people the skills that set them apart in work, business and life. This is another amazing edition, after a year of waiting. We’re excited to bring you this opportunity.</p></div>
         </section>
 
