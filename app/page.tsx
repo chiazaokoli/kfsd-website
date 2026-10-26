@@ -32,7 +32,7 @@ const sectionColors = [
   [".learning-section", [11, 16, 28]],
   [".schedule-section", [251, 250, 246]],
   [".proof-section", [242, 240, 232]],
-  [".organiser-section", [49, 92, 255]],
+  [".organiser-section", [23, 104, 54]],
   [".two-days-section", [34, 219, 121]],
   [".registration-section", [11, 16, 28]],
   [".faq-section-new", [251, 250, 246]],
@@ -107,6 +107,7 @@ export default function Home() {
   const introVideoRef = useRef<HTMLVideoElement>(null);
   const [showNavCta, setShowNavCta] = useState(false);
   const [navVisible, setNavVisible] = useState(false);
+  const [navOverHero, setNavOverHero] = useState(false);
   const [countdownInView, setCountdownInView] = useState(false);
   const [countdown, setCountdown] = useState<Countdown>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [activeStep, setActiveStep] = useState(0);
@@ -193,6 +194,7 @@ export default function Home() {
     let lastScrollY = window.scrollY;
     let scrollingUp = true;
     const shell = pageRef.current;
+    const hero = shell?.querySelector<HTMLElement>(".new-hero");
     const sections = sectionColors.map(([selector, color]) => ({ element: shell?.querySelector<HTMLElement>(selector), color }));
     const skillsIndex = sectionColors.findIndex(([selector]) => selector === ".skills-section");
     const skillsHeading = shell?.querySelector<HTMLElement>(".skills-section h2");
@@ -212,7 +214,9 @@ export default function Home() {
       const scrollY = window.scrollY;
       if (Math.abs(scrollY - lastScrollY) >= 2) scrollingUp = scrollY < lastScrollY;
       lastScrollY = scrollY;
-      setNavVisible(mobile || (scrollY > 4 && scrollingUp));
+      const overHero = !mobile && Boolean(hero && hero.getBoundingClientRect().bottom > 0);
+      setNavVisible(mobile || overHero || scrollingUp);
+      setNavOverHero(overHero);
       topbar?.classList.toggle("is-scrolled", window.scrollY > 0);
       if (cta && topbar) setShowNavCta(cta.getBoundingClientRect().bottom <= (mobile ? topbar.getBoundingClientRect().bottom : 64));
       if (!shell) return;
@@ -413,14 +417,14 @@ export default function Home() {
       {showSplashScreen && <SplashScreen onRevealStart={() => setHeroRevealStarted(true)} />}
       <main ref={pageRef} className="site-shell" id="top">
         <SmoothCorners />
-        <header ref={topbarRef} className={`topbar${navVisible ? "" : " is-hidden"}${showNavCta ? " has-cta" : ""}`}>
+        <header ref={topbarRef} className={`topbar${navVisible ? "" : " is-hidden"}${navOverHero ? " is-over-hero" : ""}${showNavCta ? " has-cta" : ""}`}>
           <a className="brand" href="#top" aria-label="KFSD Soft Skills Training home"><span className="brand-mark" aria-hidden="true"><Image src={`${assetPrefix}/images/kfsd-logo-mark.webp`} alt="" width={30} height={30} loading="eager" unoptimized /></span><span>KFSD <b>Soft Skills Training</b></span></a>
           <nav aria-label="Main navigation"><a href="#skills">Skills</a><a href="#schedule">Schedule</a><a href="#organiser">About KFSD</a></nav>
           <a className="topbar-cta" href="#register" onClick={handleRegistrationCtaClick} aria-hidden={!showNavCta} tabIndex={showNavCta ? 0 : -1}><span className="cta-copy">Reserve my spot</span><ArrowRight size={17} weight="bold" /></a>
         </header>
 
         <section className="new-hero" aria-labelledby="hero-title">
-          <Image src={`${assetPrefix}/images/hero-editorial.webp`} alt="Students collaborating while one student presents an idea" fill priority unoptimized sizes="100vw" className="hero-photo" />
+          <Image src={`${assetPrefix}/images/hero-new.jpg`} alt="A facilitator leads a group of young people in a workshop" fill priority unoptimized sizes="100vw" className="hero-photo" />
           <div className="hero-scrim" aria-hidden="true" />
           <div className="hero-content">
             <p className="edition-badge hero-enter"><span className="edition-badge-icon"><Medal size={15} weight="duotone" aria-hidden="true" /></span><span>{siteConfig.edition}</span></p>
@@ -542,7 +546,7 @@ export default function Home() {
           </div>;
         })}</div></section>
 
-        <footer className="new-footer"><a className="footer-identity" href="#top" aria-label="KFSD Soft Skills Training home"><span className="footer-logo"><Image src={`${assetPrefix}/images/kfsd-logo-full.webp`} alt="Kaiser Foundation for Social Development logo" width={155} height={155} unoptimized /></span><strong>KFSD Soft Skills Training</strong></a><div className="footer-bottom"><p>Organised by {siteConfig.organiser}</p><p>{siteConfig.event.dateLabel} · {siteConfig.event.timeLabel}</p><p>© 2026 KFSD</p></div></footer>
+        <footer className="new-footer"><div className="footer-top"><a className="footer-identity" href="#top" aria-label="KFSD Soft Skills Training home"><span className="footer-logo"><Image src={`${assetPrefix}/images/kfsd-logo-full.webp`} alt="Kaiser Foundation for Social Development logo" width={155} height={155} unoptimized /></span><strong>KFSD Soft Skills Training</strong></a><p className="footer-event-time">{siteConfig.event.dateLabel}<br />{siteConfig.event.timeLabel}</p></div><div className="footer-bottom"><p>Organised by {siteConfig.organiser}</p><p>© 2026 KFSD</p></div></footer>
       </main>
       <dialog ref={videoDialogRef} className="intro-video-dialog" onCancel={(event) => { event.preventDefault(); closeIntroVideo(); }} onClose={() => introVideoRef.current?.pause()}>
         <button className="intro-video-close" type="button" onClick={closeIntroVideo} aria-label="Close video">×</button>
