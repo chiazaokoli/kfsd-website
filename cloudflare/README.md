@@ -63,9 +63,10 @@ different spelling, update its value in `FIELD_MAP` in
 `src/registration-worker.mjs` before deploying.
 If Kit reports that it ignored a field key, the Worker looks up the account's
 actual **Last name** and **How did you hear about KFSD soft skills training?**
-keys and retries the subscriber update. It no longer reports a successful
-registration when Kit still warns that fields were ignored. Existing subscriber
-records need to be submitted again or corrected manually; this change cannot
+keys across Kit's paginated custom-field list and retries the subscriber update.
+It no longer reports a successful registration when Kit still warns that fields
+were ignored. Existing subscriber records need to be submitted again or
+corrected manually; this change cannot
 recover answers that Kit did not save.
 
 ## MailerLite rollback

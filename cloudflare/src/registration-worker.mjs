@@ -162,12 +162,28 @@ function createRegistrationHandler(fetcher = fetch) {
       // Resolve the two account-specific keys only if Kit reports that mismatch.
       if (result.warnings?.length) {
         stage = "F";
-        const customFields = (await api(`${API}/custom_fields?per_page=100`)).custom_fields;
         const normalized = (value) => String(value || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
-        const keyFor = (label) => customFields?.find((field) => normalized(field.label) === normalized(label))?.key;
-        const lastNameKey = keyFor("Last name");
-        const referralKey = keyFor("How did you hear about KFSD soft skills training");
-        if (!lastNameKey || !referralKey) throw new RegistrationError(503, RETRY_MESSAGE, undefined, "K-F-M");
+        const customFields = [];
+        let after;
+        // Kit paginates custom fields; the two missing fields may be on a later page.
+        for (let page = 0; page < 5; page++) {
+          const url = `${API}/custom_fields?per_page=100${after ? `&after=${encodeURIComponent(after)}` : ""}`;
+          const response = await api(url);
+          if (!Array.isArray(response.custom_fields)) throw new RegistrationError(503, RETRY_MESSAGE, undefined, "K-F-R");
+          customFields.push(...response.custom_fields);
+          if (!response.pagination?.has_next_page) break;
+          after = response.pagination.end_cursor;
+          if (!after) throw new RegistrationError(503, RETRY_MESSAGE, undefined, "K-F-P");
+        }
+        const keyFor = (label, prefix) => {
+          const exact = customFields.find((field) => normalized(field.label) === normalized(label));
+          if (exact?.key) return exact.key;
+          const candidates = customFields.filter((field) => normalized(field.label).startsWith(prefix));
+          return candidates.length === 1 ? candidates[0].key : undefined;
+        };
+        const lastNameKey = keyFor("Last name", "last name");
+        const referralKey = keyFor("How did you hear about KFSD soft skills training", "how did you hear");
+        if (!lastNameKey || !referralKey) throw new RegistrationError(503, RETRY_MESSAGE, undefined, !lastNameKey && !referralKey ? "K-F-M" : !lastNameKey ? "K-F-L" : "K-F-H");
         delete fields[FIELD_MAP.lastName];
         delete fields[FIELD_MAP.referral];
         fields[lastNameKey] = values.lastName;
