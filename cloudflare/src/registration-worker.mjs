@@ -154,10 +154,31 @@ function createRegistrationHandler(fetcher = fetch) {
       // Kit upserts by email. Explicit active state implements the single-opt-in
       // registration the event uses; the form submission is the subscriber's action.
       stage = "S";
-      const result = await api(`${API}/subscribers`, {
+      let result = await api(`${API}/subscribers`, {
         method: "POST",
         body: JSON.stringify({ email_address: values.email, first_name: values.firstName, state: "active", fields }),
       });
+      // Kit accepts the subscriber even when it ignores unknown custom-field keys.
+      // Resolve the two account-specific keys only if Kit reports that mismatch.
+      if (result.warnings?.length) {
+        stage = "F";
+        const customFields = (await api(`${API}/custom_fields?per_page=100`)).custom_fields;
+        const normalized = (value) => String(value || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+        const keyFor = (label) => customFields?.find((field) => normalized(field.label) === normalized(label))?.key;
+        const lastNameKey = keyFor("Last name");
+        const referralKey = keyFor("How did you hear about KFSD soft skills training");
+        if (!lastNameKey || !referralKey) throw new RegistrationError(503, RETRY_MESSAGE, undefined, "K-F-M");
+        delete fields[FIELD_MAP.lastName];
+        delete fields[FIELD_MAP.referral];
+        fields[lastNameKey] = values.lastName;
+        fields[referralKey] = values.referral;
+        stage = "S";
+        result = await api(`${API}/subscribers`, {
+          method: "POST",
+          body: JSON.stringify({ email_address: values.email, first_name: values.firstName, state: "active", fields }),
+        });
+        if (result.warnings?.length) throw new RegistrationError(503, RETRY_MESSAGE, undefined, "K-S-F");
+      }
       const subscriber = result.subscriber;
       if (!subscriber?.id || subscriber.email_address?.toLowerCase() !== values.email.toLowerCase()) throw new RegistrationError(502, RETRY_MESSAGE, undefined, "K-S-R");
       if (subscriber.state !== "active") {
