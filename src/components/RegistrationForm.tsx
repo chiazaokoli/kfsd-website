@@ -186,7 +186,7 @@ export default function RegistrationForm() {
     } finally { inFlight.current = false; setSubmitting(false); }
   }
 
-  const select = (name: keyof Selections, label: string, options: React.ComponentProps<typeof RegistrationSelect>["options"], placeholder: string, searchable = false) => <RegistrationSelect name={name} label={label} options={options} placeholder={placeholder} value={selections[name]} error={errors[name]} searchable={searchable} inlineSearch={name === "country" || name === "profession"} onChange={(value) => updateSelection(name, value)} />;
+  const select = (name: keyof Selections, label: string, options: React.ComponentProps<typeof RegistrationSelect>["options"], placeholder: string) => <RegistrationSelect name={name} label={label} options={options} placeholder={placeholder} value={selections[name]} error={errors[name]} onChange={(value) => updateSelection(name, value)} />;
 
   return <>
     <form ref={formRef} id="registration-form" className="registration-form" onSubmit={handleSubmit} onInput={(event) => { const name = (event.target as HTMLInputElement).name; const field = name === "professionOther" ? "profession" : name === "stateOther" ? "state" : name; if (field && errors[field]) setErrors((current) => ({ ...current, [field]: "" })); }} noValidate>
@@ -198,15 +198,15 @@ export default function RegistrationForm() {
           <TextField name="lastName" label="Last name" error={errors.lastName} type="text" autoComplete="family-name" placeholder="Your last name" maxLength={200} />
         </div>
         <div className="phone-field"><label htmlFor="phone-input">Phone</label><div className="phone-input-row">
-          <RegistrationSelect label="Phone country code" name="phoneCountry" options={phoneOptions} placeholder="Code" value={selections.phoneCountry} onChange={(value) => updateSelection("phoneCountry", value)} searchable compact />
+          <RegistrationSelect label="Phone country code" name="phoneCountry" options={phoneOptions} placeholder="Code" value={selections.phoneCountry} onChange={(value) => updateSelection("phoneCountry", value)} compact />
           <input id="phone-input" name="phone" type="tel" autoComplete="tel-national" inputMode="tel" placeholder="Your phone number" maxLength={40} value={phoneInput} aria-invalid={Boolean(errors.phone || errors.phoneCountry)} aria-describedby={errors.phone || errors.phoneCountry ? "phone-error" : undefined} onFocus={() => { void loadPhoneTools().catch(() => {}); }} onChange={(event) => updatePhone(event.target.value)} onBlur={() => { if (!phoneInput.trim()) return; const edit = phoneEdit.current; loadPhoneTools().then(({ validateRegistrationPhone, inferPhoneCountry }) => { if (edit !== phoneEdit.current) return; const country = phoneInput.trim().startsWith("+") ? inferPhoneCountry(phoneInput) || selections.phoneCountry : selections.phoneCountry; const result = validateRegistrationPhone(phoneInput, country); if (result.ok) setPhoneInput(result.national); else setErrors((current) => ({ ...current, phone: result.error })); }).catch(() => {}); }} />
         </div>{(errors.phone || errors.phoneCountry) && <small id="phone-error">{errors.phone || errors.phoneCountry}</small>}</div>
-        {select("profession", "Profession", professionOptions, "Select your profession", true)}
+        {select("profession", "Profession", professionOptions, "Select your profession")}
         {selections.profession === "Other" && <TextField name="professionOther" label="Your profession" error={errors.profession} placeholder="Enter your profession" maxLength={200} />}
         {select("company", "Company", companyOptions, "-")}
         <div className="form-row">
-          {select("country", "Country", countryOptions, "Select your country", true)}
-          {stateData.failed && !statesLoading ? <TextField name="state" label="State or region" error={errors.state} placeholder="Your state or region" maxLength={200} /> : <RegistrationSelect name="state" label="State or region" options={[...new Set(states.map((state) => state.name)), ...(!states.length && !statesLoading ? ["Not applicable"] : []), "Other / not listed"]} placeholder={statesLoading ? "Loading states…" : "Select your state"} value={selections.state} error={errors.state} searchable inlineSearch disabled={statesLoading} onChange={(value) => updateSelection("state", value)} />}
+          {select("country", "Country", countryOptions, "Select your country")}
+          {stateData.failed && !statesLoading ? <TextField name="state" label="State or region" error={errors.state} placeholder="Your state or region" maxLength={200} /> : <RegistrationSelect name="state" label="State or region" options={[...new Set(states.map((state) => state.name)), ...(!states.length && !statesLoading ? ["Not applicable"] : []), "Other / not listed"]} placeholder={statesLoading ? "Loading states…" : "Select your state"} value={selections.state} error={errors.state} disabled={statesLoading} onChange={(value) => updateSelection("state", value)} />}
         </div>
         {selections.state === "Other / not listed" && <TextField name="stateOther" label="Your state or region" error={errors.state} placeholder="Enter your state or region" maxLength={200} />}
         {select("attended", "Have you attended KFSD soft skills training before?", ["Yes", "No", "Not sure"], "Select an answer")}
