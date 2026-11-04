@@ -602,7 +602,7 @@ img { display: block; }
   padding: clamp(20px, 3vw, 42px) 18px;
   background: radial-gradient(circle at 50% 0, rgba(23,104,54,.18), transparent 34%), var(--cream);
 }
-.form-only-container { width: min(720px, 100%); }
+.form-only-container { width: min(660px, 100%); }
 .form-only-brand {
   display: flex;
   align-items: center;
