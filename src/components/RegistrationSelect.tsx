@@ -67,7 +67,9 @@ export default function RegistrationSelect({ label, name, options, placeholder, 
   useEffect(() => {
     if (!open) return;
     const close = (event: PointerEvent) => {
-      if (!fieldRef.current?.contains(event.target as Node) && !panelRef.current?.contains(event.target as Node)) {
+      const control = inlineSearch ? inputRef.current : triggerRef.current;
+      if (!control?.contains(event.target as Node) && !panelRef.current?.contains(event.target as Node)) {
+        if (fieldRef.current?.contains(event.target as Node)) event.preventDefault();
         setOpen(false);
       }
     };
@@ -90,7 +92,7 @@ export default function RegistrationSelect({ label, name, options, placeholder, 
       window.removeEventListener("wheel", closeOnUserScroll, true);
       window.removeEventListener("touchmove", closeOnUserScroll, true);
     };
-  }, [open]);
+  }, [open, inlineSearch]);
   useEffect(() => {
     if (open && panelReady && (keyboardOpen.current || window.matchMedia("(pointer: fine)").matches)) searchRef.current?.focus({ preventScroll: true });
   }, [open, panelReady]);
@@ -140,7 +142,7 @@ export default function RegistrationSelect({ label, name, options, placeholder, 
   }
 
   return <div className={`form-select-field${compact ? " phone-country" : ""}`} ref={fieldRef}>
-    <label className={compact ? "visually-hidden" : undefined} id={`${name}-label`} htmlFor={`${name}-trigger`}>{compact && selected ? `${label}: ${selected.label}` : label}</label>
+    <label className={compact ? "visually-hidden" : undefined} id={`${name}-label`} htmlFor={open ? undefined : `${name}-trigger`}>{compact && selected ? `${label}: ${selected.label}` : label}</label>
     <input type="hidden" name={name} value={value} />
     {inlineSearch ? <div className={`form-select-inline${open ? " is-open" : ""}`}>
       <input id={`${name}-trigger`} ref={inputRef} className={`form-select-trigger${value || query ? " is-selected" : ""}`} type="text" role="combobox" autoComplete="off" spellCheck={false} disabled={disabled} aria-labelledby={`${name}-label`} aria-autocomplete="list" aria-haspopup="listbox" aria-expanded={open} aria-controls={`${name}-options`} aria-activedescendant={open && shown[active] ? `${name}-option-${active}` : undefined} aria-invalid={Boolean(error)} aria-describedby={error ? `${name}-error` : undefined} placeholder={open ? `Search ${name === "country" ? "countries" : name === "profession" ? "professions" : "states or regions"}…` : placeholder} value={open ? query : selected?.label || ""} onFocus={openList} onClick={() => { if (!open) openList(); }} onChange={(event) => { if (!open) setPosition(null); setQuery(event.target.value); setActive(0); setOpen(true); }} onKeyDown={onKeyDown} />
