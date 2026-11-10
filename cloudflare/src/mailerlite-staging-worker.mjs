@@ -150,12 +150,11 @@ function createRegistrationHandler(fetcher = fetch) {
         if (matches.length !== 1 || !matches[0].key) throw new RegistrationError(503, RETRY_MESSAGE);
         if (values[formKey]) fields[matches[0].key] = values[formKey];
       }
-      // This event uses single opt-in. Request active status explicitly so an
-      // earlier unconfirmed record does not keep a fresh registration pending.
-      // Do not set resubscribe: true; opted-out subscribers must stay opted out.
+      // MailerLite upserts by email; group memberships are additive. Do not set
+      // status or overwrite an unsubscribe, and do not claim email delivery.
       const result = await api(`${API}/subscribers`, {
         method: "POST",
-        body: JSON.stringify({ email: values.email, fields, groups: [TEST_GROUP_ID], status: "active", resubscribe: false }),
+        body: JSON.stringify({ email: values.email, fields, groups: [TEST_GROUP_ID] }),
       });
       const subscriber = result.data;
       if (!subscriber?.id || subscriber.email?.toLowerCase() !== values.email.toLowerCase()) throw new RegistrationError(502, RETRY_MESSAGE);
