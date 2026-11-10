@@ -105,7 +105,7 @@ function createRegistrationHandler(fetcher = fetch) {
     const path = new URL(request.url).pathname;
     if (!["/", "/register", "/health", "/location"].includes(path)) return reply(404, { ok: false, message: "Not found." });
     if (request.method === "GET" && ["/", "/health"].includes(path)) {
-      return reply(200, { service: "kfsd-registration-test", provider: "mailerlite", configured: Boolean(env.MAILERLITE_API_TOKEN), rateLimited: Boolean(env.REGISTRATION_RATE_LIMITER) });
+      return reply(200, { service: "kfsd-registration", provider: "mailerlite", configured: Boolean(env.MAILERLITE_API_TOKEN), rateLimited: Boolean(env.REGISTRATION_RATE_LIMITER) });
     }
     if (!allowed) return reply(403, { ok: false, message: "Please register through the KFSD website." });
     if (request.method === "GET" && path === "/location") {
