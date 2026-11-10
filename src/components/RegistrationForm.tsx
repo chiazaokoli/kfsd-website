@@ -11,7 +11,7 @@ import RegistrationToast from "./RegistrationToast";
 const assetPrefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const endpoint = assetPrefix
   ? "https://kfsd-demo-registration.yummydummy419.workers.dev"
-  : "https://kfsdsoftskills.smart-okolichiaza.workers.dev";
+  : "https://kfsd-mailerlite-test.smart-okolichiaza.workers.dev";
 const companyOptions = ["-", "NIQS", "NICE", "NSE", "NIOB", "APWEN", "NISTRUCTE", "YEFON", "NIQS FOUNDATION", "Other"];
 const referralOptions = ["-", "NIQS, NIOB, NSE, NISTRUCTE, YEFON, APWEN, CORBIN, COREN", "KFSD Alumni", "Social Media (Facebook, LinkedIn, Instagram)", "Impact Leaders Club", "Enactus", "DSN Network", "Whatsapp", "Word of mouth", "AIN", "MEK NextGen Innovators"];
 const professionOptions = ["Student", "Teacher / Educator", "Engineer", "Architect", "Quantity surveyor", "Surveyor", "Construction professional", "Healthcare professional", "IT / Technology professional", "Business owner / Entrepreneur", "Civil servant", "Finance / Accounting professional", "Legal professional", "Researcher / Academic", "Job seeker", "Other"];
