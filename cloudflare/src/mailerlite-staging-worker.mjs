@@ -5,7 +5,7 @@ import { parsePhoneNumberFromString } from "libphonenumber-js/max";
 import { validateRegistrationPhone } from "../../src/lib/registration-phone";
 import countries from "../../src/data/registration-countries.json";
 const API = "https://connect.mailerlite.com/api";
-const TEST_GROUP_ID = "203738193191765044";
+const TEST_GROUP_ID = "203742296935498805";
 const MAX_BODY_BYTES = 8192;
 const FIELD_MAP = {
   firstName: "Name",
