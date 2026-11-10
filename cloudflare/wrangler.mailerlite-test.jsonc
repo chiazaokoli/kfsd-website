@@ -1,0 +1,14 @@
+{
+  "name": "kfsd-mailerlite-test",
+  "main": "mailerlite-staging-worker.mjs",
+  "compatibility_date": "2026-10-22",
+  "keep_vars": true,
+  "vars": { "ALLOWED_ORIGINS": "https://kfsdsoftskills.pages.dev" },
+  "ratelimits": [
+    {
+      "name": "REGISTRATION_RATE_LIMITER",
+      "namespace_id": "1002",
+      "simple": { "limit": 20, "period": 60 }
+    }
+  ]
+}

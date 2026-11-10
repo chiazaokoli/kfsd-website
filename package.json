@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "build:worker": "node scripts/build-registration-worker.mjs",
+    "build:mailerlite-test": "node scripts/build-mailerlite-staging-worker.mjs",
     "build:registration-data": "node scripts/generate-registration-data.mjs",
     "test:registration": "node cloudflare/registration-worker.test.mjs"
   },
