@@ -173,6 +173,9 @@ export default function RegistrationForm() {
       }
       const message = typeof result.message === "string" ? result.message : "Your registration details have been saved.";
       if (result.status === "registered") {
+        try {
+          (window as Window & { fbq?: (action: string, event: string) => void }).fbq?.("track", "CompleteRegistration");
+        } catch { /* Tracking must never block registration. */ }
         router.push("/welcome");
         return;
       }
