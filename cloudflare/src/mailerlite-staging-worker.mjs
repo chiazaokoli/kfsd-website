@@ -86,6 +86,10 @@ async function readSubmission(request) {
   if (values.attended && !["Yes", "No", "Not sure"].includes(values.attended)) errors.attended = "Select an answer from the list.";
   if (values.referral && !REFERRALS.includes(values.referral)) errors.referral = "Select an answer from the list.";
   if (Object.keys(errors).length) throw new RegistrationError(422, "Please check the highlighted fields.", errors);
+  const source = typeof input.utm_source === "string" ? input.utm_source.trim().toLowerCase() : "";
+  const medium = typeof input.utm_medium === "string" ? input.utm_medium.trim().toLowerCase() : "";
+  values.utm_source = medium === "paid" && ["fb", "ig"].includes(source) ? source : "";
+  values.utm_medium = values.utm_source ? medium : "";
   return values;
 }
 
@@ -149,6 +153,15 @@ function createRegistrationHandler(fetcher = fetch) {
         const matches = fieldResponse.data.filter((field) => normalize(field.name) === normalize(label));
         if (matches.length !== 1 || !matches[0].key) throw new RegistrationError(503, RETRY_MESSAGE);
         if (values[formKey]) fields[matches[0].key] = values[formKey];
+      }
+      if (values.utm_source) {
+        const sourceField = fieldResponse.data.filter((field) => normalize(field.name) === "utm source");
+        const mediumField = fieldResponse.data.filter((field) => normalize(field.name) === "utm medium");
+        // Missing tracking fields must never prevent a registration.
+        if (sourceField.length === 1 && sourceField[0].key && mediumField.length === 1 && mediumField[0].key) {
+          fields[sourceField[0].key] = values.utm_source;
+          fields[mediumField[0].key] = values.utm_medium;
+        }
       }
       // MailerLite upserts by email; group memberships are additive. Do not set
       // status or overwrite an unsubscribe, and do not claim email delivery.
