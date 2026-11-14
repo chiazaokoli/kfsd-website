@@ -121,6 +121,11 @@ export default function RegistrationForm() {
     if (inFlight.current) return;
     const form = event.currentTarget;
     const data = new FormData(form);
+    const tracking = new URLSearchParams(window.location.search);
+    for (const key of ["utm_source", "utm_medium"]) {
+      const value = tracking.get(key)?.trim().toLowerCase();
+      if (value) data.set(key, value);
+    }
     data.set("country", countryName);
     data.set("countryCode", selections.country);
     if (selections.profession === "Other") data.set("profession", String(data.get("professionOther") || "").trim());
